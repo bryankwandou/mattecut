@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const SITE = "https://roto.vercel.app";
+const SITE = "https://roto-live.vercel.app";
 const base = DICTS[DEFAULT_LOCALE];
 
 export const metadata: Metadata = {
