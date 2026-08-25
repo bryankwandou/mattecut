@@ -18,7 +18,7 @@ import { Reveal } from "@/components/reveal";
 import { LanguagePicker, ThemeToggle } from "@/components/switches";
 import { useI18n } from "@/components/preferences";
 
-const REPO = "https://github.com/nayrbryanGaming/roto";
+const REPO = "https://github.com/bryankwandou/roto";
 
 export default function Home() {
   const { t } = useI18n();
