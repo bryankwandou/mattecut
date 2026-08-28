@@ -15,8 +15,9 @@ server. Konsekuensinya nyata di dua arah, dan keduanya disebut apa adanya:
 - Gambar tidak menyentuh server kami, karena memang tidak ada server yang
   menerimanya. Tidak ada yang perlu Anda percayai soal apa yang terjadi pada
   foto Anda.
-- Unduhan pertama sekitar 54 MB, dan beban komputasi ada di perangkat Anda.
-  Ponsel kelas bawah butuh belasan detik per gambar.
+- Unduhan pertama antara 54 MB dan 180 MB tergantung tingkat yang dipilih,
+  dan beban komputasi ada di perangkat Anda. Ponsel kelas bawah butuh
+  belasan detik per gambar.
 
 Halaman depan memuat satu seksi khusus yang menyebutkan batasan-batasan ini
 sebelum orang mencoba, bukan sesudah.
@@ -27,10 +28,20 @@ sebelum orang mencoba, bukan sesudah.
   JPG, PNG, WebP sampai 12 MB.
 - Pembanding sebelum/sesudah yang bisa digeser dengan tetikus, jari, dan
   tombol panah.
-- Latar baru: transparan, swatch warna, gradien, atau warna sendiri. Kolom
-  warna menerima `#FF0000`, `#F00`, `#00f8`, `rgb(255, 0, 0)`,
-  `rgb(10 20 30)`, dan `rgba(0, 0, 255, .4)`. Salah ketik ditandai, bukan
-  diabaikan diam-diam.
+- Tiga tingkat model untuk jaringan dan perangkat yang berbeda: ringan
+  (54 MB), seimbang (96 MB), dan maksimum (180 MB). Bisa diganti di tengah
+  penyuntingan; potongan diulang pada gambar yang sama tanpa kehilangan
+  latar yang sudah dipilih.
+- Latar baru: transparan, swatch warna, gradien, enam wallpaper studio, atau
+  gambar Anda sendiri yang bisa dipenuhkan atau dimuatkan ke bingkai.
+- Spektrum warna di dalam halaman, bukan dialog warna bawaan sistem yang
+  terpotong di tepi panel dan mengambil alih layar ponsel. Seluruh
+  16.777.216 warna terjangkau, plus tingkat ketembusan. Kolom teks tetap
+  menerima `#FF0000`, `#F00`, `#00f8`, `rgb(255, 0, 0)`, `rgb(10 20 30)`,
+  dan `rgba(0, 0, 255, .4)`. Salah ketik ditandai, bukan diabaikan
+  diam-diam.
+- Hasil terakhir disimpan diam-diam di IndexedDB, jadi tab yang tertutup
+  atau peramban yang mati tidak menghapus pekerjaan Anda.
 - Ekspor PNG (kanal alfa dipertahankan), JPG, dan WebP, selalu pada resolusi
   berkas asli, bukan ukuran pratinjau.
 - Mode terang dan gelap, plus opsi mengikuti sistem, tanpa kedipan saat muat.
@@ -58,7 +69,9 @@ npx tsc --noEmit
 | Berkas | Isinya |
 | --- | --- |
 | `src/lib/matting.ts` | Pembungkus model. Satu-satunya tempat pustaka matting disentuh, dan bebas bahasa: yang keluar hanya kunci tahapan. |
-| `src/lib/color.ts` | Pengurai HEX dan `rgb()`. Mengembalikan `null` untuk apa pun yang tidak terbaca, supaya antarmuka bisa menandainya. |
+| `src/lib/color.ts` | Pengurai HEX dan `rgb()`, plus konversi HSV yang menjadi tulang punggung spektrum. Mengembalikan `null` untuk apa pun yang tidak terbaca, supaya antarmuka bisa menandainya. |
+| `src/lib/draft.ts` | Salinan tahan-crash di IndexedDB. Setiap kegagalan penyimpanan dibiarkan diam: studio harus tetap utuh di mode penyamaran, cuma tanpa jaring pengaman. |
+| `src/components/spectrum.tsx` | Spektrum warna dari gradien CSS, bukan kanvas. Tidak ada bitmap yang dialokasikan dan tidak ada yang digambar ulang saat digeser, jadi ponsel murah tidak dihukum. |
 | `src/lib/compose.ts` | Penyusunan kanvas dan ekspor. Pratinjau memakai CSS `background` agar seketika; kanvas hanya dipakai saat ekspor. |
 | `src/lib/i18n/` | Tipe `Dict` dan 18 kamus. Menambah satu kalimat ke produk akan menggagalkan build sampai semua bahasa melengkapinya. |
 | `src/components/preferences.tsx` | Tema dan bahasa, dibaca lewat `useSyncExternalStore` karena `localStorage` memang sistem eksternal. Ikut sinkron antar-tab. |

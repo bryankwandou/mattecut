@@ -123,15 +123,22 @@ export const vi: Dict = {
     pick: "Chọn ảnh",
     formats: "JPG · PNG · WEBP — tối đa 12 MB",
     qualityLabel: "Chất lượng",
-    fastTitle: "Nhanh",
-    fastNote: "Mô hình {mb} MB · đủ cho phần lớn ảnh",
-    preciseTitle: "Chính xác",
-    preciseNote: "Mô hình {mb} MB · sạch hơn ở tóc và mép mềm",
+    lightTitle: "Nhẹ",
+    lightNote:
+      "Mô hình {mb} MB · nhẹ nhất, cho máy và mạng hạn chế",
+    balancedTitle: "Cân bằng",
+    balancedNote:
+      "Mô hình {mb} MB · lựa chọn ở giữa, đủ cho hầu hết ảnh",
+    maximumTitle: "Tối đa",
+    maximumNote:
+      "Mô hình {mb} MB · sạch nhất ở tóc và viền mềm",
     downloadPng: "Tải PNG",
     transparentSuffix: "trong suốt",
     exportNote:
       "Luôn xuất ở độ phân giải gốc, không phải kích thước bản xem trước.",
     another: "Ảnh khác",
+    restored: "Kết quả gần nhất đã được khôi phục sau khi thẻ đóng.",
+    modelNote: "Đổi mô hình bất cứ lúc nào; phần tách được làm lại trên cùng ảnh.",
     firstDownloadNote:
       "Lần tải {mb} MB này chỉ diễn ra một lần. Sau khi được lưu trong trình duyệt, những ảnh sau được xử lý mà không cần mạng.",
     errUnsupported: "Định dạng đó chưa được hỗ trợ. Hãy dùng JPG, PNG hoặc WebP.",
@@ -161,6 +168,10 @@ export const vi: Dict = {
     customLabel: "Màu tự chọn",
     transparent: "Trong suốt",
     wheel: "Chọn từ bánh xe màu",
+    spectrum: "Quang phổ màu",
+    hue: "Sắc độ",
+    alpha: "Độ đục",
+    count: "16.777.216 màu",
     hint: "Nhận HEX và rgb(), kể cả rgba() nếu muốn nền bán trong suốt.",
     invalid: "Chưa đọc được. Thử #FF0000, #F00 hoặc rgb(255, 0, 0).",
     presets: [
@@ -174,5 +185,18 @@ export const vi: Dict = {
       "Kem",
     ],
     gradients: ["Hoàng hôn", "Sương", "Nửa đêm", "Biển"],
+    wallpaperLabel: "Ảnh nền",
+    wallpapers: [
+      "Xám studio",
+      "Xanh hộ chiếu",
+      "Than chì",
+      "Cát ấm",
+      "Bầu trời",
+      "Xanh xô thơm",
+    ],
+    upload: "Ảnh của bạn",
+    uploadHint: "Tệp vẫn ở trên máy này",
+    fitCover: "Lấp đầy",
+    fitContain: "Vừa khung",
   },
 };

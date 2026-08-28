@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Check } from "lucide-react";
+import { useRef, useState } from "react";
+import { Check, ImagePlus } from "lucide-react";
 import { parseColor, toCss, toHex, type Rgba } from "@/lib/color";
-import type { Background } from "@/lib/compose";
+import { backdropUrl, type Background, type Fit } from "@/lib/compose";
 import { useI18n } from "@/components/preferences";
+import { Spectrum } from "@/components/spectrum";
 
 /** Labels live in the dictionaries; only the values live here, indexed by
  *  position so a translator never has to touch a hex code. */
@@ -17,6 +18,19 @@ const PRESETS = [
   "#e03131",
   "#00b140",
   "#f5ead6",
+] as const;
+
+const WHITE = { r: 255, g: 255, b: 255, a: 1 } as const;
+
+/** Bundled backdrops. SVG because a gradient described in a few hundred
+ *  bytes beats a JPEG of the same gradient at every screen size. */
+const BACKDROPS = [
+  "studio-grey",
+  "passport-blue",
+  "graphite",
+  "warm-sand",
+  "sky",
+  "sage",
 ] as const;
 
 const GRADIENTS: { from: string; to: string; angle: number }[] = [
@@ -40,6 +54,25 @@ export function BackgroundPicker({
   // it beats mirroring the selection into state and then fighting to keep
   // the two in step.
   const [draft, setDraft] = useState<string | null>(null);
+
+  // Which backdrop is lit. The Background itself only carries a Blob, and
+  // two different Blobs of the same picture are not equal, so the identity
+  // of the choice has to be remembered separately from the value.
+  const [active, setActive] = useState<string | null>(null);
+  const [fit, setFit] = useState<Fit>("cover");
+  const file = useRef<HTMLInputElement>(null);
+
+  // Bundled backdrops are fetched and handed on as Blobs, exactly like an
+  // uploaded file. One code path downstream instead of two, and the draft
+  // can store either without knowing which it got.
+  const pickBackdrop = async (name: string) => {
+    const res = await fetch(`/backdrops/${name}.svg`);
+    const blob = await res.blob();
+    backdropUrl(blob);
+    setDraft(null);
+    setActive(name);
+    onChange({ kind: "image", blob, fit });
+  };
 
   const selected = value.kind === "solid" ? toHex(value.color) : "#ffffff";
   const text = draft ?? selected;
@@ -73,6 +106,7 @@ export function BackgroundPicker({
                 active={active}
                 onClick={() => {
                   setDraft(null);
+                  setActive(null);
                   applyColor(c);
                 }}
                 title={t.bg.presets[i]}
@@ -102,6 +136,7 @@ export function BackgroundPicker({
                 active={active}
                 onClick={() => {
                   setDraft(null);
+                  setActive(null);
                   onChange({ kind: "gradient", from, to, angle: g.angle });
                 }}
                 title={t.bg.gradients[i]}
@@ -118,38 +153,102 @@ export function BackgroundPicker({
         </div>
       </Row>
 
-      <Row label={t.bg.customLabel}>
+      <Row label={t.bg.wallpaperLabel}>
         <div className="space-y-2">
+          <div className="flex flex-wrap gap-2">
+            {BACKDROPS.map((name, i) => (
+              <Swatch
+                key={name}
+                active={active === name}
+                onClick={() => void pickBackdrop(name)}
+                title={t.bg.wallpapers[i]}
+              >
+                <span
+                  className="absolute inset-0 rounded-[7px] bg-cover bg-center"
+                  style={{ backgroundImage: `url("/backdrops/${name}.svg")` }}
+                />
+              </Swatch>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => file.current?.click()}
+              title={t.bg.upload}
+              aria-label={t.bg.upload}
+              className="grid h-9 w-9 place-items-center rounded-lg border border-dashed border-line text-text-faint transition-colors hover:border-accent hover:text-accent-text"
+            >
+              <ImagePlus size={15} />
+            </button>
+            <input
+              ref={file}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) {
+                  setActive("own");
+                  onChange({ kind: "image", blob: f, fit });
+                }
+                // Clear it, or choosing the same file twice does nothing.
+                e.target.value = "";
+              }}
+            />
+          </div>
+
+          {value.kind === "image" && (
+            <div className="flex gap-2">
+              {(["cover", "contain"] as const).map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => {
+                    setFit(f);
+                    onChange({ ...value, fit: f });
+                  }}
+                  aria-pressed={value.fit === f}
+                  className={`flex-1 rounded-lg border px-2 py-1.5 text-xs transition-colors ${
+                    value.fit === f
+                      ? "border-accent bg-accent/10 text-text"
+                      : "border-line text-text-dim hover:border-text-faint"
+                  }`}
+                >
+                  {f === "cover" ? t.bg.fitCover : t.bg.fitContain}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <p className="text-xs leading-relaxed text-text-faint">
+            {t.bg.uploadHint}
+          </p>
+        </div>
+      </Row>
+
+      <Row label={t.bg.customLabel}>
+        <div className="space-y-2.5">
+          <Spectrum
+            value={value.kind === "solid" ? value.color : WHITE}
+            onChange={(c) => {
+              setDraft(null);
+              applyColor(c);
+            }}
+          />
+
           <div className="flex items-stretch gap-2">
-            <label
-              className="relative h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-lg hairline"
+            <span
+              className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg hairline"
               title={t.bg.wheel}
             >
+              <span className="checker checker-sm absolute inset-0" />
               <span
                 className="absolute inset-0"
                 style={{
                   background:
-                    value.kind === "solid" ? toCss(value.color) : "#ffffff",
+                    value.kind === "solid" ? toCss(value.color) : "transparent",
                 }}
               />
-              <input
-                type="color"
-                aria-label={t.bg.wheel}
-                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                value={
-                  value.kind === "solid"
-                    ? toHex(value.color).slice(0, 7)
-                    : "#ffffff"
-                }
-                onChange={(e) => {
-                  const c = parseColor(e.target.value);
-                  if (c) {
-                    setDraft(null);
-                    applyColor(c);
-                  }
-                }}
-              />
-            </label>
+            </span>
 
             <input
               value={text}
@@ -181,6 +280,9 @@ export function BackgroundPicker({
             }`}
           >
             {invalid ? t.bg.invalid : t.bg.hint}
+          </p>
+          <p className="mono text-[10px] uppercase tracking-[0.16em] text-text-faint">
+            {t.bg.count}
           </p>
         </div>
       </Row>

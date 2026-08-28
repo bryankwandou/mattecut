@@ -123,15 +123,22 @@ export const de: Dict = {
     pick: "Bild auswählen",
     formats: "JPG · PNG · WEBP — höchstens 12 MB",
     qualityLabel: "Qualität",
-    fastTitle: "Schnell",
-    fastNote: "Modell mit {mb} MB · reicht für die meisten Fotos",
-    preciseTitle: "Präzise",
-    preciseNote: "Modell mit {mb} MB · sauberer bei Haar und weichen Kanten",
+    lightTitle: "Leicht",
+    lightNote:
+      "{mb} MB Modell · am leichtesten, für schwache Geräte und Verbindungen",
+    balancedTitle: "Ausgewogen",
+    balancedNote:
+      "{mb} MB Modell · die mittlere Wahl, für die meisten Fotos genug",
+    maximumTitle: "Maximum",
+    maximumNote:
+      "{mb} MB Modell · am saubersten bei Haaren und weichen Kanten",
     downloadPng: "PNG herunterladen",
     transparentSuffix: "transparent",
     exportNote:
       "Wird immer in der Originalauflösung exportiert, nicht in der Vorschaugröße.",
     another: "Anderes Bild",
+    restored: "Dein letztes Ergebnis wurde nach dem Schließen des Tabs wiederhergestellt.",
+    modelNote: "Modell jederzeit wechseln; der Freisteller wird auf demselben Bild neu berechnet.",
     firstDownloadNote:
       "Dieser Download von {mb} MB fällt nur einmal an. Sobald er im Browser liegt, werden weitere Bilder ganz ohne Netz verarbeitet.",
     errUnsupported: "Dieses Format wird noch nicht unterstützt. Nehmen Sie JPG, PNG oder WebP.",
@@ -161,6 +168,10 @@ export const de: Dict = {
     customLabel: "Eigene Farbe",
     transparent: "Transparent",
     wheel: "Aus dem Farbkreis wählen",
+    spectrum: "Farbspektrum",
+    hue: "Farbton",
+    alpha: "Deckkraft",
+    count: "16.777.216 Farben",
     hint: "Nimmt HEX und rgb(), auch rgba() für einen halbtransparenten Hintergrund.",
     invalid: "Nicht lesbar. Versuchen Sie #FF0000, #F00 oder rgb(255, 0, 0).",
     presets: [
@@ -174,5 +185,18 @@ export const de: Dict = {
       "Creme",
     ],
     gradients: ["Dämmerung", "Dunst", "Mitternacht", "Meer"],
+    wallpaperLabel: "Hintergrundbild",
+    wallpapers: [
+      "Studiograu",
+      "Passblau",
+      "Graphit",
+      "Warmer Sand",
+      "Himmel",
+      "Salbei",
+    ],
+    upload: "Eigenes Bild",
+    uploadHint: "Die Datei bleibt auf diesem Gerät",
+    fitCover: "Füllen",
+    fitContain: "Einpassen",
   },
 };

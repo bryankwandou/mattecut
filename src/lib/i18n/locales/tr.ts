@@ -123,15 +123,22 @@ export const tr: Dict = {
     pick: "Görsel seçin",
     formats: "JPG · PNG · WEBP — en fazla 12 MB",
     qualityLabel: "Kalite",
-    fastTitle: "Hızlı",
-    fastNote: "{mb} MB model · çoğu fotoğraf için yeter",
-    preciseTitle: "Hassas",
-    preciseNote: "{mb} MB model · saç ve yumuşak kenarlarda daha temiz",
+    lightTitle: "Hafif",
+    lightNote:
+      "{mb} MB model · en hafifi, sınırlı cihaz ve bağlantılar için",
+    balancedTitle: "Dengeli",
+    balancedNote:
+      "{mb} MB model · ortadaki seçim, çoğu fotoğraf için yeterli",
+    maximumTitle: "Azami",
+    maximumNote:
+      "{mb} MB model · saçta ve yumuşak kenarlarda en temizi",
     downloadPng: "PNG indir",
     transparentSuffix: "saydam",
     exportNote:
       "Her zaman önizleme boyutunda değil, özgün çözünürlükte dışa aktarılır.",
     another: "Başka görsel",
+    restored: "Sekme kapandıktan sonra son sonucunuz geri yüklendi.",
+    modelNote: "İstediğiniz zaman model değiştirin; kesim aynı görsel üzerinde yeniden yapılır.",
     firstDownloadNote:
       "Bu {mb} MB'lık indirme yalnızca bir kez olur. Tarayıcıda saklandıktan sonra sonraki görseller hiç ağ kullanmadan işlenir.",
     errUnsupported: "Bu biçim henüz desteklenmiyor. JPG, PNG veya WebP kullanın.",
@@ -161,6 +168,10 @@ export const tr: Dict = {
     customLabel: "Kendi renginiz",
     transparent: "Saydam",
     wheel: "Renk çarkından seçin",
+    spectrum: "Renk tayfı",
+    hue: "Ton",
+    alpha: "Örtücülük",
+    count: "16.777.216 renk",
     hint: "HEX ve rgb() kabul eder; yarı saydam arka plan için rgba() de olur.",
     invalid: "Okunamadı. #FF0000, #F00 veya rgb(255, 0, 0) deneyin.",
     presets: [
@@ -174,5 +185,18 @@ export const tr: Dict = {
       "Krem",
     ],
     gradients: ["Alacakaranlık", "Pus", "Gece yarısı", "Deniz"],
+    wallpaperLabel: "Duvar kâğıdı",
+    wallpapers: [
+      "Stüdyo grisi",
+      "Pasaport mavisi",
+      "Grafit",
+      "Ilık kum",
+      "Gökyüzü",
+      "Adaçayı",
+    ],
+    upload: "Kendi görselin",
+    uploadHint: "Dosya bu cihazda kalır",
+    fitCover: "Doldur",
+    fitContain: "Sığdır",
   },
 };

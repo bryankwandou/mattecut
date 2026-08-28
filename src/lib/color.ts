@@ -98,3 +98,53 @@ export function readableOn({ r, g, b }: Rgba): "#000" | "#fff" {
   const luma = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
   return luma > 0.55 ? "#000" : "#fff";
 }
+
+/**
+ * HSV is what a colour *picker* is shaped like: one square of saturation
+ * against value, one strip of hue. RGB is what a screen is shaped like.
+ * The two conversions below are the seam between them, and they are the
+ * only reason the spectrum control can exist.
+ */
+export type Hsv = { h: number; s: number; v: number };
+
+export function rgbToHsv({ r, g, b }: Rgba): Hsv {
+  const R = r / 255;
+  const G = g / 255;
+  const B = b / 255;
+  const max = Math.max(R, G, B);
+  const min = Math.min(R, G, B);
+  const d = max - min;
+
+  let h = 0;
+  if (d !== 0) {
+    if (max === R) h = ((G - B) / d) % 6;
+    else if (max === G) h = (B - R) / d + 2;
+    else h = (R - G) / d + 4;
+    h *= 60;
+    if (h < 0) h += 360;
+  }
+  // Grey has no hue to speak of; 0 is as good an answer as any, and it
+  // keeps the hue strip from jumping when the user drags into the corner.
+  return { h, s: max === 0 ? 0 : d / max, v: max };
+}
+
+export function hsvToRgb({ h, s, v }: Hsv, a = 1): Rgba {
+  const c = v * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = v - c;
+  const seg = Math.floor(h / 60) % 6;
+  const [R, G, B] = [
+    [c, x, 0],
+    [x, c, 0],
+    [0, c, x],
+    [0, x, c],
+    [x, 0, c],
+    [c, 0, x],
+  ][seg < 0 ? seg + 6 : seg];
+  return {
+    r: Math.round((R + m) * 255),
+    g: Math.round((G + m) * 255),
+    b: Math.round((B + m) * 255),
+    a,
+  };
+}

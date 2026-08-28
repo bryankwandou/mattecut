@@ -11,7 +11,65 @@ import { toCss } from "./color";
 export type Background =
   | { kind: "transparent" }
   | { kind: "solid"; color: Rgba }
-  | { kind: "gradient"; from: Rgba; to: Rgba; angle: number };
+  | { kind: "gradient"; from: Rgba; to: Rgba; angle: number }
+  /**
+   * A photo or wallpaper behind the subject.
+   *
+   * It carries a Blob rather than a decoded image or an object URL, for one
+   * reason that is easy to miss: this value is written straight into the
+   * crash-safe draft, and IndexedDB can store a Blob but throws on an
+   * HTMLImageElement. Decoding is a caching concern, handled below.
+   */
+  | { kind: "image"; blob: Blob; fit: Fit };
+
+/** `cover` fills the frame and crops; `contain` fits and leaves margins. */
+export type Fit = "cover" | "contain";
+
+/**
+ * Decoded backdrops, keyed by the Blob they came from.
+ *
+ * Weak on purpose: when a background is replaced, the old Blob becomes
+ * unreachable and the bitmap and its object URL go with it, so swapping
+ * wallpapers twenty times does not pin twenty full-size images in memory.
+ */
+const decoded = new WeakMap<Blob, HTMLImageElement>();
+const urls = new WeakMap<Blob, string>();
+
+/** Stable object URL for a backdrop, for CSS preview and decoding alike. */
+export function backdropUrl(blob: Blob): string {
+  let url = urls.get(blob);
+  if (!url) {
+    url = URL.createObjectURL(blob);
+    urls.set(blob, url);
+  }
+  return url;
+}
+
+/**
+ * Decode a backdrop so `paintBackground` can stay synchronous.
+ *
+ * Export calls this first. Skipping it would not throw — it would quietly
+ * write a picture with no background at all, which is the worst kind of
+ * bug: the file looks fine until someone opens it.
+ */
+export async function prepareBackground(bg: Background): Promise<void> {
+  if (bg.kind !== "image" || decoded.has(bg.blob)) return;
+  const img = new Image();
+  img.src = backdropUrl(bg.blob);
+  await img.decode();
+  decoded.set(bg.blob, img);
+}
+
+/** Where a backdrop lands inside w×h under the chosen fit. */
+function frame(img: HTMLImageElement, w: number, h: number, fit: Fit) {
+  const scale =
+    fit === "cover"
+      ? Math.max(w / img.naturalWidth, h / img.naturalHeight)
+      : Math.min(w / img.naturalWidth, h / img.naturalHeight);
+  const dw = img.naturalWidth * scale;
+  const dh = img.naturalHeight * scale;
+  return { x: (w - dw) / 2, y: (h - dh) / 2, dw, dh };
+}
 
 export function paintBackground(
   ctx: CanvasRenderingContext2D,
@@ -20,6 +78,19 @@ export function paintBackground(
   h: number,
 ) {
   if (bg.kind === "transparent") return;
+
+  if (bg.kind === "image") {
+    const img = decoded.get(bg.blob);
+    // Undecoded means `prepareBackground` was not awaited. Silence here
+    // would ship a transparent export, so say so where a developer sees it.
+    if (!img) {
+      console.error("[roto] backdrop painted before decode");
+      return;
+    }
+    const { x, y, dw, dh } = frame(img, w, h, bg.fit);
+    ctx.drawImage(img, x, y, dw, dh);
+    return;
+  }
 
   if (bg.kind === "solid") {
     ctx.fillStyle = toCss(bg.color);
@@ -79,6 +150,8 @@ export async function exportImage(
   if (!ctx) throw new Error("Canvas 2D tidak tersedia di peramban ini.");
 
   // JPEG has no alpha — fill white so the subject does not land on black.
+  await prepareBackground(bg);
+
   if (format === "image/jpeg" && bg.kind === "transparent") {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, w, h);
@@ -128,5 +201,8 @@ export function outputName(original: string, ext: string) {
 export function backgroundToCss(bg: Background): string | null {
   if (bg.kind === "transparent") return null;
   if (bg.kind === "solid") return toCss(bg.color);
+  if (bg.kind === "image") {
+    return `url("${backdropUrl(bg.blob)}") center / ${bg.fit} no-repeat`;
+  }
   return `linear-gradient(${bg.angle}deg, ${toCss(bg.from)}, ${toCss(bg.to)})`;
 }

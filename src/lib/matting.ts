@@ -22,17 +22,32 @@ export type Progress = {
   key: ProgressKey;
 };
 
-export type Quality = "fast" | "precise";
+/**
+ * Three tiers, because the library ships three sets of weights for the same
+ * network. They differ only in how precisely each weight is stored:
+ *
+ *   light    8-bit integers   smallest download, softest edges
+ *   balanced 16-bit floats    the middle, and the sane default
+ *   maximum  32-bit floats    every weight at full precision
+ *
+ * Worth saying plainly, because it is the question everyone asks: there is
+ * no fourth tier that is both tiny and sharper than the others. Shrinking
+ * the file *is* the act of throwing away precision. A lighter model is
+ * lighter because it knows less about edges, and hair is where that shows.
+ */
+export type Quality = "light" | "balanced" | "maximum";
 
-const MODEL: Record<Quality, "isnet_quint8" | "isnet_fp16"> = {
-  fast: "isnet_quint8",
-  precise: "isnet_fp16",
+const MODEL: Record<Quality, "isnet_quint8" | "isnet_fp16" | "isnet"> = {
+  light: "isnet_quint8",
+  balanced: "isnet_fp16",
+  maximum: "isnet",
 };
 
-/** Approximate first-load download per quality tier, for honest copy. */
+/** Approximate first-load download per tier, for honest copy. */
 export const DOWNLOAD_MB: Record<Quality, number> = {
-  fast: 54,
-  precise: 96,
+  light: 54,
+  balanced: 96,
+  maximum: 180,
 };
 
 function describe(raw: string, current: number, total: number): Progress {

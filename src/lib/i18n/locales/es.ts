@@ -123,15 +123,22 @@ export const es: Dict = {
     pick: "Elegir imagen",
     formats: "JPG · PNG · WEBP — 12 MB como máximo",
     qualityLabel: "Calidad",
-    fastTitle: "Rápido",
-    fastNote: "Modelo de {mb} MB · suficiente para casi todas las fotos",
-    preciseTitle: "Preciso",
-    preciseNote: "Modelo de {mb} MB · más limpio en pelo y bordes suaves",
+    lightTitle: "Ligero",
+    lightNote:
+      "Modelo de {mb} MB · el más ligero, para equipos y conexiones limitados",
+    balancedTitle: "Equilibrado",
+    balancedNote:
+      "Modelo de {mb} MB · la opción intermedia, suficiente para casi todas las fotos",
+    maximumTitle: "Máximo",
+    maximumNote:
+      "Modelo de {mb} MB · más limpio en el pelo y los bordes suaves",
     downloadPng: "Descargar PNG",
     transparentSuffix: "transparente",
     exportNote:
       "Siempre se exporta a la resolución original, no al tamaño de la vista previa.",
     another: "Otra imagen",
+    restored: "Se restauró tu último resultado tras cerrarse la pestaña.",
+    modelNote: "Cambia de modelo cuando quieras; el recorte se rehace sobre la misma imagen.",
     firstDownloadNote:
       "Esta descarga de {mb} MB ocurre una sola vez. Cuando quede guardada en el navegador, las siguientes imágenes se procesan sin red alguna.",
     errUnsupported: "Ese formato todavía no está admitido. Usa JPG, PNG o WebP.",
@@ -161,6 +168,10 @@ export const es: Dict = {
     customLabel: "Color propio",
     transparent: "Transparente",
     wheel: "Elegir en la rueda de color",
+    spectrum: "Espectro de color",
+    hue: "Tono",
+    alpha: "Opacidad",
+    count: "16.777.216 colores",
     hint: "Acepta HEX y rgb(), incluido rgba() si quieres un fondo semitransparente.",
     invalid: "No se pudo interpretar. Prueba #FF0000, #F00 o rgb(255, 0, 0).",
     presets: [
@@ -174,5 +185,18 @@ export const es: Dict = {
       "Crema",
     ],
     gradients: ["Ocaso", "Bruma", "Medianoche", "Mar"],
+    wallpaperLabel: "Fondo",
+    wallpapers: [
+      "Gris de estudio",
+      "Azul de pasaporte",
+      "Grafito",
+      "Arena cálida",
+      "Cielo",
+      "Salvia",
+    ],
+    upload: "Tu propia imagen",
+    uploadHint: "El archivo se queda en este equipo",
+    fitCover: "Rellenar",
+    fitContain: "Ajustar",
   },
 };

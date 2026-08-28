@@ -253,3 +253,29 @@ input[type="color"] {
   -webkit-appearance: none; appearance: none;
   border: none; padding: 0; background: transparent;
 }
+
+/* The spectrum's two strips. Both carry their gradient as an inline
+   background, so all this rule does is flatten the platform's own styling
+   and draw a thumb that reads against any colour underneath it. */
+.spectrum-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 14px; border-radius: 99px;
+  border: 1px solid var(--line);
+  outline: none; cursor: pointer; touch-action: none;
+}
+.spectrum-slider:focus-visible {
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
+}
+.spectrum-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; border-radius: 99px;
+  background: transparent;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5);
+}
+.spectrum-slider::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 99px;
+  background: transparent;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5);
+}

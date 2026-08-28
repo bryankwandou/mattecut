@@ -34,6 +34,7 @@ import {
   outputName,
   type Background,
 } from "@/lib/compose";
+import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
 
 const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 12 * 1024 * 1024;
@@ -42,20 +43,25 @@ type Shot = {
   file: File;
   originalUrl: string;
   masterUrl: string;
+  /** Kept so a background change can re-save the draft without cutting again. */
+  masterBlob: Blob;
   bitmap: HTMLImageElement;
   w: number;
   h: number;
+  /** Which model produced this cut, so the switcher shows the live state. */
+  quality: Quality;
 };
 
 export function Studio() {
   const { t } = useI18n();
   const [shot, setShot] = useState<Shot | null>(null);
   const [bg, setBg] = useState<Background>({ kind: "transparent" });
-  const [quality, setQuality] = useState<Quality>("fast");
+  const [quality, setQuality] = useState<Quality>("balanced");
   const [progress, setProgress] = useState<Progress | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [restored, setRestored] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const urls = useRef<string[]>([]);
 
@@ -66,8 +72,9 @@ export function Studio() {
   }, []);
 
   const run = useCallback(
-    async (file: File) => {
+    async (file: File, q: Quality = quality) => {
       setError(null);
+      setRestored(false);
 
       if (!ACCEPTED.includes(file.type)) {
         setError(t.studio.errUnsupported);
@@ -81,14 +88,15 @@ export function Studio() {
       }
 
       setBusy(true);
+      setQuality(q);
       setProgress({
-        stage: isWarm(quality) ? "processing" : "fetching",
+        stage: isWarm(q) ? "processing" : "fetching",
         ratio: null,
-        key: isWarm(quality) ? "separating" : "engine",
+        key: isWarm(q) ? "separating" : "engine",
       });
 
       try {
-        const blob = await cutout(file, quality, setProgress);
+        const blob = await cutout(file, q, setProgress);
 
         const originalUrl = URL.createObjectURL(file);
         const masterUrl = URL.createObjectURL(blob);
@@ -99,9 +107,11 @@ export function Studio() {
           file,
           originalUrl,
           masterUrl,
+          masterBlob: blob,
           bitmap,
           w: bitmap.naturalWidth,
           h: bitmap.naturalHeight,
+          quality: q,
         });
         setProgress({ stage: "done", ratio: 1, key: "separating" });
       } catch (e) {
@@ -110,6 +120,10 @@ export function Studio() {
         // original still goes to the console for whoever is debugging.
         console.error("[roto] cutout failed", e);
         setProgress(null);
+        // The switcher moved the moment the chip was pressed, so a failed
+        // cut has to move it back; otherwise it claims a model that never
+        // produced the picture on screen.
+        setQuality(quality);
         setError(t.studio.errFailed);
       } finally {
         setBusy(false);
@@ -117,6 +131,63 @@ export function Studio() {
     },
     [quality, t],
   );
+
+  // A crash, a closed tab, or a stray reload should not cost the reader the
+  // minute they just spent waiting for a cut. Runs once, on open.
+  useEffect(() => {
+    let alive = true;
+    void (async () => {
+      const d = await loadDraft();
+      if (!alive || !d) return;
+      const file = new File([d.original], d.name, { type: d.type });
+      const originalUrl = URL.createObjectURL(file);
+      const masterUrl = URL.createObjectURL(d.master);
+      urls.current.push(originalUrl, masterUrl);
+      try {
+        // This string is never shown: the catch discards the draft rather
+        // than blaming the reader for a record they cannot even see.
+        const bitmap = await loadImage(masterUrl, "draft decode failed");
+        if (!alive) return;
+        setShot({
+          file,
+          originalUrl,
+          masterUrl,
+          masterBlob: d.master,
+          bitmap,
+          w: bitmap.naturalWidth,
+          h: bitmap.naturalHeight,
+          quality: d.quality,
+        });
+        setQuality(d.quality);
+        if (d.bg) setBg(d.bg as Background);
+        setRestored(true);
+      } catch {
+        void clearDraft();
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // Keep that draft current. The background is part of the work, so a colour
+  // change re-saves too; the delay stops a drag across the colour wheel from
+  // writing to disk on every frame.
+  useEffect(() => {
+    if (!shot) return;
+    const timer = setTimeout(() => {
+      void saveDraft({
+        name: shot.file.name,
+        type: shot.file.type,
+        original: shot.file,
+        master: shot.masterBlob,
+        quality: shot.quality,
+        bg,
+        at: Date.now(),
+      });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [shot, bg]);
 
   // Paste-to-upload. People screenshot then paste; supporting it costs a
   // handful of lines and removes a whole step from the flow.
@@ -138,6 +209,8 @@ export function Studio() {
   }, [quality, shot, busy]);
 
   const reset = () => {
+    void clearDraft();
+    setRestored(false);
     setShot(null);
     setBg({ kind: "transparent" });
     setProgress(null);
@@ -195,6 +268,22 @@ export function Studio() {
         </div>
       )}
 
+      {restored && (
+        <div
+          role="status"
+          className="mb-6 flex items-start gap-3 rounded-xl border border-ok/40 bg-ok/10 p-4 text-sm"
+        >
+          <ShieldCheck size={17} className="mt-px shrink-0 text-ok-text" />
+          <p className="min-w-0 flex-1 text-text">{t.studio.restored}</p>
+          <button
+            onClick={() => setRestored(false)}
+            className="shrink-0 text-xs text-text-faint transition-colors hover:text-text"
+          >
+            {t.common.close}
+          </button>
+        </div>
+      )}
+
       {!shot ? (
         <Dropzone
           dragOver={dragOver}
@@ -207,7 +296,7 @@ export function Studio() {
           onFile={run}
         />
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+        <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px]">
           <div className="min-w-0 space-y-3">
             <CompareSlider
               before={shot.originalUrl}
@@ -219,7 +308,43 @@ export function Studio() {
             </p>
           </div>
 
-          <aside className="space-y-6 lg:sticky lg:top-6 lg:self-start">
+          <aside className="space-y-5 md:sticky md:top-6 md:self-start">
+            <fieldset
+              className="rounded-xl border border-line bg-surface p-4"
+              disabled={busy}
+            >
+              <legend className="mono px-2 text-[10px] uppercase tracking-[0.16em] text-text-faint">
+                {t.studio.qualityLabel}
+              </legend>
+              <div className="grid grid-cols-3 gap-1.5">
+                <ModelChip
+                  active={quality === "light"}
+                  busy={busy}
+                  label={t.studio.lightTitle}
+                  onClick={() => void run(shot.file, "light")}
+                />
+                <ModelChip
+                  active={quality === "balanced"}
+                  busy={busy}
+                  label={t.studio.balancedTitle}
+                  onClick={() => void run(shot.file, "balanced")}
+                />
+                <ModelChip
+                  active={quality === "maximum"}
+                  busy={busy}
+                  label={t.studio.maximumTitle}
+                  onClick={() => void run(shot.file, "maximum")}
+                />
+              </div>
+              <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
+                {busy
+                  ? progress
+                    ? t.progress[progress.key]
+                    : t.progress.working
+                  : t.studio.modelNote}
+              </p>
+            </fieldset>
+
             <div className="rounded-xl border border-line bg-surface p-5">
               <BackgroundPicker value={bg} onChange={setBg} />
             </div>
@@ -364,19 +489,26 @@ function Dropzone({
         <legend className="mono px-2 text-[10px] uppercase tracking-[0.16em] text-text-faint">
           {t.studio.qualityLabel}
         </legend>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-2 sm:grid-cols-3">
           <QualityOption
-            active={quality === "fast"}
-            onClick={() => onQuality("fast")}
-            title={t.studio.fastTitle}
-            note={fill(t.studio.fastNote, { mb: DOWNLOAD_MB.fast })}
+            active={quality === "light"}
+            onClick={() => onQuality("light")}
+            title={t.studio.lightTitle}
+            note={fill(t.studio.lightNote, { mb: DOWNLOAD_MB.light })}
             disabled={busy}
           />
           <QualityOption
-            active={quality === "precise"}
-            onClick={() => onQuality("precise")}
-            title={t.studio.preciseTitle}
-            note={fill(t.studio.preciseNote, { mb: DOWNLOAD_MB.precise })}
+            active={quality === "balanced"}
+            onClick={() => onQuality("balanced")}
+            title={t.studio.balancedTitle}
+            note={fill(t.studio.balancedNote, { mb: DOWNLOAD_MB.balanced })}
+            disabled={busy}
+          />
+          <QualityOption
+            active={quality === "maximum"}
+            onClick={() => onQuality("maximum")}
+            title={t.studio.maximumTitle}
+            note={fill(t.studio.maximumNote, { mb: DOWNLOAD_MB.maximum })}
             disabled={busy}
           />
         </div>
@@ -465,6 +597,34 @@ function ProgressPanel({
         </p>
       )}
     </div>
+  );
+}
+
+function ModelChip({
+  active,
+  busy,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  busy: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-xs font-medium transition-colors disabled:opacity-60 ${
+        active
+          ? "border-accent bg-accent/10 text-text"
+          : "border-line text-text-dim hover:border-text-faint hover:text-text"
+      }`}
+    >
+      {busy && active && <Loader2 size={12} className="animate-spin" />}
+      {label}
+    </button>
   );
 }
 

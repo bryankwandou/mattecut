@@ -123,15 +123,22 @@ export const it: Dict = {
     pick: "Scegli un'immagine",
     formats: "JPG · PNG · WEBP — massimo 12 MB",
     qualityLabel: "Qualità",
-    fastTitle: "Veloce",
-    fastNote: "Modello da {mb} MB · basta per quasi tutte le foto",
-    preciseTitle: "Preciso",
-    preciseNote: "Modello da {mb} MB · più pulito su capelli e bordi morbidi",
+    lightTitle: "Leggero",
+    lightNote:
+      "Modello da {mb} MB · il più leggero, per dispositivi e reti limitati",
+    balancedTitle: "Bilanciato",
+    balancedNote:
+      "Modello da {mb} MB · la scelta intermedia, basta per quasi tutte le foto",
+    maximumTitle: "Massimo",
+    maximumNote:
+      "Modello da {mb} MB · più pulito su capelli e bordi morbidi",
     downloadPng: "Scarica il PNG",
     transparentSuffix: "trasparente",
     exportNote:
       "Esportato sempre alla risoluzione originale, non alla dimensione dell'anteprima.",
     another: "Un'altra immagine",
+    restored: "L’ultimo risultato è stato ripristinato dopo la chiusura della scheda.",
+    modelNote: "Cambia modello quando vuoi; il ritaglio viene rifatto sulla stessa immagine.",
     firstDownloadNote:
       "Questo download da {mb} MB avviene una volta sola. Una volta salvato nel browser, le immagini successive vengono elaborate senza rete.",
     errUnsupported: "Quel formato non è ancora supportato. Usa JPG, PNG o WebP.",
@@ -161,6 +168,10 @@ export const it: Dict = {
     customLabel: "Colore libero",
     transparent: "Trasparente",
     wheel: "Scegli dalla ruota dei colori",
+    spectrum: "Spettro di colori",
+    hue: "Tonalità",
+    alpha: "Opacità",
+    count: "16.777.216 colori",
     hint: "Accetta HEX e rgb(), incluso rgba() per uno sfondo semitrasparente.",
     invalid: "Non interpretabile. Prova #FF0000, #F00 o rgb(255, 0, 0).",
     presets: [
@@ -174,5 +185,18 @@ export const it: Dict = {
       "Crema",
     ],
     gradients: ["Tramonto", "Foschia", "Mezzanotte", "Mare"],
+    wallpaperLabel: "Sfondo",
+    wallpapers: [
+      "Grigio studio",
+      "Blu passaporto",
+      "Grafite",
+      "Sabbia calda",
+      "Cielo",
+      "Salvia",
+    ],
+    upload: "Una tua immagine",
+    uploadHint: "Il file resta su questo dispositivo",
+    fitCover: "Riempi",
+    fitContain: "Adatta",
   },
 };

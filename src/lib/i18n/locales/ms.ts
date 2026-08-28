@@ -123,15 +123,22 @@ export const ms: Dict = {
     pick: "Pilih gambar",
     formats: "JPG · PNG · WEBP — maksimum 12 MB",
     qualityLabel: "Kualiti",
-    fastTitle: "Pantas",
-    fastNote: "Model {mb} MB · cukup untuk kebanyakan foto",
-    preciseTitle: "Persis",
-    preciseNote: "Model {mb} MB · lebih kemas pada rambut dan tepi halus",
+    lightTitle: "Ringan",
+    lightNote:
+      "Model {mb} MB · paling ringan, untuk peranti dan talian terhad",
+    balancedTitle: "Seimbang",
+    balancedNote:
+      "Model {mb} MB · pilihan tengah, memadai untuk kebanyakan foto",
+    maximumTitle: "Maksimum",
+    maximumNote:
+      "Model {mb} MB · paling bersih pada rambut dan tepi lembut",
     downloadPng: "Muat turun PNG",
     transparentSuffix: "lutsinar",
     exportNote:
       "Sentiasa dieksport pada resolusi asal, bukan saiz pratonton.",
     another: "Gambar lain",
+    restored: "Hasil terakhir dipulihkan selepas tab ditutup.",
+    modelNote: "Tukar model bila-bila masa; potongan diulang pada imej yang sama.",
     firstDownloadNote:
       "Muat turun {mb} MB ini sekali sahaja. Selepas tersimpan dalam pelayar, gambar seterusnya diproses tanpa rangkaian langsung.",
     errUnsupported: "Format itu belum disokong. Guna JPG, PNG, atau WebP.",
@@ -161,6 +168,10 @@ export const ms: Dict = {
     customLabel: "Warna sendiri",
     transparent: "Lutsinar",
     wheel: "Pilih daripada roda warna",
+    spectrum: "Spektrum warna",
+    hue: "Rona",
+    alpha: "Kelegapan",
+    count: "16,777,216 warna",
     hint: "Menerima HEX dan rgb(), termasuk rgba() bila mahu latar separa lutsinar.",
     invalid: "Format belum terbaca. Cuba #FF0000, #F00, atau rgb(255, 0, 0).",
     presets: [
@@ -174,5 +185,18 @@ export const ms: Dict = {
       "Krim",
     ],
     gradients: ["Senja", "Kabus", "Malam", "Laut"],
+    wallpaperLabel: "Kertas dinding",
+    wallpapers: [
+      "Kelabu studio",
+      "Biru pasport",
+      "Grafit",
+      "Pasir suam",
+      "Langit",
+      "Sage",
+    ],
+    upload: "Imej sendiri",
+    uploadHint: "Fail kekal pada peranti ini",
+    fitCover: "Penuhi",
+    fitContain: "Muat",
   },
 };

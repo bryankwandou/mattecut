@@ -123,15 +123,22 @@ export const ja: Dict = {
     pick: "画像を選ぶ",
     formats: "JPG · PNG · WEBP — 最大 12 MB",
     qualityLabel: "品質",
-    fastTitle: "高速",
-    fastNote: "{mb} MB のモデル · ほとんどの写真に十分",
-    preciseTitle: "精密",
-    preciseNote: "{mb} MB のモデル · 髪や柔らかい境界がきれい",
+    lightTitle: "軽量",
+    lightNote:
+      "{mb} MB のモデル · 最軽量。非力な端末や細い回線向け",
+    balancedTitle: "標準",
+    balancedNote:
+      "{mb} MB のモデル · 中間の選択。ほとんどの写真に十分",
+    maximumTitle: "最高",
+    maximumNote:
+      "{mb} MB のモデル · 髪や柔らかい輪郭が最もきれい",
     downloadPng: "PNG をダウンロード",
     transparentSuffix: "透明",
     exportNote:
       "書き出しは常に元の解像度で、プレビューの大きさではありません。",
     another: "別の画像",
+    restored: "タブが閉じたあと、直前の結果を復元しました。",
+    modelNote: "モデルはいつでも切り替えられます。同じ画像で切り抜きをやり直します。",
     firstDownloadNote:
       "この {mb} MB のダウンロードは一度きりです。ブラウザーに保存されたあとは、次の画像は通信をまったく使わずに処理されます。",
     errUnsupported:
@@ -162,6 +169,10 @@ export const ja: Dict = {
     customLabel: "自分で指定する色",
     transparent: "透明",
     wheel: "カラーホイールから選ぶ",
+    spectrum: "色スペクトル",
+    hue: "色相",
+    alpha: "不透明度",
+    count: "16,777,216 色",
     hint: "HEX と rgb() を受け付けます。半透明の背景にしたいときは rgba() も使えます。",
     invalid: "読み取れませんでした。#FF0000、#F00、rgb(255, 0, 0) をお試しください。",
     presets: [
@@ -175,5 +186,18 @@ export const ja: Dict = {
       "クリーム",
     ],
     gradients: ["夕暮れ", "かすみ", "真夜中", "海"],
+    wallpaperLabel: "背景画像",
+    wallpapers: [
+      "スタジオグレー",
+      "パスポートブルー",
+      "グラファイト",
+      "ウォームサンド",
+      "スカイ",
+      "セージ",
+    ],
+    upload: "自分の画像",
+    uploadHint: "ファイルはこの端末に残ります",
+    fitCover: "埋める",
+    fitContain: "収める",
   },
 };

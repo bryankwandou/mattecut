@@ -123,15 +123,22 @@ export const fr: Dict = {
     pick: "Choisir une image",
     formats: "JPG · PNG · WEBP — 12 Mo maximum",
     qualityLabel: "Qualité",
-    fastTitle: "Rapide",
-    fastNote: "Modèle de {mb} Mo · suffisant pour la plupart des photos",
-    preciseTitle: "Précis",
-    preciseNote: "Modèle de {mb} Mo · plus propre sur les cheveux et les bords doux",
+    lightTitle: "Léger",
+    lightNote:
+      "Modèle de {mb} Mo · le plus léger, pour appareils et connexions limités",
+    balancedTitle: "Équilibré",
+    balancedNote:
+      "Modèle de {mb} Mo · le choix intermédiaire, suffisant pour presque toutes les photos",
+    maximumTitle: "Maximum",
+    maximumNote:
+      "Modèle de {mb} Mo · plus net sur les cheveux et les bords doux",
     downloadPng: "Télécharger le PNG",
     transparentSuffix: "transparent",
     exportNote:
       "Toujours exporté à la résolution d'origine, pas à la taille de l'aperçu.",
     another: "Une autre image",
+    restored: "Votre dernier résultat a été restauré après la fermeture de l’onglet.",
+    modelNote: "Changez de modèle à tout moment ; le détourage est refait sur la même image.",
     firstDownloadNote:
       "Ce téléchargement de {mb} Mo n'a lieu qu'une fois. Une fois en cache dans le navigateur, les images suivantes sont traitées sans réseau du tout.",
     errUnsupported: "Ce format n'est pas encore pris en charge. Utilisez JPG, PNG ou WebP.",
@@ -161,6 +168,10 @@ export const fr: Dict = {
     customLabel: "Couleur libre",
     transparent: "Transparent",
     wheel: "Choisir dans la roue chromatique",
+    spectrum: "Spectre de couleurs",
+    hue: "Teinte",
+    alpha: "Opacité",
+    count: "16 777 216 couleurs",
     hint: "Accepte HEX et rgb(), y compris rgba() pour un fond semi-transparent.",
     invalid: "Non interprétable. Essayez #FF0000, #F00 ou rgb(255, 0, 0).",
     presets: [
@@ -174,5 +185,18 @@ export const fr: Dict = {
       "Crème",
     ],
     gradients: ["Crépuscule", "Brume", "Minuit", "Mer"],
+    wallpaperLabel: "Fond",
+    wallpapers: [
+      "Gris studio",
+      "Bleu passeport",
+      "Graphite",
+      "Sable chaud",
+      "Ciel",
+      "Sauge",
+    ],
+    upload: "Votre propre image",
+    uploadHint: "Le fichier reste sur cet appareil",
+    fitCover: "Remplir",
+    fitContain: "Ajuster",
   },
 };

@@ -123,15 +123,22 @@ export const pt: Dict = {
     pick: "Escolher imagem",
     formats: "JPG · PNG · WEBP — 12 MB no máximo",
     qualityLabel: "Qualidade",
-    fastTitle: "Rápido",
-    fastNote: "Modelo de {mb} MB · suficiente para a maioria das fotos",
-    preciseTitle: "Preciso",
-    preciseNote: "Modelo de {mb} MB · mais limpo em cabelo e bordas suaves",
+    lightTitle: "Leve",
+    lightNote:
+      "Modelo de {mb} MB · o mais leve, para aparelhos e conexões limitados",
+    balancedTitle: "Equilibrado",
+    balancedNote:
+      "Modelo de {mb} MB · a opção do meio, suficiente para quase todas as fotos",
+    maximumTitle: "Máximo",
+    maximumNote:
+      "Modelo de {mb} MB · mais limpo em cabelos e bordas suaves",
     downloadPng: "Baixar PNG",
     transparentSuffix: "transparente",
     exportNote:
       "Sempre exportado na resolução original, não no tamanho da prévia.",
     another: "Outra imagem",
+    restored: "Seu último resultado foi restaurado depois que a aba fechou.",
+    modelNote: "Troque de modelo quando quiser; o recorte é refeito na mesma imagem.",
     firstDownloadNote:
       "Este download de {mb} MB acontece uma vez só. Depois de guardado no navegador, as imagens seguintes são processadas sem rede nenhuma.",
     errUnsupported: "Esse formato ainda não é aceito. Use JPG, PNG ou WebP.",
@@ -161,6 +168,10 @@ export const pt: Dict = {
     customLabel: "Cor própria",
     transparent: "Transparente",
     wheel: "Escolher na roda de cores",
+    spectrum: "Espectro de cores",
+    hue: "Matiz",
+    alpha: "Opacidade",
+    count: "16.777.216 cores",
     hint: "Aceita HEX e rgb(), incluindo rgba() se quiser um fundo semitransparente.",
     invalid: "Não deu para interpretar. Tente #FF0000, #F00 ou rgb(255, 0, 0).",
     presets: [
@@ -174,5 +185,18 @@ export const pt: Dict = {
       "Creme",
     ],
     gradients: ["Entardecer", "Névoa", "Meia-noite", "Mar"],
+    wallpaperLabel: "Papel de parede",
+    wallpapers: [
+      "Cinza de estúdio",
+      "Azul de passaporte",
+      "Grafite",
+      "Areia quente",
+      "Céu",
+      "Sálvia",
+    ],
+    upload: "Sua própria imagem",
+    uploadHint: "O arquivo fica neste aparelho",
+    fitCover: "Preencher",
+    fitContain: "Ajustar",
   },
 };

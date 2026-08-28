@@ -123,15 +123,22 @@ export const nl: Dict = {
     pick: "Afbeelding kiezen",
     formats: "JPG · PNG · WEBP — maximaal 12 MB",
     qualityLabel: "Kwaliteit",
-    fastTitle: "Snel",
-    fastNote: "Model van {mb} MB · genoeg voor de meeste foto's",
-    preciseTitle: "Precies",
-    preciseNote: "Model van {mb} MB · schoner bij haar en zachte randen",
+    lightTitle: "Licht",
+    lightNote:
+      "Model van {mb} MB · het lichtst, voor beperkte apparaten en verbindingen",
+    balancedTitle: "Gebalanceerd",
+    balancedNote:
+      "Model van {mb} MB · de middenkeuze, genoeg voor de meeste foto's",
+    maximumTitle: "Maximaal",
+    maximumNote:
+      "Model van {mb} MB · schoner bij haar en zachte randen",
     downloadPng: "PNG downloaden",
     transparentSuffix: "transparant",
     exportNote:
       "Altijd geëxporteerd op de oorspronkelijke resolutie, niet op het formaat van de voorvertoning.",
     another: "Andere afbeelding",
+    restored: "Je laatste resultaat is hersteld nadat het tabblad sloot.",
+    modelNote: "Wissel altijd van model; de uitsnede wordt op dezelfde afbeelding opnieuw gemaakt.",
     firstDownloadNote:
       "Deze download van {mb} MB gebeurt één keer. Zodra hij in de browser staat, worden volgende afbeeldingen zonder netwerk verwerkt.",
     errUnsupported: "Dat formaat wordt nog niet ondersteund. Gebruik JPG, PNG of WebP.",
@@ -161,6 +168,10 @@ export const nl: Dict = {
     customLabel: "Eigen kleur",
     transparent: "Transparant",
     wheel: "Kies uit de kleurenschijf",
+    spectrum: "Kleurenspectrum",
+    hue: "Kleurtoon",
+    alpha: "Dekking",
+    count: "16.777.216 kleuren",
     hint: "Neemt HEX en rgb(), inclusief rgba() voor een halfdoorzichtige achtergrond.",
     invalid: "Niet te lezen. Probeer #FF0000, #F00 of rgb(255, 0, 0).",
     presets: [
@@ -174,5 +185,18 @@ export const nl: Dict = {
       "Crème",
     ],
     gradients: ["Schemering", "Nevel", "Middernacht", "Zee"],
+    wallpaperLabel: "Achtergrond",
+    wallpapers: [
+      "Studiogrijs",
+      "Paspoortblauw",
+      "Grafiet",
+      "Warm zand",
+      "Lucht",
+      "Salie",
+    ],
+    upload: "Je eigen afbeelding",
+    uploadHint: "Het bestand blijft op dit apparaat",
+    fitCover: "Vullen",
+    fitContain: "Passend",
   },
 };
