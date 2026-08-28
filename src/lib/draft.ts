@@ -18,6 +18,8 @@ const KEY = "current";
  *  surprise the reader more than help them. */
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
+const TIERS = ["light", "balanced", "maximum"] as const;
+
 export type Draft = {
   name: string;
   type: string;
@@ -86,6 +88,14 @@ export async function loadDraft(): Promise<Draft | null> {
   }
   // A half-written record from a crash mid-put is worse than none.
   if (!(raw.original instanceof Blob) || !(raw.master instanceof Blob)) {
+    void clearDraft();
+    return null;
+  }
+  // A draft written by an older build can name a tier this one no longer
+  // has. Restoring it would hand the matting library `undefined` for a
+  // model the moment the reader pressed anything, so the draft goes
+  // instead — one lost result beats a studio that throws on first use.
+  if (!TIERS.includes(raw.quality)) {
     void clearDraft();
     return null;
   }
