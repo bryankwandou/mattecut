@@ -46,8 +46,10 @@ const ATTIRE = ["charcoal", "navy", "blazer"] as const;
 type Attire = (typeof ATTIRE)[number];
 
 /** A jacket is wider than the silhouette it hangs on: the mask stops at the
- *  body, the shoulder pads do not. Tuned against the bundled artwork. */
-const JACKET_SPREAD = 1.42;
+ *  body, the shoulder pads do not. Measured against a real cut rather than
+ *  guessed — a detected shoulder width of 0.71 of the frame wants a jacket
+ *  of about 0.86, which clears each shoulder without reaching the edges. */
+const JACKET_SPREAD = 1.2;
 
 /** How far above the detected neck the collar sits, in image heights. */
 const JACKET_RISE = 0.035;

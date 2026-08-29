@@ -1,13 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620">
-  <!-- Shirt, drawn first so the jacket's opening reveals it. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
   <path d="M320 0 L500 430 L680 0 Z" fill="#f2f2ef"/>
-  <!-- Jacket, over shirt and tie: the V is the only place they show. -->
-  <path d="M0 620 L0 156 C 66 62, 196 8, 320 0 L500 300 L474 620 Z" fill="#2f3a44"/>
-  <path d="M1000 620 L1000 156 C 934 62, 804 8, 680 0 L500 300 L526 620 Z" fill="#2f3a44"/>
-  <!-- Lapels, a shade up so the fold reads at small sizes. -->
+  <path d="M0 1000 L0 156 C 66 62, 196 8, 320 0 L500 300 L474 1000 Z" fill="#2f3a44"/>
+  <path d="M1000 1000 L1000 156 C 934 62, 804 8, 680 0 L500 300 L526 1000 Z" fill="#2f3a44"/>
   <path d="M320 0 L500 300 L408 44 Z" fill="#3b4854"/>
   <path d="M680 0 L500 300 L592 44 Z" fill="#3b4854"/>
-  <!-- Shirt collar sits on top of everything. -->
   <path d="M322 0 L436 26 L404 96 Z" fill="#ffffff"/>
   <path d="M678 0 L564 26 L596 96 Z" fill="#ffffff"/>
 </svg>

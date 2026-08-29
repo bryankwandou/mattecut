@@ -83,30 +83,44 @@ export function findPortrait(img: HTMLImageElement): Portrait | null {
 
   const span = bottom - top;
 
-  // The head: widest row in the upper part of the silhouette.
-  let headY = top;
-  let headW = 0;
-  const headBand = top + Math.round(span * 0.45);
-  for (let y = top; y <= headBand; y++) {
-    if (width[y] > headW) {
-      headW = width[y];
-      headY = y;
-    }
+  // Finding the neck by first guessing where the head ends does not work:
+  // on a tight chest-up crop the shoulders begin inside any band generous
+  // enough to contain the head, so the "widest row up top" is a shoulder.
+  //
+  // The neck needs no band. It is the row that is narrow *and* has
+  // something wider on both sides of it — the head above, the shoulders
+  // below. Scoring every row by how much it is pinched between its
+  // surroundings finds it without assuming where anything starts.
+  const maxAbove = new Int32Array(h);
+  const maxBelow = new Int32Array(h);
+  let run = 0;
+  for (let y = top; y <= bottom; y++) {
+    maxAbove[y] = run;
+    if (width[y] > run) run = width[y];
   }
-  if (headW < 8) return null;
+  run = 0;
+  for (let y = bottom; y >= top; y--) {
+    maxBelow[y] = run;
+    if (width[y] > run) run = width[y];
+  }
 
-  // The neck: narrowest row below the head, stopping once the silhouette
-  // flares back out past the head's own width — that flare is the shoulders.
   let neckY = -1;
-  let neckW = Infinity;
-  for (let y = headY + 1; y <= bottom; y++) {
-    if (width[y] > headW * 1.15) break;
-    if (width[y] > 0 && width[y] < neckW) {
-      neckW = width[y];
+  let best = 0;
+  const lo = top + Math.round(span * 0.08);
+  const hi = top + Math.round(span * 0.8);
+  for (let y = lo; y <= hi; y++) {
+    if (width[y] <= 0) continue;
+    const pinch = Math.min(maxAbove[y], maxBelow[y]) / width[y];
+    if (pinch > best) {
+      best = pinch;
       neckY = y;
     }
   }
-  if (neckY < 0) return null;
+
+  // A pinch this shallow is not a neck. A head alone, a full-body shot, or
+  // a shoulder hidden behind a raised arm all land here, and guessing from
+  // any of them would put a collar across someone's chin.
+  if (neckY < 0 || best < 1.55) return null;
 
   // The shoulders: the widest the body gets below the neck.
   let shoulderW = 0;
@@ -117,13 +131,7 @@ export function findPortrait(img: HTMLImageElement): Portrait | null {
       shoulderY = y;
     }
   }
-
-  // Three ways this is not the portrait we assumed: no real narrowing at the
-  // neck, shoulders that never appear below it, or a neck so low that the
-  // frame is probably not chest-up. Any of them means hands off.
-  if (neckW > shoulderW * 0.62) return null;
   if (shoulderY <= neckY + 1) return null;
-  if (neckY > top + span * 0.75) return null;
 
   return {
     centerX: centre[shoulderY] / w,
