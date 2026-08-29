@@ -132,6 +132,15 @@ export const de: Dict = {
     maximumTitle: "Maximum",
     maximumNote:
       "{mb} MB Modell · am saubersten bei Haaren und weichen Kanten",
+    auditOpen: "Modellkatalog prüfen",
+    auditResult:
+      "{models} Modelle an der Quelle gelesen. Kleinstes {small} Bytes, größtes {big} Bytes — nichts außerhalb dieses Bereichs.",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "Im Moment des Klicks vom Ursprungsserver gelesen, keine in dieser App hinterlegte Zahl. Zum erneuten Prüfen neu laden.",
+    auditFailed:
+      "Der Katalog ließ sich nicht lesen — das Netz versagte oder der Ursprung verweigerte die Antwort. Die Größen oben sind derzeit unbestätigt.",
     downloadPng: "PNG herunterladen",
     transparentSuffix: "transparent",
     exportNote:

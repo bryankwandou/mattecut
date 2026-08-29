@@ -132,6 +132,15 @@ export const ja: Dict = {
     maximumTitle: "最高",
     maximumNote:
       "{mb} MB のモデル · 髪や柔らかい輪郭が最もきれい",
+    auditOpen: "モデル一覧を確認",
+    auditResult:
+      "配信元で {models} 件のモデルを読み取りました。最小 {small} バイト、最大 {big} バイト — この範囲の外には何もありません。",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "ボタンを押した時点で配信元サーバーから読み取った値であり、このアプリに書かれた数字ではありません。もう一度確かめるには再読み込みしてください。",
+    auditFailed:
+      "一覧を読み取れませんでした — 通信に失敗したか、配信元が応答を拒みました。上の段階に表示された容量は今は裏付けがありません。",
     downloadPng: "PNG をダウンロード",
     transparentSuffix: "透明",
     exportNote:

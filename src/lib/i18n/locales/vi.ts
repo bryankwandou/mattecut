@@ -132,6 +132,15 @@ export const vi: Dict = {
     maximumTitle: "Tối đa",
     maximumNote:
       "Mô hình {mb} MB · sạch nhất ở tóc và viền mềm",
+    auditOpen: "Kiểm tra danh mục mô hình",
+    auditResult:
+      "Đọc được {models} mô hình tại nguồn. Nhỏ nhất {small} byte, lớn nhất {big} byte — không có gì ngoài khoảng đó.",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "Đọc từ máy chủ gốc ngay lúc bạn bấm nút, không phải con số viết sẵn trong ứng dụng này. Tải lại trang để kiểm tra lần nữa.",
+    auditFailed:
+      "Không đọc được danh mục — mạng lỗi hoặc máy chủ gốc từ chối. Các dung lượng ở những mức trên hiện chưa được xác minh.",
     downloadPng: "Tải PNG",
     transparentSuffix: "trong suốt",
     exportNote:

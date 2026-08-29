@@ -132,6 +132,15 @@ export const ms: Dict = {
     maximumTitle: "Maksimum",
     maximumNote:
       "Model {mb} MB · paling bersih pada rambut dan tepi lembut",
+    auditOpen: "Semak katalog model",
+    auditResult:
+      "Terbaca {models} model di sumbernya. Terkecil {small} bait, terbesar {big} bait — tiada di luar julat itu.",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "Dibaca terus dari pelayan asal ketika butang ditekan, bukan angka yang ditulis dalam aplikasi ini. Muat semula untuk menyemak lagi.",
+    auditFailed:
+      "Katalog tidak dapat dibaca — rangkaian gagal atau pelayan asal menolak. Saiz pada tahap di atas belum disahkan buat masa ini.",
     downloadPng: "Muat turun PNG",
     transparentSuffix: "lutsinar",
     exportNote:

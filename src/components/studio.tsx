@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { CompareSlider } from "@/components/compare-slider";
 import { BackgroundPicker } from "@/components/background-picker";
+import { CatalogAudit } from "@/components/catalog-audit";
 import { RotoLogo } from "@/components/logo";
 import { LanguagePicker, ThemeToggle } from "@/components/switches";
 import { useI18n } from "@/components/preferences";
@@ -434,6 +435,7 @@ export function Studio() {
                     : t.progress.working
                   : t.studio.modelNote}
               </p>
+              <CatalogAudit />
             </fieldset>
 
             <fieldset
@@ -666,6 +668,7 @@ function Dropzone({
             disabled={busy}
           />
         </div>
+        <CatalogAudit />
       </fieldset>
     </div>
   );

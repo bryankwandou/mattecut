@@ -132,6 +132,15 @@ export const es: Dict = {
     maximumTitle: "Máximo",
     maximumNote:
       "Modelo de {mb} MB · más limpio en el pelo y los bordes suaves",
+    auditOpen: "Revisar el catálogo de modelos",
+    auditResult:
+      "Se leyeron {models} modelos en el origen. El menor {small} bytes, el mayor {big} bytes: nada fuera de ese rango.",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "Leído del servidor de origen en el momento en que pulsaste el botón, no es una cifra escrita en esta aplicación. Recarga para volver a comprobarlo.",
+    auditFailed:
+      "No se pudo leer el catálogo: falló la red o el origen lo rechazó. Los tamaños de los niveles de arriba no están verificados ahora mismo.",
     downloadPng: "Descargar PNG",
     transparentSuffix: "transparente",
     exportNote:

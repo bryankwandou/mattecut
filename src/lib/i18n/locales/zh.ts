@@ -130,6 +130,15 @@ export const zh: Dict = {
     maximumTitle: "最高",
     maximumNote:
       "{mb} MB 模型 · 头发与柔和边缘最干净",
+    auditOpen: "查看模型清单",
+    auditResult:
+      "在来源处读到 {models} 个模型。最小 {small} 字节，最大 {big} 字节 — 这个范围之外没有别的。",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "这是按下按钮那一刻从来源服务器读取的，不是写在这个应用里的数字。想再核对一次，重新载入即可。",
+    auditFailed:
+      "清单读取失败 — 网络中断或来源拒绝了请求。上面各档位标注的大小目前没有得到证实。",
     downloadPng: "下载 PNG",
     transparentSuffix: "透明",
     exportNote: "始终按原始分辨率导出，而不是预览的尺寸。",

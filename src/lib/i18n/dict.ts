@@ -56,6 +56,12 @@ export type Dict = {
     balancedNote: string;
     maximumTitle: string;
     maximumNote: string;
+    auditOpen: string;
+    auditResult: string;
+    auditSize: string;
+    auditTiny: string;
+    auditNote: string;
+    auditFailed: string;
     downloadPng: string;
     transparentSuffix: string;
     exportNote: string;

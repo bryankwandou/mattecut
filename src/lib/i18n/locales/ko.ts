@@ -131,6 +131,15 @@ export const ko: Dict = {
     maximumTitle: "최고",
     maximumNote:
       "{mb} MB 모델 · 머리카락과 부드러운 가장자리가 가장 깔끔",
+    auditOpen: "모델 목록 확인",
+    auditResult:
+      "원본에서 모델 {models}개를 읽었습니다. 가장 작은 것 {small}바이트, 가장 큰 것 {big}바이트 — 그 범위 밖에는 아무것도 없습니다.",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "버튼을 누른 그 순간 원본 서버에서 읽은 값이며, 이 앱에 적어 둔 숫자가 아닙니다. 다시 확인하려면 새로 고침하세요.",
+    auditFailed:
+      "목록을 읽지 못했습니다 — 네트워크가 실패했거나 원본이 거부했습니다. 위 단계에 적힌 용량은 지금은 확인되지 않은 값입니다.",
     downloadPng: "PNG 내려받기",
     transparentSuffix: "투명",
     exportNote: "미리보기 크기가 아니라 언제나 원본 해상도로 내보냅니다.",

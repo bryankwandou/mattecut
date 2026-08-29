@@ -130,6 +130,15 @@ export const id: Dict = {
     maximumTitle: "Maksimum",
     maximumNote:
       "Model {mb} MB · paling bersih pada rambut dan tepi lembut",
+    auditOpen: "Periksa katalog model",
+    auditResult:
+      "Terbaca {models} model di sumbernya. Terkecil {small} bita, terbesar {big} bita — tidak ada di luar rentang itu.",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "Dibaca langsung dari server asal saat tombol ditekan, bukan angka yang ditulis di aplikasi ini. Muat ulang untuk memeriksa lagi.",
+    auditFailed:
+      "Katalog tidak terbaca — jaringan gagal atau server asal menolak. Angka pada tingkat kualitas di atas tidak terbukti saat ini.",
     downloadPng: "Unduh PNG",
     transparentSuffix: "transparan",
     exportNote: "Selalu diekspor pada resolusi asli, bukan ukuran pratinjau.",

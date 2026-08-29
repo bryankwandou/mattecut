@@ -132,6 +132,15 @@ export const nl: Dict = {
     maximumTitle: "Maximaal",
     maximumNote:
       "Model van {mb} MB · schoner bij haar en zachte randen",
+    auditOpen: "Modelcatalogus controleren",
+    auditResult:
+      "{models} modellen gelezen bij de bron. Kleinste {small} bytes, grootste {big} bytes — niets buiten dat bereik.",
+    auditSize: "{mb} MB",
+    auditTiny: "{kb} KB",
+    auditNote:
+      "Gelezen van de bronserver op het moment dat je op de knop drukte, geen getal dat in deze app staat. Herlaad om opnieuw te controleren.",
+    auditFailed:
+      "De catalogus kon niet worden gelezen — het netwerk faalde of de bron weigerde. De formaten bij de niveaus hierboven zijn nu niet geverifieerd.",
     downloadPng: "PNG downloaden",
     transparentSuffix: "transparant",
     exportNote:
