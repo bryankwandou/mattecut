@@ -139,6 +139,19 @@ export const nl: Dict = {
     another: "Andere afbeelding",
     restored: "Je laatste resultaat is hersteld nadat het tabblad sloot.",
     modelNote: "Wissel altijd van model; de uitsnede wordt op dezelfde afbeelding opnieuw gemaakt.",
+    attireLabel: "Kleding",
+    attireNone: "Zonder colbert",
+    attire: [
+      "Antracietpak",
+      "Marineblauw pak",
+      "Blazer zonder das",
+    ],
+    attireAuto:
+      "Automatisch geplaatst op basis van schouders en hals in de uitsnede.",
+    attireManual:
+      "De schouders waren niet leesbaar op deze foto. Stel grootte en hoogte zelf in.",
+    attireSize: "Grootte",
+    attireDrop: "Hoogte",
     firstDownloadNote:
       "Deze download van {mb} MB gebeurt één keer. Zodra hij in de browser staat, worden volgende afbeeldingen zonder netwerk verwerkt.",
     errUnsupported: "Dat formaat wordt nog niet ondersteund. Gebruik JPG, PNG of WebP.",

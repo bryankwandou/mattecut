@@ -139,6 +139,19 @@ export const ja: Dict = {
     another: "別の画像",
     restored: "タブが閉じたあと、直前の結果を復元しました。",
     modelNote: "モデルはいつでも切り替えられます。同じ画像で切り抜きをやり直します。",
+    attireLabel: "服装",
+    attireNone: "ジャケットなし",
+    attire: [
+      "チャコールのスーツ",
+      "ネイビーのスーツ",
+      "ノーネクタイのブレザー",
+    ],
+    attireAuto:
+      "切り抜きの肩と首から自動で配置しました。",
+    attireManual:
+      "この写真では肩を読み取れませんでした。大きさと高さはご自分で調整してください。",
+    attireSize: "大きさ",
+    attireDrop: "高さ",
     firstDownloadNote:
       "この {mb} MB のダウンロードは一度きりです。ブラウザーに保存されたあとは、次の画像は通信をまったく使わずに処理されます。",
     errUnsupported:

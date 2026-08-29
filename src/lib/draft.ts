@@ -27,6 +27,10 @@ export type Draft = {
   master: Blob;
   quality: "light" | "balanced" | "maximum";
   bg: unknown;
+  /** Optional so a draft written before jackets existed still loads. */
+  attire?: string | null;
+  attireScale?: number;
+  attireDrop?: number;
   at: number;
 };
 

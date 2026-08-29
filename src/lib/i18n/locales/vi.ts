@@ -139,6 +139,19 @@ export const vi: Dict = {
     another: "Ảnh khác",
     restored: "Kết quả gần nhất đã được khôi phục sau khi thẻ đóng.",
     modelNote: "Đổi mô hình bất cứ lúc nào; phần tách được làm lại trên cùng ảnh.",
+    attireLabel: "Trang phục",
+    attireNone: "Không áo vest",
+    attire: [
+      "Vest than chì",
+      "Vest xanh navy",
+      "Blazer không cà vạt",
+    ],
+    attireAuto:
+      "Đặt tự động theo vai và cổ trên ảnh đã tách nền.",
+    attireManual:
+      "Không đọc được vai trong ảnh này. Hãy tự chỉnh kích thước và độ cao.",
+    attireSize: "Kích thước",
+    attireDrop: "Độ cao",
     firstDownloadNote:
       "Lần tải {mb} MB này chỉ diễn ra một lần. Sau khi được lưu trong trình duyệt, những ảnh sau được xử lý mà không cần mạng.",
     errUnsupported: "Định dạng đó chưa được hỗ trợ. Hãy dùng JPG, PNG hoặc WebP.",

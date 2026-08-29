@@ -28,6 +28,7 @@ import {
   type Quality,
 } from "@/lib/matting";
 import {
+  backdropUrl,
   backgroundToCss,
   downloadBlob,
   exportImage,
@@ -35,9 +36,21 @@ import {
   type Background,
 } from "@/lib/compose";
 import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
+import { findPortrait, type Portrait } from "@/lib/portrait";
 
 const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 12 * 1024 * 1024;
+
+/** Jacket artwork, by file name under /attire. */
+const ATTIRE = ["charcoal", "navy", "blazer"] as const;
+type Attire = (typeof ATTIRE)[number];
+
+/** A jacket is wider than the silhouette it hangs on: the mask stops at the
+ *  body, the shoulder pads do not. Tuned against the bundled artwork. */
+const JACKET_SPREAD = 1.42;
+
+/** How far above the detected neck the collar sits, in image heights. */
+const JACKET_RISE = 0.035;
 
 type Shot = {
   file: File;
@@ -50,6 +63,8 @@ type Shot = {
   h: number;
   /** Which model produced this cut, so the switcher shows the live state. */
   quality: Quality;
+  /** Null when the silhouette did not read as a frontal, chest-up portrait. */
+  portrait: Portrait | null;
 };
 
 export function Studio() {
@@ -62,6 +77,16 @@ export function Studio() {
   const [dragOver, setDragOver] = useState(false);
   const [busy, setBusy] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [attire, setAttire] = useState<Attire | null>(null);
+  // The artwork is kept next to the name it was fetched for. Holding the
+  // Blob alone would let a half-finished switch paint the previous jacket
+  // for a frame, and clearing it up front would need a setState the effect
+  // has no business making.
+  const [art, setArt] = useState<{ name: Attire; blob: Blob } | null>(null);
+  // Nudges on top of the automatic placement, both centred on zero so the
+  // sliders read as corrections rather than as the settings themselves.
+  const [attireScale, setAttireScale] = useState(1);
+  const [attireDrop, setAttireDrop] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const urls = useRef<string[]>([]);
 
@@ -112,6 +137,7 @@ export function Studio() {
           w: bitmap.naturalWidth,
           h: bitmap.naturalHeight,
           quality: q,
+          portrait: findPortrait(bitmap),
         });
         setProgress({ stage: "done", ratio: 1, key: "separating" });
       } catch (e) {
@@ -157,9 +183,17 @@ export function Studio() {
           w: bitmap.naturalWidth,
           h: bitmap.naturalHeight,
           quality: d.quality,
+          portrait: findPortrait(bitmap),
         });
         setQuality(d.quality);
         if (d.bg) setBg(d.bg as Background);
+        // Same guard as the tier: a jacket this build no longer ships must
+        // not come back as a broken fetch on the reader's first glance.
+        if (d.attire && (ATTIRE as readonly string[]).includes(d.attire)) {
+          setAttire(d.attire as Attire);
+          if (typeof d.attireScale === "number") setAttireScale(d.attireScale);
+          if (typeof d.attireDrop === "number") setAttireDrop(d.attireDrop);
+        }
         setRestored(true);
       } catch {
         void clearDraft();
@@ -183,11 +217,14 @@ export function Studio() {
         master: shot.masterBlob,
         quality: shot.quality,
         bg,
+        attire,
+        attireScale,
+        attireDrop,
         at: Date.now(),
       });
     }, 400);
     return () => clearTimeout(timer);
-  }, [shot, bg]);
+  }, [shot, bg, attire, attireScale, attireDrop]);
 
   // Paste-to-upload. People screenshot then paste; supporting it costs a
   // handful of lines and removes a whole step from the flow.
@@ -208,11 +245,50 @@ export function Studio() {
     return () => clearTimeout(timer);
   }, [quality, shot, busy]);
 
+  // Jacket artwork is fetched into a Blob, like every other image in the
+  // studio, so preview and export read from one decoded copy.
+  useEffect(() => {
+    if (!attire) return;
+    let alive = true;
+    void (async () => {
+      try {
+        const res = await fetch(`/attire/${attire}.svg`);
+        const blob = await res.blob();
+        if (alive) setArt({ name: attire, blob });
+      } catch {
+        // A jacket that will not load is worse than none: it would leave a
+        // chip lit over a picture that never changed.
+        if (alive) setAttire(null);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [attire]);
+
+  // One rectangle, in fractions of the picture, used by the preview and by
+  // the export alike. Two separate calculations here would be two chances
+  // for the downloaded file to disagree with what the reader approved.
+  const jacket = attire && art?.name === attire ? art.blob : null;
+  const overlay =
+    shot && jacket
+      ? (() => {
+          const p = shot.portrait;
+          const w = (p ? p.shoulderWidth * JACKET_SPREAD : 0.8) * attireScale;
+          const cx = p ? p.centerX : 0.5;
+          const y = (p ? p.neckY - JACKET_RISE : 0.55) + attireDrop;
+          return { blob: jacket, x: cx - w / 2, y, w };
+        })()
+      : null;
+
   const reset = () => {
     void clearDraft();
     setRestored(false);
     setShot(null);
     setBg({ kind: "transparent" });
+    setAttire(null);
+    setAttireScale(1);
+    setAttireDrop(0);
     setProgress(null);
     setError(null);
   };
@@ -222,7 +298,15 @@ export function Studio() {
     const ext =
       format === "image/png" ? "png" : format === "image/jpeg" ? "jpg" : "webp";
     try {
-      const blob = await exportImage(shot.bitmap, shot.w, shot.h, bg, format);
+      const blob = await exportImage(
+        shot.bitmap,
+        shot.w,
+        shot.h,
+        bg,
+        format,
+        0.95,
+        overlay,
+      );
       downloadBlob(blob, outputName(shot.file.name, ext));
     } catch (e) {
       console.error("[roto] export failed", e);
@@ -302,6 +386,11 @@ export function Studio() {
               before={shot.originalUrl}
               after={shot.masterUrl}
               backdrop={backgroundToCss(bg)}
+              overlay={
+                overlay
+                  ? { ...overlay, src: backdropUrl(overlay.blob) }
+                  : null
+              }
             />
             <p className="mono text-[11px] text-text-faint" dir="ltr">
               {shot.w} &times; {shot.h} px &middot; {shot.file.name}
@@ -342,6 +431,69 @@ export function Studio() {
                     ? t.progress[progress.key]
                     : t.progress.working
                   : t.studio.modelNote}
+              </p>
+            </fieldset>
+
+            <fieldset
+              className="rounded-xl border border-line bg-surface p-4"
+              disabled={busy}
+            >
+              <legend className="mono px-2 text-[10px] uppercase tracking-[0.16em] text-text-faint">
+                {t.studio.attireLabel}
+              </legend>
+
+              <div className="grid grid-cols-4 gap-1.5">
+                <ModelChip
+                  active={attire === null}
+                  busy={false}
+                  label={t.studio.attireNone}
+                  onClick={() => setAttire(null)}
+                />
+                {ATTIRE.map((name, i) => (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => setAttire(name)}
+                    aria-pressed={attire === name}
+                    title={t.studio.attire[i]}
+                    aria-label={t.studio.attire[i]}
+                    className={`relative h-11 overflow-hidden rounded-lg border transition-colors ${
+                      attire === name
+                        ? "border-accent ring-2 ring-accent/40"
+                        : "border-line hover:border-text-faint"
+                    }`}
+                  >
+                    <span
+                      className="absolute inset-0 bg-contain bg-bottom bg-no-repeat"
+                      style={{
+                        backgroundImage: `url("/attire/${name}.svg")`,
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              {attire && (
+                <div className="mt-3 space-y-2.5">
+                  <Nudge
+                    label={t.studio.attireSize}
+                    min={70}
+                    max={140}
+                    value={Math.round(attireScale * 100)}
+                    onChange={(v) => setAttireScale(v / 100)}
+                  />
+                  <Nudge
+                    label={t.studio.attireDrop}
+                    min={-15}
+                    max={25}
+                    value={Math.round(attireDrop * 100)}
+                    onChange={(v) => setAttireDrop(v / 100)}
+                  />
+                </div>
+              )}
+
+              <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
+                {shot.portrait ? t.studio.attireAuto : t.studio.attireManual}
               </p>
             </fieldset>
 
@@ -597,6 +749,36 @@ function ProgressPanel({
         </p>
       )}
     </div>
+  );
+}
+
+function Nudge({
+  label,
+  min,
+  max,
+  value,
+  onChange,
+}: {
+  label: string;
+  min: number;
+  max: number;
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <label className="flex items-center gap-3">
+      <span className="mono w-14 shrink-0 text-[10px] uppercase tracking-[0.14em] text-text-faint">
+        {label}
+      </span>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="roto-range min-w-0 flex-1"
+      />
+    </label>
   );
 }
 

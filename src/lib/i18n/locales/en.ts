@@ -138,6 +138,19 @@ export const en: Dict = {
     another: "Another image",
     restored: "Your last result was restored after the tab closed.",
     modelNote: "Switch model any time; the cut is redone on the same image.",
+    attireLabel: "Attire",
+    attireNone: "No jacket",
+    attire: [
+      "Charcoal suit",
+      "Navy suit",
+      "Blazer, no tie",
+    ],
+    attireAuto:
+      "Placed automatically from the shoulders and neck in the cut-out.",
+    attireManual:
+      "The shoulders were not readable in this photo. Set size and height yourself.",
+    attireSize: "Size",
+    attireDrop: "Height",
     firstDownloadNote:
       "This {mb} MB download happens once. After it is cached in the browser, later images are processed with no network at all.",
     errUnsupported: "That format is not supported yet. Use JPG, PNG, or WebP.",

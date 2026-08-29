@@ -139,6 +139,19 @@ export const tr: Dict = {
     another: "Başka görsel",
     restored: "Sekme kapandıktan sonra son sonucunuz geri yüklendi.",
     modelNote: "İstediğiniz zaman model değiştirin; kesim aynı görsel üzerinde yeniden yapılır.",
+    attireLabel: "Kıyafet",
+    attireNone: "Ceketsiz",
+    attire: [
+      "Antrasit takım",
+      "Lacivert takım",
+      "Kravatsız blazer",
+    ],
+    attireAuto:
+      "Kesitteki omuz ve boyundan otomatik yerleştirildi.",
+    attireManual:
+      "Bu fotoğrafta omuzlar okunamadı. Boyutu ve yüksekliği kendin ayarla.",
+    attireSize: "Boyut",
+    attireDrop: "Yükseklik",
     firstDownloadNote:
       "Bu {mb} MB'lık indirme yalnızca bir kez olur. Tarayıcıda saklandıktan sonra sonraki görseller hiç ağ kullanmadan işlenir.",
     errUnsupported: "Bu biçim henüz desteklenmiyor. JPG, PNG veya WebP kullanın.",

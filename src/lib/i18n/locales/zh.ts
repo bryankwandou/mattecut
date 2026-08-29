@@ -136,6 +136,19 @@ export const zh: Dict = {
     another: "换一张图",
     restored: "标签页关闭后，已恢复你上次的结果。",
     modelNote: "随时切换模型，将在同一张图上重新抠图。",
+    attireLabel: "着装",
+    attireNone: "不加西装",
+    attire: [
+      "炭灰西装",
+      "藏青西装",
+      "无领带西装外套",
+    ],
+    attireAuto:
+      "根据抠图中的肩线与颈部自动摆放。",
+    attireManual:
+      "这张照片读不出肩线，请自行调整大小和高度。",
+    attireSize: "大小",
+    attireDrop: "高度",
     firstDownloadNote:
       "这次 {mb} MB 的下载只发生一次。存进浏览器之后，后面的图片完全不用联网就能处理。",
     errUnsupported: "还不支持这个格式。请使用 JPG、PNG 或 WebP。",

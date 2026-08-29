@@ -40,8 +40,15 @@ sebelum orang mencoba, bukan sesudah.
   menerima `#FF0000`, `#F00`, `#00f8`, `rgb(255, 0, 0)`, `rgb(10 20 30)`,
   dan `rgba(0, 0, 255, .4)`. Salah ketik ditandai, bukan diabaikan
   diam-diam.
+- Jas untuk pas foto: tiga potongan yang ditempatkan otomatis dari bahu dan
+  leher pada hasil potongan, plus penggeser ukuran dan tinggi untuk
+  mengoreksinya. Penempatan dibaca dari kanal alfa, bukan dari model pose,
+  jadi tidak ada unduhan tambahan. Batasnya disebut di antarmuka: ini
+  membaca potret hadap depan sebatas dada, dan kalau bahu tidak terbaca
+  aplikasinya bilang begitu alih-alih menebak.
 - Hasil terakhir disimpan diam-diam di IndexedDB, jadi tab yang tertutup
-  atau peramban yang mati tidak menghapus pekerjaan Anda.
+  atau peramban yang mati tidak menghapus pekerjaan Anda. Latar dan jas
+  yang dipilih ikut pulih.
 - Ekspor PNG (kanal alfa dipertahankan), JPG, dan WebP, selalu pada resolusi
   berkas asli, bukan ukuran pratinjau.
 - Mode terang dan gelap, plus opsi mengikuti sistem, tanpa kedipan saat muat.
@@ -70,6 +77,7 @@ npx tsc --noEmit
 | --- | --- |
 | `src/lib/matting.ts` | Pembungkus model. Satu-satunya tempat pustaka matting disentuh, dan bebas bahasa: yang keluar hanya kunci tahapan. |
 | `src/lib/color.ts` | Pengurai HEX dan `rgb()`, plus konversi HSV yang menjadi tulang punggung spektrum. Mengembalikan `null` untuk apa pun yang tidak terbaca, supaya antarmuka bisa menandainya. |
+| `src/lib/portrait.ts` | Letak leher dan bahu, dibaca dari lebar kanal alfa baris demi baris. Mengembalikan `null` untuk bentuk yang tidak masuk akal sebagai potret, supaya antarmuka bisa meminta penempatan manual alih-alih menebak. |
 | `src/lib/draft.ts` | Salinan tahan-crash di IndexedDB. Setiap kegagalan penyimpanan dibiarkan diam: studio harus tetap utuh di mode penyamaran, cuma tanpa jaring pengaman. |
 | `src/components/spectrum.tsx` | Spektrum warna dari gradien CSS, bukan kanvas. Tidak ada bitmap yang dialokasikan dan tidak ada yang digambar ulang saat digeser, jadi ponsel murah tidak dihukum. |
 | `src/lib/compose.ts` | Penyusunan kanvas dan ekspor. Pratinjau memakai CSS `background` agar seketika; kanvas hanya dipakai saat ekspor. |

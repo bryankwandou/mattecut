@@ -139,6 +139,19 @@ export const it: Dict = {
     another: "Un'altra immagine",
     restored: "L’ultimo risultato è stato ripristinato dopo la chiusura della scheda.",
     modelNote: "Cambia modello quando vuoi; il ritaglio viene rifatto sulla stessa immagine.",
+    attireLabel: "Abbigliamento",
+    attireNone: "Senza giacca",
+    attire: [
+      "Abito antracite",
+      "Abito blu navy",
+      "Blazer senza cravatta",
+    ],
+    attireAuto:
+      "Posizionato automaticamente da spalle e collo nel ritaglio.",
+    attireManual:
+      "Le spalle non sono leggibili in questa foto. Imposta tu dimensione e altezza.",
+    attireSize: "Dimensione",
+    attireDrop: "Altezza",
     firstDownloadNote:
       "Questo download da {mb} MB avviene una volta sola. Una volta salvato nel browser, le immagini successive vengono elaborate senza rete.",
     errUnsupported: "Quel formato non è ancora supportato. Usa JPG, PNG o WebP.",

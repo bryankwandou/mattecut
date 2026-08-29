@@ -139,6 +139,19 @@ export const ms: Dict = {
     another: "Gambar lain",
     restored: "Hasil terakhir dipulihkan selepas tab ditutup.",
     modelNote: "Tukar model bila-bila masa; potongan diulang pada imej yang sama.",
+    attireLabel: "Pakaian",
+    attireNone: "Tanpa jaket",
+    attire: [
+      "Sut arang",
+      "Sut biru gelap",
+      "Blazer tanpa tali leher",
+    ],
+    attireAuto:
+      "Diletakkan automatik daripada bahu dan leher pada potongan.",
+    attireManual:
+      "Bahu tidak dapat dibaca pada foto ini. Tetapkan saiz dan ketinggian sendiri.",
+    attireSize: "Saiz",
+    attireDrop: "Ketinggian",
     firstDownloadNote:
       "Muat turun {mb} MB ini sekali sahaja. Selepas tersimpan dalam pelayar, gambar seterusnya diproses tanpa rangkaian langsung.",
     errUnsupported: "Format itu belum disokong. Guna JPG, PNG, atau WebP.",

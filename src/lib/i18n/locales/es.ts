@@ -139,6 +139,19 @@ export const es: Dict = {
     another: "Otra imagen",
     restored: "Se restauró tu último resultado tras cerrarse la pestaña.",
     modelNote: "Cambia de modelo cuando quieras; el recorte se rehace sobre la misma imagen.",
+    attireLabel: "Vestimenta",
+    attireNone: "Sin chaqueta",
+    attire: [
+      "Traje carbón",
+      "Traje azul marino",
+      "Blazer sin corbata",
+    ],
+    attireAuto:
+      "Colocada automáticamente a partir de los hombros y el cuello del recorte.",
+    attireManual:
+      "No se pudieron leer los hombros en esta foto. Ajusta el tamaño y la altura a mano.",
+    attireSize: "Tamaño",
+    attireDrop: "Altura",
     firstDownloadNote:
       "Esta descarga de {mb} MB ocurre una sola vez. Cuando quede guardada en el navegador, las siguientes imágenes se procesan sin red alguna.",
     errUnsupported: "Ese formato todavía no está admitido. Usa JPG, PNG o WebP.",

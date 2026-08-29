@@ -136,6 +136,19 @@ export const id: Dict = {
     another: "Gambar lain",
     restored: "Hasil terakhir dipulihkan setelah tab tertutup.",
     modelNote: "Ganti model kapan saja; potongan diulang pada gambar yang sama.",
+    attireLabel: "Pakaian",
+    attireNone: "Tanpa jas",
+    attire: [
+      "Jas arang",
+      "Jas biru dongker",
+      "Blazer tanpa dasi",
+    ],
+    attireAuto:
+      "Ditempatkan otomatis dari bahu dan leher pada potongan.",
+    attireManual:
+      "Bahu tidak terbaca pada foto ini. Atur sendiri ukuran dan tingginya.",
+    attireSize: "Ukuran",
+    attireDrop: "Tinggi",
     firstDownloadNote:
       "Unduhan {mb} MB ini hanya sekali. Setelah tersimpan di peramban, gambar berikutnya diproses tanpa jaringan sama sekali.",
     errUnsupported: "Format itu belum didukung. Pakai JPG, PNG, atau WebP.",

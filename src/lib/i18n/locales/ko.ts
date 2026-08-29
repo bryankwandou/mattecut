@@ -137,6 +137,19 @@ export const ko: Dict = {
     another: "다른 이미지",
     restored: "탭이 닫힌 뒤 마지막 결과를 복원했습니다.",
     modelNote: "모델은 언제든 바꿀 수 있으며, 같은 이미지로 다시 잘라냅니다.",
+    attireLabel: "복장",
+    attireNone: "재킷 없음",
+    attire: [
+      "차콜 정장",
+      "네이비 정장",
+      "넥타이 없는 블레이저",
+    ],
+    attireAuto:
+      "잘라낸 이미지의 어깨와 목에서 자동으로 배치했습니다.",
+    attireManual:
+      "이 사진에서는 어깨를 읽지 못했습니다. 크기와 높이를 직접 맞춰 주세요.",
+    attireSize: "크기",
+    attireDrop: "높이",
     firstDownloadNote:
       "이 {mb}MB 내려받기는 한 번뿐입니다. 브라우저에 저장된 뒤로는 다음 이미지들이 네트워크 없이 처리됩니다.",
     errUnsupported: "그 형식은 아직 지원하지 않습니다. JPG, PNG, WebP를 써 주세요.",

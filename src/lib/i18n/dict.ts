@@ -62,6 +62,13 @@ export type Dict = {
     another: string;
     restored: string;
     modelNote: string;
+    attireLabel: string;
+    attireNone: string;
+    attire: [string, string, string];
+    attireAuto: string;
+    attireManual: string;
+    attireSize: string;
+    attireDrop: string;
     firstDownloadNote: string;
     errUnsupported: string;
     errTooBig: string;

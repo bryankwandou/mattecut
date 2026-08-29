@@ -26,6 +26,17 @@ export type Background =
 export type Fit = "cover" | "contain";
 
 /**
+ * Something drawn over the subject — today that means a jacket.
+ *
+ * Position is in fractions of the picture rather than pixels, so one value
+ * places it correctly in the preview, which is a few hundred pixels wide,
+ * and in the export, which is the original file. Height is left out on
+ * purpose: it follows from the artwork's own aspect, so a CSS `height:auto`
+ * and a canvas calculation cannot drift apart.
+ */
+export type Overlay = { blob: Blob; x: number; y: number; w: number };
+
+/**
  * Decoded backdrops, keyed by the Blob they came from.
  *
  * Weak on purpose: when a background is replaced, the old Blob becomes
@@ -113,6 +124,32 @@ export function paintBackground(
   ctx.fillRect(0, 0, w, h);
 }
 
+/** Draw an overlay over the subject, at its own aspect ratio. */
+export function paintOverlay(
+  ctx: CanvasRenderingContext2D,
+  overlay: Overlay,
+  w: number,
+  h: number,
+) {
+  const img = decoded.get(overlay.blob);
+  if (!img) {
+    console.error("[roto] overlay painted before decode");
+    return;
+  }
+  const dw = overlay.w * w;
+  const dh = (dw * img.naturalHeight) / img.naturalWidth;
+  ctx.drawImage(img, overlay.x * w, overlay.y * h, dw, dh);
+}
+
+/** Decode an overlay, for the same reason `prepareBackground` exists. */
+export async function prepareOverlay(overlay: Overlay | null): Promise<void> {
+  if (!overlay || decoded.has(overlay.blob)) return;
+  const img = new Image();
+  img.src = backdropUrl(overlay.blob);
+  await img.decode();
+  decoded.set(overlay.blob, img);
+}
+
 /** Draw subject over background into an existing canvas. */
 export function composite(
   canvas: HTMLCanvasElement,
@@ -142,6 +179,7 @@ export async function exportImage(
   bg: Background,
   format: "image/png" | "image/jpeg" | "image/webp" = "image/png",
   quality = 0.95,
+  overlay: Overlay | null = null,
 ): Promise<Blob> {
   const canvas = document.createElement("canvas");
   canvas.width = w;
@@ -151,6 +189,7 @@ export async function exportImage(
 
   // JPEG has no alpha — fill white so the subject does not land on black.
   await prepareBackground(bg);
+  await prepareOverlay(overlay);
 
   if (format === "image/jpeg" && bg.kind === "transparent") {
     ctx.fillStyle = "#ffffff";
@@ -159,6 +198,7 @@ export async function exportImage(
     paintBackground(ctx, bg, w, h);
   }
   ctx.drawImage(subject, 0, 0, w, h);
+  if (overlay) paintOverlay(ctx, overlay, w, h);
 
   return new Promise((resolve, reject) => {
     canvas.toBlob(

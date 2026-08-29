@@ -18,12 +18,15 @@ export function CompareSlider({
   before,
   after,
   backdrop = null,
+  overlay = null,
   className = "",
 }: {
   before: string;
   after: string;
   /** CSS background for the result side; null shows the checkerboard. */
   backdrop?: string | null;
+  /** Drawn over the result, in fractions of the frame. Mirrors the export. */
+  overlay?: { src: string; x: number; y: number; w: number } | null;
   className?: string;
 }) {
   const { t } = useI18n();
@@ -90,6 +93,21 @@ export function CompareSlider({
           className="absolute inset-0 block h-full w-full"
           draggable={false}
         />
+        {overlay && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={overlay.src}
+            alt=""
+            aria-hidden
+            className="absolute"
+            style={{
+              left: `${overlay.x * 100}%`,
+              top: `${overlay.y * 100}%`,
+              width: `${overlay.w * 100}%`,
+            }}
+            draggable={false}
+          />
+        )}
       </div>
 
       {/* Divider + grab handle. */}

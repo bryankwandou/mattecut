@@ -139,6 +139,19 @@ export const de: Dict = {
     another: "Anderes Bild",
     restored: "Dein letztes Ergebnis wurde nach dem Schließen des Tabs wiederhergestellt.",
     modelNote: "Modell jederzeit wechseln; der Freisteller wird auf demselben Bild neu berechnet.",
+    attireLabel: "Kleidung",
+    attireNone: "Ohne Sakko",
+    attire: [
+      "Anthrazit-Anzug",
+      "Marineblauer Anzug",
+      "Blazer ohne Krawatte",
+    ],
+    attireAuto:
+      "Automatisch aus Schultern und Hals im Freisteller platziert.",
+    attireManual:
+      "Die Schultern waren auf diesem Foto nicht lesbar. Größe und Höhe bitte selbst einstellen.",
+    attireSize: "Größe",
+    attireDrop: "Höhe",
     firstDownloadNote:
       "Dieser Download von {mb} MB fällt nur einmal an. Sobald er im Browser liegt, werden weitere Bilder ganz ohne Netz verarbeitet.",
     errUnsupported: "Dieses Format wird noch nicht unterstützt. Nehmen Sie JPG, PNG oder WebP.",

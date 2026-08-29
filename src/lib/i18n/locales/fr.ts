@@ -139,6 +139,19 @@ export const fr: Dict = {
     another: "Une autre image",
     restored: "Votre dernier résultat a été restauré après la fermeture de l’onglet.",
     modelNote: "Changez de modèle à tout moment ; le détourage est refait sur la même image.",
+    attireLabel: "Tenue",
+    attireNone: "Sans veste",
+    attire: [
+      "Costume anthracite",
+      "Costume bleu marine",
+      "Blazer sans cravate",
+    ],
+    attireAuto:
+      "Placée automatiquement d'après les épaules et le cou du détourage.",
+    attireManual:
+      "Les épaules n'ont pas pu être lues sur cette photo. Réglez la taille et la hauteur vous-même.",
+    attireSize: "Taille",
+    attireDrop: "Hauteur",
     firstDownloadNote:
       "Ce téléchargement de {mb} Mo n'a lieu qu'une fois. Une fois en cache dans le navigateur, les images suivantes sont traitées sans réseau du tout.",
     errUnsupported: "Ce format n'est pas encore pris en charge. Utilisez JPG, PNG ou WebP.",
