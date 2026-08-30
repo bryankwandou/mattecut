@@ -24,7 +24,8 @@ import {
   cutout,
   warm,
   isWarm,
-  DOWNLOAD_MB,
+  canGpu,
+  downloadMb,
   type Progress,
   type Quality,
 } from "@/lib/matting";
@@ -79,6 +80,12 @@ export function Studio() {
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [busy, setBusy] = useState(false);
+  // Whether this browser can run the model on the GPU. It changes the size
+  // of the runtime it downloads, so the tier labels wait for the answer.
+  const [onGpu, setOnGpu] = useState(false);
+  // A warm-up is a large download with no picture on screen yet. Left
+  // unannounced it reads as a dead page, which is exactly how it was read.
+  const [warming, setWarming] = useState(false);
   const [restored, setRestored] = useState(false);
   const [attire, setAttire] = useState<Attire | null>(null);
   // The artwork is kept next to the name it was fetched for. Holding the
@@ -92,6 +99,14 @@ export function Studio() {
   const [attireDrop, setAttireDrop] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const urls = useRef<string[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    void canGpu().then((v) => alive && setOnGpu(v));
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   // Revoke object URLs on unmount; leaking them keeps whole bitmaps alive.
   useEffect(() => {
@@ -244,8 +259,24 @@ export function Studio() {
   // first cut is not also the first big download.
   useEffect(() => {
     if (shot || busy) return;
-    const timer = setTimeout(() => void warm(quality).catch(() => {}), 1200);
-    return () => clearTimeout(timer);
+    let alive = true;
+    const timer = setTimeout(() => {
+      if (isWarm(quality)) return;
+      setWarming(true);
+      void warm(quality, (p) => {
+        if (alive) setProgress(p);
+      })
+        .catch(() => {})
+        .finally(() => {
+          if (!alive) return;
+          setWarming(false);
+          setProgress(null);
+        });
+    }, 1200);
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+    };
   }, [quality, shot, busy]);
 
   // Jacket artwork is fetched into a Blob, like every other image in the
@@ -318,7 +349,7 @@ export function Studio() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10 xl:max-w-7xl 2xl:max-w-[1720px]">
       <header className="mb-8 flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/"
@@ -375,6 +406,8 @@ export function Studio() {
         <Dropzone
           dragOver={dragOver}
           busy={busy}
+          warming={warming}
+          onGpu={onGpu}
           progress={progress}
           quality={quality}
           onQuality={setQuality}
@@ -383,7 +416,7 @@ export function Studio() {
           onFile={run}
         />
       ) : (
-        <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_260px] md:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_380px]">
           <div className="min-w-0 space-y-3">
             <CompareSlider
               before={shot.originalUrl}
@@ -400,7 +433,7 @@ export function Studio() {
             </p>
           </div>
 
-          <aside className="space-y-5 md:sticky md:top-6 md:self-start">
+          <aside className="space-y-5 sm:sticky sm:top-6 sm:self-start">
             <fieldset
               className="rounded-xl border border-line bg-surface p-4"
               disabled={busy}
@@ -578,6 +611,8 @@ function SecondaryButton({
 function Dropzone({
   dragOver,
   busy,
+  warming,
+  onGpu,
   progress,
   quality,
   onQuality,
@@ -587,6 +622,8 @@ function Dropzone({
 }: {
   dragOver: boolean;
   busy: boolean;
+  warming: boolean;
+  onGpu: boolean;
   progress: Progress | null;
   quality: Quality;
   onQuality: (q: Quality) => void;
@@ -615,7 +652,7 @@ function Dropzone({
         }`}
       >
         {busy ? (
-          <ProgressPanel progress={progress} quality={quality} />
+          <ProgressPanel progress={progress} quality={quality} onGpu={onGpu} />
         ) : (
           <div className="text-center">
             <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl border border-line bg-surface">
@@ -650,24 +687,39 @@ function Dropzone({
             active={quality === "light"}
             onClick={() => onQuality("light")}
             title={t.studio.lightTitle}
-            note={fill(t.studio.lightNote, { mb: DOWNLOAD_MB.light })}
+            note={fill(t.studio.lightNote, { mb: downloadMb("light", onGpu) })}
             disabled={busy}
           />
           <QualityOption
             active={quality === "balanced"}
             onClick={() => onQuality("balanced")}
             title={t.studio.balancedTitle}
-            note={fill(t.studio.balancedNote, { mb: DOWNLOAD_MB.balanced })}
+            note={fill(t.studio.balancedNote, { mb: downloadMb("balanced", onGpu) })}
             disabled={busy}
           />
           <QualityOption
             active={quality === "maximum"}
             onClick={() => onQuality("maximum")}
             title={t.studio.maximumTitle}
-            note={fill(t.studio.maximumNote, { mb: DOWNLOAD_MB.maximum })}
+            note={fill(t.studio.maximumNote, { mb: downloadMb("maximum", onGpu) })}
             disabled={busy}
           />
         </div>
+        {warming && (
+          <p
+            className="mt-2.5 flex items-center gap-2 text-xs leading-relaxed text-text-faint"
+            role="status"
+            aria-live="polite"
+          >
+            <Loader2 size={12} className="shrink-0 animate-spin" />
+            {progress ? t.progress[progress.key] : t.progress.preparing}
+            {progress?.ratio != null && (
+              <span className="mono tabular-nums">
+                {Math.round(progress.ratio * 100)}%
+              </span>
+            )}
+          </p>
+        )}
         <CatalogAudit />
       </fieldset>
     </div>
@@ -712,9 +764,11 @@ function QualityOption({
 function ProgressPanel({
   progress,
   quality,
+  onGpu,
 }: {
   progress: Progress | null;
   quality: Quality;
+  onGpu: boolean;
 }) {
   const { t } = useI18n();
   const pct = progress?.ratio != null ? Math.round(progress.ratio * 100) : null;
@@ -750,7 +804,7 @@ function ProgressPanel({
 
       {fetching && (
         <p className="mt-5 text-pretty text-xs leading-relaxed text-text-faint">
-          {fill(t.studio.firstDownloadNote, { mb: DOWNLOAD_MB[quality] })}
+          {fill(t.studio.firstDownloadNote, { mb: downloadMb(quality, onGpu) })}
         </p>
       )}
     </div>

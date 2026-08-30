@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, ChevronDown, Loader2, TriangleAlert } from "lucide-react";
 import { readCatalog, mb, type Catalog } from "@/lib/catalog";
+import { canGpu } from "@/lib/matting";
 import { useI18n } from "@/components/preferences";
 import { fill } from "@/lib/i18n";
 
@@ -35,7 +36,11 @@ export function CatalogAudit() {
     const ctl = new AbortController();
     abort.current = ctl;
     try {
-      setState({ kind: "read", catalog: await readCatalog(ctl.signal) });
+      const onGpu = await canGpu();
+      setState({
+        kind: "read",
+        catalog: await readCatalog(onGpu, ctl.signal),
+      });
     } catch {
       if (!ctl.signal.aborted) setState({ kind: "failed" });
     }

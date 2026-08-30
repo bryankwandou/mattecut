@@ -138,7 +138,7 @@ export const tr: Dict = {
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
     auditMath:
-      "Yukarıdaki her kademenin rakamı, modeline {rt} MB’lık CPU çalışma zamanını ekler; gerçekte inen budur.",
+      "Yukarıdaki her kademenin rakamı, modeline {rt} MB’lık çalışma zamanını ekler; gerçekte inen budur.",
     auditNote:
       "Düğmeye bastığınız anda kaynak sunucudan okundu; bu uygulamaya yazılmış bir sayı değil. Yeniden denetlemek için sayfayı yenileyin.",
     auditFailed:

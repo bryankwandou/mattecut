@@ -136,7 +136,7 @@ export const id: Dict = {
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
     auditMath:
-      "Angka pada tingkat kualitas di atas menjumlahkan model dengan runtime CPU {rt} MB, karena itulah yang benar-benar diunduh.",
+      "Angka pada tingkat kualitas di atas menjumlahkan model dengan runtime {rt} MB, karena itulah yang benar-benar diunduh.",
     auditNote:
       "Dibaca langsung dari server asal saat tombol ditekan, bukan angka yang ditulis di aplikasi ini. Muat ulang untuk memeriksa lagi.",
     auditFailed:

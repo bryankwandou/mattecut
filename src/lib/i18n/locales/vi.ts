@@ -138,7 +138,7 @@ export const vi: Dict = {
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
     auditMath:
-      "Con số ở mỗi mức bên trên cộng thêm {rt} MB bộ chạy CPU vào mô hình, vì đó mới là phần thực sự được tải về.",
+      "Con số ở mỗi mức bên trên cộng thêm {rt} MB bộ chạy vào mô hình, vì đó mới là phần thực sự được tải về.",
     auditNote:
       "Đọc từ máy chủ gốc ngay lúc bạn bấm nút, không phải con số viết sẵn trong ứng dụng này. Tải lại trang để kiểm tra lần nữa.",
     auditFailed:

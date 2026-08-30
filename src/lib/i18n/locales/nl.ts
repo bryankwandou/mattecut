@@ -138,7 +138,7 @@ export const nl: Dict = {
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
     auditMath:
-      "Het getal bij elk niveau hierboven telt de CPU-runtime van {rt} MB bij het model op, want dat is wat er werkelijk wordt gedownload.",
+      "Het getal bij elk niveau hierboven telt de runtime van {rt} MB bij het model op, want dat is wat er werkelijk wordt gedownload.",
     auditNote:
       "Gelezen van de bronserver op het moment dat je op de knop drukte, geen getal dat in deze app staat. Herlaad om opnieuw te controleren.",
     auditFailed:

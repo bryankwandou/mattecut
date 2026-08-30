@@ -136,7 +136,7 @@ export const zh: Dict = {
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
     auditMath:
-      "上面每个档位的数字是模型加上 {rt} MB 的 CPU 运行时，因为实际下载的就是这个总和。",
+      "上面每个档位的数字是模型加上 {rt} MB 的运行时，因为实际下载的就是这个总和。",
     auditNote:
       "这是按下按钮那一刻从来源服务器读取的，不是写在这个应用里的数字。想再核对一次，重新载入即可。",
     auditFailed:

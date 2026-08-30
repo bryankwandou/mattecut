@@ -138,7 +138,7 @@ export const de: Dict = {
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
     auditMath:
-      "Die Zahl bei jeder Stufe oben addiert die {rt} MB CPU-Laufzeit zu ihrem Modell, denn genau das wird heruntergeladen.",
+      "Die Zahl bei jeder Stufe oben addiert die {rt} MB Laufzeit zu ihrem Modell, denn genau das wird heruntergeladen.",
     auditNote:
       "Im Moment des Klicks vom Ursprungsserver gelesen, keine in dieser App hinterlegte Zahl. Zum erneuten Prüfen neu laden.",
     auditFailed:

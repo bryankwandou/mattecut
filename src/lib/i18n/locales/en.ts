@@ -138,7 +138,7 @@ export const en: Dict = {
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
     auditMath:
-      "The figure on each tier above adds the {rt} MB CPU runtime to its model, because that is what actually gets downloaded.",
+      "The figure on each tier above adds the {rt} MB runtime to its model, because that is what actually gets downloaded.",
     auditNote:
       "Read from the origin server the moment you pressed the button, not a number written into this app. Reload to check again.",
     auditFailed:

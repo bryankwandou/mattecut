@@ -138,7 +138,7 @@ export const it: Dict = {
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
     auditMath:
-      "Il numero di ogni livello qui sopra somma al modello il motore CPU da {rt} MB, perché è questo che viene scaricato davvero.",
+      "Il numero di ogni livello qui sopra somma al modello il motore da {rt} MB, perché è questo che viene scaricato davvero.",
     auditNote:
       "Letto dal server di origine nel momento in cui hai premuto il pulsante, non è un numero scritto in questa applicazione. Ricarica per ricontrollare.",
     auditFailed:

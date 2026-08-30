@@ -28,8 +28,9 @@ export type Catalog = {
   smallest: number;
   largest: number;
   models: number;
-  /** The CPU runtime that executes the weights. A tier's advertised size is
-   *  its model plus this, which is why the two numbers differ on screen. */
+  /** The runtime that executes the weights, picked to match what this
+   *  browser will actually fetch. A tier's advertised size is its model
+   *  plus this, which is why the two numbers differ on screen. */
   runtime: number;
 };
 
@@ -43,7 +44,10 @@ function role(key: string): Entry["role"] {
 
 /** Reads the live manifest. Throws on a bad response so the caller can say
  *  the check failed, rather than quietly showing numbers I wrote. */
-export async function readCatalog(signal?: AbortSignal): Promise<Catalog> {
+export async function readCatalog(
+  onGpu: boolean,
+  signal?: AbortSignal,
+): Promise<Catalog> {
   const res = await fetch(`${BASE}/resources.json`, { signal });
   if (!res.ok) throw new Error(`manifest ${res.status}`);
   const raw: Manifest = await res.json();
@@ -61,13 +65,19 @@ export async function readCatalog(signal?: AbortSignal): Promise<Catalog> {
   const weights = entries.filter((e) => e.role === "model").map((e) => e.bytes);
   if (weights.length === 0) throw new Error("no models in manifest");
 
-  const cpu = entries.find(
-    (e) => e.key === "/onnxruntime-web/ort-wasm-simd-threaded.wasm",
+  // WebGPU needs the larger JSEP build. Quoting the other one would put a
+  // number on screen that this machine is never going to download.
+  const rt = entries.find(
+    (e) =>
+      e.key ===
+      (onGpu
+        ? "/onnxruntime-web/ort-wasm-simd-threaded.jsep.wasm"
+        : "/onnxruntime-web/ort-wasm-simd-threaded.wasm"),
   );
 
   return {
     entries,
-    runtime: cpu?.bytes ?? 0,
+    runtime: rt?.bytes ?? 0,
     smallest: Math.min(...weights),
     largest: Math.max(...weights),
     models: weights.length,
