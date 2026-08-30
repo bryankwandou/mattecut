@@ -93,6 +93,9 @@ export function CatalogAudit() {
           </ul>
 
           <p className="mt-2 text-xs leading-relaxed text-text-faint">
+            {fill(t.studio.auditMath, {
+              rt: mb(state.catalog.runtime).toFixed(1),
+            })}{" "}
             {t.studio.auditNote}
           </p>
         </div>

@@ -135,6 +135,8 @@ export const zh: Dict = {
       "在来源处读到 {models} 个模型。最小 {small} 字节，最大 {big} 字节 — 这个范围之外没有别的。",
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
+    auditMath:
+      "上面每个档位的数字是模型加上 {rt} MB 的 CPU 运行时，因为实际下载的就是这个总和。",
     auditNote:
       "这是按下按钮那一刻从来源服务器读取的，不是写在这个应用里的数字。想再核对一次，重新载入即可。",
     auditFailed:

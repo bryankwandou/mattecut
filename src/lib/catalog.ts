@@ -28,6 +28,9 @@ export type Catalog = {
   smallest: number;
   largest: number;
   models: number;
+  /** The CPU runtime that executes the weights. A tier's advertised size is
+   *  its model plus this, which is why the two numbers differ on screen. */
+  runtime: number;
 };
 
 type Chunk = { offsets: [number, number] };
@@ -58,8 +61,13 @@ export async function readCatalog(signal?: AbortSignal): Promise<Catalog> {
   const weights = entries.filter((e) => e.role === "model").map((e) => e.bytes);
   if (weights.length === 0) throw new Error("no models in manifest");
 
+  const cpu = entries.find(
+    (e) => e.key === "/onnxruntime-web/ort-wasm-simd-threaded.wasm",
+  );
+
   return {
     entries,
+    runtime: cpu?.bytes ?? 0,
     smallest: Math.min(...weights),
     largest: Math.max(...weights),
     models: weights.length,

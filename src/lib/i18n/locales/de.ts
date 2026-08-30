@@ -137,6 +137,8 @@ export const de: Dict = {
       "{models} Modelle an der Quelle gelesen. Kleinstes {small} Bytes, größtes {big} Bytes — nichts außerhalb dieses Bereichs.",
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
+    auditMath:
+      "Die Zahl bei jeder Stufe oben addiert die {rt} MB CPU-Laufzeit zu ihrem Modell, denn genau das wird heruntergeladen.",
     auditNote:
       "Im Moment des Klicks vom Ursprungsserver gelesen, keine in dieser App hinterlegte Zahl. Zum erneuten Prüfen neu laden.",
     auditFailed:

@@ -137,6 +137,8 @@ export const fr: Dict = {
       "{models} modèles lus à la source. Le plus petit {small} octets, le plus grand {big} octets — rien en dehors de cette plage.",
     auditSize: "{mb} Mo",
     auditTiny: "{kb} Ko",
+    auditMath:
+      "Le chiffre de chaque niveau ci-dessus ajoute le moteur CPU de {rt} Mo à son modèle, car c’est cela qui est réellement téléchargé.",
     auditNote:
       "Lu sur le serveur d’origine au moment où vous avez appuyé, ce n’est pas un chiffre inscrit dans cette application. Rechargez pour revérifier.",
     auditFailed:

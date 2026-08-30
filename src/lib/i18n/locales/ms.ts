@@ -137,6 +137,8 @@ export const ms: Dict = {
       "Terbaca {models} model di sumbernya. Terkecil {small} bait, terbesar {big} bait — tiada di luar julat itu.",
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
+    auditMath:
+      "Angka pada setiap tahap di atas menambah runtime CPU {rt} MB kepada modelnya, kerana itulah yang benar-benar dimuat turun.",
     auditNote:
       "Dibaca terus dari pelayan asal ketika butang ditekan, bukan angka yang ditulis dalam aplikasi ini. Muat semula untuk menyemak lagi.",
     auditFailed:

@@ -136,6 +136,8 @@ export const ko: Dict = {
       "원본에서 모델 {models}개를 읽었습니다. 가장 작은 것 {small}바이트, 가장 큰 것 {big}바이트 — 그 범위 밖에는 아무것도 없습니다.",
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
+    auditMath:
+      "위 각 단계의 숫자는 모델에 {rt} MB CPU 실행 환경을 더한 값입니다. 실제로 내려받는 것이 그 합이기 때문입니다.",
     auditNote:
       "버튼을 누른 그 순간 원본 서버에서 읽은 값이며, 이 앱에 적어 둔 숫자가 아닙니다. 다시 확인하려면 새로 고침하세요.",
     auditFailed:

@@ -137,6 +137,8 @@ export const es: Dict = {
       "Se leyeron {models} modelos en el origen. El menor {small} bytes, el mayor {big} bytes: nada fuera de ese rango.",
     auditSize: "{mb} MB",
     auditTiny: "{kb} KB",
+    auditMath:
+      "La cifra de cada nivel de arriba suma el motor de CPU de {rt} MB a su modelo, porque eso es lo que realmente se descarga.",
     auditNote:
       "Leído del servidor de origen en el momento en que pulsaste el botón, no es una cifra escrita en esta aplicación. Recarga para volver a comprobarlo.",
     auditFailed:

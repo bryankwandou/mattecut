@@ -60,6 +60,7 @@ export type Dict = {
     auditResult: string;
     auditSize: string;
     auditTiny: string;
+    auditMath: string;
     auditNote: string;
     auditFailed: string;
     downloadPng: string;
