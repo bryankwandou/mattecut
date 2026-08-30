@@ -105,23 +105,114 @@ let warmed: Quality | null = null;
 /** Kick off the asset download early so the first cut is not the slow one. */
 export async function warm(quality: Quality, onProgress?: (p: Progress) => void) {
   if (warmed === quality) return;
-  const { preload } = await import("@imgly/background-removal");
-  await preload(await opts(quality, onProgress));
+  await dispatch("warm", quality, undefined, onProgress);
   warmed = quality;
 }
 
-/** The one config both entry points use, so a warm run and the cut that
- *  follows it can never disagree about which files to fetch. */
-async function opts(quality: Quality, onProgress?: (p: Progress) => void) {
-  const onGpu = await canGpu();
-  return {
+type Msg =
+  | { id: number; type: "progress"; key: string; cur: number; total: number }
+  | { id: number; type: "done"; blob?: Blob }
+  | { id: number; type: "error"; message: string };
+
+let worker: Worker | null = null;
+/** Set only when the worker could not be constructed or died outright, not
+ *  when the model inside it threw. The difference decides whether falling
+ *  back to the main thread is a repair or just the same failure, slower. */
+let noWorker = false;
+let seq = 0;
+
+function hire(): Worker | null {
+  if (noWorker) return null;
+  if (worker) return worker;
+  try {
+    worker = new Worker(new URL("./matting.worker.ts", import.meta.url), {
+      type: "module",
+    });
+    worker.onerror = () => {
+      noWorker = true;
+      worker = null;
+    };
+    return worker;
+  } catch {
+    noWorker = true;
+    return null;
+  }
+}
+
+function offThread(
+  op: "warm" | "cut",
+  quality: Quality,
+  device: "cpu" | "gpu",
+  file: Blob | undefined,
+  onProgress?: (p: Progress) => void,
+): Promise<Blob | undefined> {
+  const w = hire();
+  if (!w) return Promise.reject(new Error("no worker"));
+  const id = ++seq;
+  return new Promise((resolve, reject) => {
+    const listen = (e: MessageEvent<Msg>) => {
+      const d = e.data;
+      if (d.id !== id) return;
+      if (d.type === "progress") {
+        onProgress?.(describe(d.key, d.cur, d.total));
+        return;
+      }
+      w.removeEventListener("message", listen);
+      if (d.type === "error") reject(new Error(d.message));
+      else resolve(d.blob);
+    };
+    w.addEventListener("message", listen);
+    w.postMessage({ id, op, model: MODEL[quality], device, file });
+  });
+}
+
+/** The old path, kept for browsers that will not give us a worker. It
+ *  blocks the tab, but a frozen page that finishes beats one that cannot
+ *  cut at all. */
+async function onThread(
+  op: "warm" | "cut",
+  quality: Quality,
+  device: "cpu" | "gpu",
+  file: Blob | undefined,
+  onProgress?: (p: Progress) => void,
+): Promise<Blob | undefined> {
+  const lib = await import("@imgly/background-removal");
+  const config = {
     model: MODEL[quality],
-    device: onGpu ? ("gpu" as const) : ("cpu" as const),
-    proxyToWorker: onGpu,
+    device,
     output: { format: "image/png" as const, quality: 1 },
     progress: (k: string, cur: number, total: number) =>
       onProgress?.(describe(k, cur, total)),
   };
+  if (op === "warm") {
+    await lib.preload(config);
+    return undefined;
+  }
+  return lib.removeBackground(file as Blob, config);
+}
+
+async function dispatch(
+  op: "warm" | "cut",
+  quality: Quality,
+  file: Blob | undefined,
+  onProgress?: (p: Progress) => void,
+): Promise<Blob | undefined> {
+  const device = (await canGpu()) ? ("gpu" as const) : ("cpu" as const);
+  try {
+    return await offThread(op, quality, device, file, onProgress);
+  } catch (e) {
+    if (noWorker) return onThread(op, quality, device, file, onProgress);
+    // An adapter that exists but fails mid-run would otherwise lose the
+    // picture. The CPU path still works, so take it.
+    if (device === "gpu") {
+      gpu = false;
+      warmed = null;
+      return offThread(op, quality, "cpu", file, onProgress).catch(() =>
+        onThread(op, quality, "cpu", file, onProgress),
+      );
+    }
+    throw e;
+  }
 }
 
 export async function cutout(
@@ -129,18 +220,9 @@ export async function cutout(
   quality: Quality,
   onProgress?: (p: Progress) => void,
 ): Promise<Blob> {
-  const { removeBackground } = await import("@imgly/background-removal");
-  try {
-    return await removeBackground(file, await opts(quality, onProgress));
-  } catch (e) {
-    // An adapter that exists but fails mid-run would otherwise lose the
-    // picture entirely. The slow path still works, so take it rather than
-    // hand back an error for something the CPU can do.
-    if (!gpu) throw e;
-    gpu = false;
-    warmed = null;
-    return removeBackground(file, await opts(quality, onProgress));
-  }
+  const blob = await dispatch("cut", quality, file, onProgress);
+  if (!blob) throw new Error("no image returned");
+  return blob;
 }
 
 export function isWarm(quality: Quality) {
