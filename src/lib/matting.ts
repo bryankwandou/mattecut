@@ -125,9 +125,11 @@ function hire(): Worker | null {
   if (noWorker) return null;
   if (worker) return worker;
   try {
-    worker = new Worker(new URL("./matting.worker.ts", import.meta.url), {
-      type: "module",
-    });
+    // Built ahead of time into /public by worker/build.mjs. Turbopack does
+    // not compile `new URL('./x.ts', import.meta.url)` workers — it copies
+    // the TypeScript through, the worker never starts, and the fallback
+    // below quietly reinstates the freeze this is here to remove.
+    worker = new Worker("/matting-worker.js", { type: "module" });
     worker.onerror = () => {
       noWorker = true;
       worker = null;
