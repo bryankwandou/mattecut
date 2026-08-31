@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { RotoMark } from "@/components/logo";
+import { MattecutMark } from "@/components/logo";
 import { useI18n } from "@/components/preferences";
 
 export default function NotFound() {
@@ -11,7 +11,7 @@ export default function NotFound() {
   return (
     <main className="grid min-h-dvh place-items-center px-4 py-16">
       <div className="max-w-md text-center">
-        <RotoMark size={40} className="mx-auto" />
+        <MattecutMark size={40} className="mx-auto" />
         <p className="mono mt-8 text-[11px] uppercase tracking-[0.16em] text-text-faint">
           404
         </p>

@@ -95,7 +95,7 @@ export function paintBackground(
     // Undecoded means `prepareBackground` was not awaited. Silence here
     // would ship a transparent export, so say so where a developer sees it.
     if (!img) {
-      console.error("[roto] backdrop painted before decode");
+      console.error("[mattecut] backdrop painted before decode");
       return;
     }
     const { x, y, dw, dh } = frame(img, w, h, bg.fit);
@@ -133,7 +133,7 @@ export function paintOverlay(
 ) {
   const img = decoded.get(overlay.blob);
   if (!img) {
-    console.error("[roto] overlay painted before decode");
+    console.error("[mattecut] overlay painted before decode");
     return;
   }
   const dw = overlay.w * w;
@@ -224,10 +224,10 @@ export function downloadBlob(blob: Blob, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 10_000);
 }
 
-/** "kucing.jpg" → "kucing-roto.png" */
+/** "kucing.jpg" → "kucing-mattecut.png" */
 export function outputName(original: string, ext: string) {
   const stem = original.replace(/\.[^.]+$/, "") || "gambar";
-  return `${stem}-roto.${ext}`;
+  return `${stem}-mattecut.${ext}`;
 }
 
 /**

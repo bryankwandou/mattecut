@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const en: Dict = {
   meta: {
-    title: "Roto — remove image backgrounds without uploading them",
+    title: "Mattecut — remove image backgrounds without uploading them",
     description:
       "A background remover that runs inside the browser. Images are never sent to a server, there is no queue, and the result downloads at the original resolution.",
     studioTitle: "Studio",
@@ -31,7 +31,7 @@ export const en: Dict = {
     badge: "Runs on your device",
     titleA: "Lift the subject.",
     titleB: "Drop the rest.",
-    lead: "Roto cuts image backgrounds out inside the browser itself. The file never leaves your device, so there is no queue, no daily quota, and nothing you have to take on trust about what happens to your photo.",
+    lead: "Mattecut cuts image backgrounds out inside the browser itself. The file never leaves your device, so there is no queue, no daily quota, and nothing you have to take on trust about what happens to your photo.",
     cta: "Cut your first image",
     note: "No account · no upload · no watermark",
     caption: "Alpha matte · 8-bit",
@@ -188,7 +188,7 @@ export const en: Dict = {
   },
   compare: {
     before: "Original",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Drag to compare before and after",
     altBefore: "The original image before processing",
     altAfter: "The result after the background was removed",

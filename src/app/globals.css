@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ── Roto design tokens ────────────────────────────────────────────────
+/* ── Mattecut design tokens ────────────────────────────────────────────────
    Two palettes, one shape language. The UI stays near-neutral on purpose:
    the user's image is the only thing allowed to be colourful. One
    saturated accent, borrowed from a darkroom safelight, is identical in
@@ -178,7 +178,7 @@ body {
     color 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* The alpha checkerboard — Roto's brand motif, used behind every
+/* The alpha checkerboard — Mattecut's brand motif, used behind every
    transparent result and echoed in the logo. */
 .checker {
   background-image:
@@ -225,24 +225,24 @@ body {
 }
 
 /* Range input styled once, reused wherever a slider appears. */
-input[type="range"].roto-range {
+input[type="range"].mc-range {
   -webkit-appearance: none; appearance: none;
   background: transparent; cursor: pointer;
 }
-input[type="range"].roto-range::-webkit-slider-runnable-track {
+input[type="range"].mc-range::-webkit-slider-runnable-track {
   height: 4px; border-radius: 99px; background: var(--line);
 }
-input[type="range"].roto-range::-webkit-slider-thumb {
+input[type="range"].mc-range::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
   width: 16px; height: 16px; margin-top: -6px;
   border-radius: 99px; background: var(--accent);
   border: 2px solid var(--ink);
   box-shadow: 0 0 0 1px var(--accent);
 }
-input[type="range"].roto-range::-moz-range-track {
+input[type="range"].mc-range::-moz-range-track {
   height: 4px; border-radius: 99px; background: var(--line);
 }
-input[type="range"].roto-range::-moz-range-thumb {
+input[type="range"].mc-range::-moz-range-thumb {
   width: 16px; height: 16px; border-radius: 99px;
   background: var(--accent); border: 2px solid var(--ink);
 }
@@ -251,10 +251,10 @@ input[type="range"].roto-range::-moz-range-thumb {
    The native track is hidden so our own track and its stop marks can sit
    underneath the thumb: a slider with four discrete positions and nothing
    on the rail reads as continuous, which is a lie about what it does. */
-input[type="range"].roto-range.ticks::-webkit-slider-runnable-track {
+input[type="range"].mc-range.ticks::-webkit-slider-runnable-track {
   background: transparent;
 }
-input[type="range"].roto-range.ticks::-moz-range-track {
+input[type="range"].mc-range.ticks::-moz-range-track {
   background: transparent;
 }
 .range-rail {

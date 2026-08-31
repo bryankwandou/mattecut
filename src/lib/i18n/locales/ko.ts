@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const ko: Dict = {
   meta: {
-    title: "Roto — 업로드 없이 이미지 배경 지우기",
+    title: "Mattecut — 업로드 없이 이미지 배경 지우기",
     description:
       "브라우저 안에서 동작하는 배경 제거 도구입니다. 이미지는 어떤 서버로도 전송되지 않고, 대기열도 없으며, 결과는 원본 해상도 그대로 내려받습니다.",
     studioTitle: "스튜디오",
@@ -187,7 +187,7 @@ export const ko: Dict = {
   },
   compare: {
     before: "원본",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "끌어서 처리 전후를 비교합니다",
     altBefore: "처리 전 원본 이미지",
     altAfter: "배경을 지운 뒤의 결과",

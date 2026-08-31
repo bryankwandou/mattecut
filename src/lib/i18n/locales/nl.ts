@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const nl: Dict = {
   meta: {
-    title: "Roto — achtergronden weghalen zonder te uploaden",
+    title: "Mattecut — achtergronden weghalen zonder te uploaden",
     description:
       "Een achtergrondverwijderaar die in de browser draait. Afbeeldingen gaan naar geen enkele server, er is geen wachtrij en het resultaat wordt op de oorspronkelijke resolutie gedownload.",
     studioTitle: "Studio",
@@ -31,7 +31,7 @@ export const nl: Dict = {
     badge: "Draait op je eigen apparaat",
     titleA: "Til het onderwerp eruit.",
     titleB: "Gooi de rest weg.",
-    lead: "Roto knipt achtergronden weg binnen de browser zelf. Het bestand verlaat je apparaat nooit, dus geen wachtrij, geen daglimiet en niets wat je op goed vertrouwen hoeft aan te nemen over wat er met je foto gebeurt.",
+    lead: "Mattecut knipt achtergronden weg binnen de browser zelf. Het bestand verlaat je apparaat nooit, dus geen wachtrij, geen daglimiet en niets wat je op goed vertrouwen hoeft aan te nemen over wat er met je foto gebeurt.",
     cta: "Knip je eerste afbeelding",
     note: "Geen account · geen upload · geen watermerk",
     caption: "Alpha matte · 8 bits",
@@ -189,7 +189,7 @@ export const nl: Dict = {
   },
   compare: {
     before: "Origineel",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Sleep om voor en na te vergelijken",
     altBefore: "De oorspronkelijke afbeelding voor de verwerking",
     altAfter: "Het resultaat nadat de achtergrond weg is",

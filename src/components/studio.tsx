@@ -22,7 +22,7 @@ import {
 import { CompareSlider } from "@/components/compare-slider";
 import { BackgroundPicker } from "@/components/background-picker";
 import { CatalogAudit } from "@/components/catalog-audit";
-import { RotoLogo } from "@/components/logo";
+import { MattecutLogo } from "@/components/logo";
 import { LanguagePicker, ThemeToggle } from "@/components/switches";
 import { useI18n } from "@/components/preferences";
 import { fill } from "@/lib/i18n";
@@ -201,7 +201,7 @@ export function Studio() {
         // The library's messages are English internals; a translated
         // sentence the user can act on beats a leaked stack trace. The
         // original still goes to the console for whoever is debugging.
-        console.error("[roto] cutout failed", e);
+        console.error("[mattecut] cutout failed", e);
         setProgress(null);
         // The switcher moved the moment the chip was pressed, so a failed
         // cut has to move it back; otherwise it claims a model that never
@@ -387,7 +387,7 @@ export function Studio() {
       );
       downloadBlob(blob, outputName(shot.file.name, ext));
     } catch (e) {
-      console.error("[roto] export failed", e);
+      console.error("[mattecut] export failed", e);
       setError(t.studio.errExport);
     }
   };
@@ -401,7 +401,7 @@ export function Studio() {
           className="flex items-center gap-3 text-text-dim transition-colors hover:text-text"
         >
           <ArrowLeft size={16} className="rtl:rotate-180" />
-          <RotoLogo size={24} />
+          <MattecutLogo size={24} />
         </Link>
         <div className="flex items-center gap-2">
           <span className="mono me-1 hidden items-center gap-2 text-[11px] text-text-faint lg:flex">
@@ -841,7 +841,7 @@ function QualitySlider({
           </div>
           <input
             type="range"
-            className="roto-range ticks relative w-full"
+            className="mc-range ticks relative w-full"
             min={0}
             max={TIERS.length - 1}
             step={1}
@@ -946,7 +946,7 @@ function Nudge({
         max={max}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="roto-range min-w-0 flex-1"
+        className="mc-range min-w-0 flex-1"
       />
     </label>
   );

@@ -12,13 +12,13 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { GithubIcon } from "@/components/github-icon";
-import { RotoLogo, RotoMark } from "@/components/logo";
+import { MattecutLogo, MattecutMark } from "@/components/logo";
 import { HeroVisual } from "@/components/hero-visual";
 import { Reveal } from "@/components/reveal";
 import { LanguagePicker, ThemeToggle } from "@/components/switches";
 import { useI18n } from "@/components/preferences";
 
-const REPO = "https://github.com/bryankwandou/roto";
+const REPO = "https://github.com/bryankwandou/mattecut";
 
 export default function Home() {
   const { t } = useI18n();
@@ -51,8 +51,8 @@ function Nav() {
   return (
     <nav className="sticky top-0 z-50 border-b border-line-soft bg-ink/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-        <RotoMark size={26} className="sm:hidden" />
-        <RotoLogo size={26} className="hidden sm:inline-flex" />
+        <MattecutMark size={26} className="sm:hidden" />
+        <MattecutLogo size={26} className="hidden sm:inline-flex" />
         <div className="flex items-center gap-1.5 sm:gap-2">
           <a
             href={REPO}
@@ -314,7 +314,7 @@ function Closer() {
     <section className="relative overflow-hidden border-b border-line-soft">
       <div className="relative mx-auto max-w-6xl px-4 py-24 text-center sm:px-6 sm:py-32">
         <Reveal>
-          <RotoMark size={44} className="mx-auto" />
+          <MattecutMark size={44} className="mx-auto" />
           <h2 className="mx-auto mt-8 max-w-xl text-balance text-3xl font-semibold tracking-[-0.03em] sm:text-5xl">
             {t.closer.heading}
           </h2>
@@ -343,7 +343,7 @@ function Footer() {
   return (
     <footer className="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-10 text-sm text-text-faint sm:px-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <RotoLogo size={20} className="inline-flex text-text-dim" />
+        <MattecutLogo size={20} className="inline-flex text-text-dim" />
         <div className="flex flex-wrap items-center gap-5">
           <a
             href={REPO}

@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const es: Dict = {
   meta: {
-    title: "Roto — quita el fondo de tus imágenes sin subirlas",
+    title: "Mattecut — quita el fondo de tus imágenes sin subirlas",
     description:
       "Un quitafondos que funciona dentro del navegador. Las imágenes no se envían a ningún servidor, no hay cola de espera y el resultado se descarga en la resolución original.",
     studioTitle: "Estudio",
@@ -31,7 +31,7 @@ export const es: Dict = {
     badge: "Funciona en tu dispositivo",
     titleA: "Levanta el sujeto.",
     titleB: "Descarta el resto.",
-    lead: "Roto recorta el fondo de las imágenes dentro del propio navegador. El archivo nunca sale de tu dispositivo, así que no hay cola, no hay cuota diaria y no tienes que fiarte de nadie sobre lo que pasa con tu foto.",
+    lead: "Mattecut recorta el fondo de las imágenes dentro del propio navegador. El archivo nunca sale de tu dispositivo, así que no hay cola, no hay cuota diaria y no tienes que fiarte de nadie sobre lo que pasa con tu foto.",
     cta: "Recorta tu primera imagen",
     note: "Sin cuenta · sin subida · sin marca de agua",
     caption: "Alpha matte · 8 bits",
@@ -189,7 +189,7 @@ export const es: Dict = {
   },
   compare: {
     before: "Original",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Arrastra para comparar el antes y el después",
     altBefore: "La imagen original antes de procesarla",
     altAfter: "El resultado tras quitar el fondo",

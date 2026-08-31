@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const ja: Dict = {
   meta: {
-    title: "Roto — アップロードせずに画像の背景を消す",
+    title: "Mattecut — アップロードせずに画像の背景を消す",
     description:
       "ブラウザーの中で動く背景除去ツール。画像はどのサーバーにも送られず、順番待ちもなく、結果は元の解像度のままダウンロードできます。",
     studioTitle: "スタジオ",
@@ -31,7 +31,7 @@ export const ja: Dict = {
     badge: "お使いの端末で動きます",
     titleA: "被写体だけ残す。",
     titleB: "あとは捨てる。",
-    lead: "Roto はブラウザーの中で画像の背景を切り抜きます。ファイルが端末から出ることはないので、順番待ちも1日あたりの上限もなく、写真に何が起きるかを誰かの言葉で信じる必要もありません。",
+    lead: "Mattecut はブラウザーの中で画像の背景を切り抜きます。ファイルが端末から出ることはないので、順番待ちも1日あたりの上限もなく、写真に何が起きるかを誰かの言葉で信じる必要もありません。",
     cta: "最初の1枚を切り抜く",
     note: "アカウント不要 · アップロードなし · 透かしなし",
     caption: "アルファマット · 8ビット",
@@ -190,7 +190,7 @@ export const ja: Dict = {
   },
   compare: {
     before: "元画像",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "ドラッグして処理前と処理後を比べます",
     altBefore: "処理前の元画像",
     altAfter: "背景を消したあとの結果",

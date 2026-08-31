@@ -20,7 +20,7 @@ import {
 } from "@/lib/i18n";
 
 export type ThemeChoice = "light" | "dark" | "system";
-export const THEME_KEY = "roto.theme";
+export const THEME_KEY = "mattecut.theme";
 
 /* ── the store ───────────────────────────────────────────────────────────
    localStorage is an external system, so it is read through
@@ -194,7 +194,7 @@ function LangProvider({ children }: { children: React.ReactNode }) {
     // otherwise the page announces itself in a language nobody asked for.
     const dict = DICTS[locale];
     const studio = window.location.pathname.startsWith("/studio");
-    const title = studio ? `${dict.meta.studioTitle} · Roto` : dict.meta.title;
+    const title = studio ? `${dict.meta.studioTitle} · Mattecut` : dict.meta.title;
 
     document
       .querySelector('meta[name="description"]')

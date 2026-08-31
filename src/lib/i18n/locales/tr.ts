@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const tr: Dict = {
   meta: {
-    title: "Roto — görselleri yüklemeden arka planını kaldırın",
+    title: "Mattecut — görselleri yüklemeden arka planını kaldırın",
     description:
       "Tarayıcının içinde çalışan bir arka plan kaldırıcı. Görseller hiçbir sunucuya gönderilmez, sıra beklemek yok ve sonuç özgün çözünürlükte indirilir.",
     studioTitle: "Stüdyo",
@@ -31,7 +31,7 @@ export const tr: Dict = {
     badge: "Kendi cihazınızda çalışır",
     titleA: "Özneyi ayırın.",
     titleB: "Gerisini atın.",
-    lead: "Roto, görsellerin arka planını doğrudan tarayıcının içinde keser. Dosya cihazınızdan hiç çıkmaz; yani sıra yok, günlük kota yok ve fotoğrafınıza ne olduğu konusunda kimseye güvenmeniz gerekmiyor.",
+    lead: "Mattecut, görsellerin arka planını doğrudan tarayıcının içinde keser. Dosya cihazınızdan hiç çıkmaz; yani sıra yok, günlük kota yok ve fotoğrafınıza ne olduğu konusunda kimseye güvenmeniz gerekmiyor.",
     cta: "İlk görseli kesin",
     note: "Hesap yok · yükleme yok · filigran yok",
     caption: "Alfa matte · 8 bit",
@@ -189,7 +189,7 @@ export const tr: Dict = {
   },
   compare: {
     before: "Özgün",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Öncesi ile sonrasını karşılaştırmak için sürükleyin",
     altBefore: "İşlenmeden önceki özgün görsel",
     altAfter: "Arka plan kaldırıldıktan sonraki sonuç",

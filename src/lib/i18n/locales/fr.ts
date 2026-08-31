@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const fr: Dict = {
   meta: {
-    title: "Roto — détourez vos images sans les envoyer",
+    title: "Mattecut — détourez vos images sans les envoyer",
     description:
       "Un détoureur qui fonctionne dans le navigateur. Les images ne partent sur aucun serveur, il n'y a pas de file d'attente, et le résultat se télécharge à la résolution d'origine.",
     studioTitle: "Studio",
@@ -31,7 +31,7 @@ export const fr: Dict = {
     badge: "Fonctionne sur votre appareil",
     titleA: "Gardez le sujet.",
     titleB: "Jetez le reste.",
-    lead: "Roto détoure le fond des images à l'intérieur même du navigateur. Le fichier ne quitte jamais votre appareil : pas de file d'attente, pas de quota quotidien, et rien à croire sur parole quant à ce qu'il advient de votre photo.",
+    lead: "Mattecut détoure le fond des images à l'intérieur même du navigateur. Le fichier ne quitte jamais votre appareil : pas de file d'attente, pas de quota quotidien, et rien à croire sur parole quant à ce qu'il advient de votre photo.",
     cta: "Détourer une première image",
     note: "Sans compte · sans envoi · sans filigrane",
     caption: "Alpha matte · 8 bits",
@@ -189,7 +189,7 @@ export const fr: Dict = {
   },
   compare: {
     before: "Original",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Faites glisser pour comparer avant et après",
     altBefore: "L'image d'origine avant traitement",
     altAfter: "Le résultat après suppression du fond",

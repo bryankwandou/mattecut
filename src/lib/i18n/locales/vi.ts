@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const vi: Dict = {
   meta: {
-    title: "Roto — xoá nền ảnh mà không cần tải lên",
+    title: "Mattecut — xoá nền ảnh mà không cần tải lên",
     description:
       "Công cụ xoá nền chạy ngay trong trình duyệt. Ảnh không được gửi tới máy chủ nào, không phải xếp hàng, và kết quả tải về ở đúng độ phân giải gốc.",
     studioTitle: "Studio",
@@ -31,7 +31,7 @@ export const vi: Dict = {
     badge: "Chạy trên thiết bị của bạn",
     titleA: "Giữ lại chủ thể.",
     titleB: "Bỏ đi phần còn lại.",
-    lead: "Roto cắt nền ảnh ngay bên trong trình duyệt. Tệp không bao giờ rời khỏi thiết bị của bạn, nên không có hàng đợi, không có hạn mức mỗi ngày, và không có điều gì bạn phải tin suông về chuyện gì xảy ra với tấm ảnh.",
+    lead: "Mattecut cắt nền ảnh ngay bên trong trình duyệt. Tệp không bao giờ rời khỏi thiết bị của bạn, nên không có hàng đợi, không có hạn mức mỗi ngày, và không có điều gì bạn phải tin suông về chuyện gì xảy ra với tấm ảnh.",
     cta: "Cắt tấm ảnh đầu tiên",
     note: "Không tài khoản · không tải lên · không hình mờ",
     caption: "Alpha matte · 8-bit",
@@ -189,7 +189,7 @@ export const vi: Dict = {
   },
   compare: {
     before: "Ảnh gốc",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Kéo để so sánh trước và sau",
     altBefore: "Ảnh gốc trước khi xử lý",
     altAfter: "Kết quả sau khi nền đã bị xoá",

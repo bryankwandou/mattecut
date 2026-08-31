@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const ms: Dict = {
   meta: {
-    title: "Roto — buang latar gambar tanpa memuat naiknya",
+    title: "Mattecut — buang latar gambar tanpa memuat naiknya",
     description:
       "Pembuang latar belakang yang berjalan di dalam pelayar. Gambar tidak pernah dihantar ke pelayan, tiada giliran menunggu, dan hasilnya dimuat turun pada resolusi asal.",
     studioTitle: "Studio",
@@ -31,7 +31,7 @@ export const ms: Dict = {
     badge: "Berjalan pada peranti anda",
     titleA: "Angkat subjeknya.",
     titleB: "Buang selebihnya.",
-    lead: "Roto memotong latar belakang gambar terus di dalam pelayar. Failnya tidak pernah keluar dari peranti anda, jadi tiada giliran menunggu, tiada kuota harian, dan tiada apa-apa yang perlu anda percayai tentang apa yang berlaku kepada foto anda.",
+    lead: "Mattecut memotong latar belakang gambar terus di dalam pelayar. Failnya tidak pernah keluar dari peranti anda, jadi tiada giliran menunggu, tiada kuota harian, dan tiada apa-apa yang perlu anda percayai tentang apa yang berlaku kepada foto anda.",
     cta: "Potong gambar pertama",
     note: "Tanpa akaun · tanpa muat naik · tanpa tera air",
     caption: "Alpha matte · 8-bit",
@@ -189,7 +189,7 @@ export const ms: Dict = {
   },
   compare: {
     before: "Asal",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Seret untuk membandingkan sebelum dan selepas",
     altBefore: "Gambar asal sebelum diproses",
     altAfter: "Hasil selepas latar dibuang",

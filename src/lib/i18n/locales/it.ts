@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const it: Dict = {
   meta: {
-    title: "Roto — togli lo sfondo alle immagini senza caricarle",
+    title: "Mattecut — togli lo sfondo alle immagini senza caricarle",
     description:
       "Uno scontornatore che funziona dentro il browser. Le immagini non vengono inviate a nessun server, non c'è coda e il risultato si scarica alla risoluzione originale.",
     studioTitle: "Studio",
@@ -31,7 +31,7 @@ export const it: Dict = {
     badge: "Funziona sul tuo dispositivo",
     titleA: "Solleva il soggetto.",
     titleB: "Butta il resto.",
-    lead: "Roto ritaglia lo sfondo delle immagini dentro il browser stesso. Il file non lascia mai il tuo dispositivo, quindi niente coda, niente quota giornaliera e niente da prendere per buono su cosa succede alla tua foto.",
+    lead: "Mattecut ritaglia lo sfondo delle immagini dentro il browser stesso. Il file non lascia mai il tuo dispositivo, quindi niente coda, niente quota giornaliera e niente da prendere per buono su cosa succede alla tua foto.",
     cta: "Ritaglia la prima immagine",
     note: "Senza account · senza caricamento · senza filigrana",
     caption: "Alpha matte · 8 bit",
@@ -189,7 +189,7 @@ export const it: Dict = {
   },
   compare: {
     before: "Originale",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Trascina per confrontare prima e dopo",
     altBefore: "L'immagine originale prima dell'elaborazione",
     altAfter: "Il risultato dopo la rimozione dello sfondo",

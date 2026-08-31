@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const zh: Dict = {
   meta: {
-    title: "Roto — 不用上传就能抠掉图片背景",
+    title: "Mattecut — 不用上传就能抠掉图片背景",
     description:
       "一个在浏览器里运行的背景去除工具。图片不会发往任何服务器，不用排队，结果按原始分辨率下载。",
     studioTitle: "工作台",
@@ -30,7 +30,7 @@ export const zh: Dict = {
     badge: "在你的设备上运行",
     titleA: "留下主体。",
     titleB: "扔掉其余。",
-    lead: "Roto 直接在浏览器里抠掉图片背景。文件从不离开你的设备，因此没有排队，没有每日额度，也没有什么关于照片去向的说法需要你凭信任接受。",
+    lead: "Mattecut 直接在浏览器里抠掉图片背景。文件从不离开你的设备，因此没有排队，没有每日额度，也没有什么关于照片去向的说法需要你凭信任接受。",
     cta: "抠第一张图",
     note: "无需账号 · 无需上传 · 没有水印",
     caption: "Alpha matte · 8 位",
@@ -186,7 +186,7 @@ export const zh: Dict = {
   },
   compare: {
     before: "原图",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "拖动以对比处理前后",
     altBefore: "处理之前的原图",
     altAfter: "去掉背景之后的结果",

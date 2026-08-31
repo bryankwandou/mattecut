@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const de: Dict = {
   meta: {
-    title: "Roto — Bildhintergründe entfernen, ohne sie hochzuladen",
+    title: "Mattecut — Bildhintergründe entfernen, ohne sie hochzuladen",
     description:
       "Ein Hintergrundentferner, der im Browser läuft. Bilder gehen an keinen Server, es gibt keine Warteschlange, und das Ergebnis wird in der Originalauflösung heruntergeladen.",
     studioTitle: "Studio",
@@ -31,7 +31,7 @@ export const de: Dict = {
     badge: "Läuft auf Ihrem Gerät",
     titleA: "Motiv freistellen.",
     titleB: "Rest verwerfen.",
-    lead: "Roto schneidet Bildhintergründe direkt im Browser heraus. Die Datei verlässt Ihr Gerät nie, also gibt es keine Warteschlange, kein Tageslimit und nichts, was Sie darüber glauben müssten, was mit Ihrem Foto passiert.",
+    lead: "Mattecut schneidet Bildhintergründe direkt im Browser heraus. Die Datei verlässt Ihr Gerät nie, also gibt es keine Warteschlange, kein Tageslimit und nichts, was Sie darüber glauben müssten, was mit Ihrem Foto passiert.",
     cta: "Erstes Bild freistellen",
     note: "Ohne Konto · ohne Upload · ohne Wasserzeichen",
     caption: "Alpha-Matte · 8 Bit",
@@ -189,7 +189,7 @@ export const de: Dict = {
   },
   compare: {
     before: "Original",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Ziehen, um Vorher und Nachher zu vergleichen",
     altBefore: "Das Originalbild vor der Verarbeitung",
     altAfter: "Das Ergebnis nach dem Entfernen des Hintergrunds",

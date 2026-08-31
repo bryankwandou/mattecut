@@ -2,7 +2,7 @@ import type { Dict } from "../dict";
 
 export const id: Dict = {
   meta: {
-    title: "Roto — hapus latar gambar tanpa mengunggahnya",
+    title: "Mattecut — hapus latar gambar tanpa mengunggahnya",
     description:
       "Penghapus latar belakang yang bekerja di dalam peramban. Gambar tidak dikirim ke server mana pun, tidak ada antrean, dan hasilnya diunduh pada resolusi asli.",
     studioTitle: "Studio",
@@ -31,7 +31,7 @@ export const id: Dict = {
     badge: "Berjalan di perangkat Anda",
     titleA: "Angkat subjeknya.",
     titleB: "Buang sisanya.",
-    lead: "Roto memotong latar belakang gambar langsung di dalam peramban. Berkasnya tidak pernah dikirim ke mana-mana, jadi tidak ada antrean, tidak ada kuota harian, dan tidak ada yang perlu Anda percayai soal apa yang terjadi pada foto Anda.",
+    lead: "Mattecut memotong latar belakang gambar langsung di dalam peramban. Berkasnya tidak pernah dikirim ke mana-mana, jadi tidak ada antrean, tidak ada kuota harian, dan tidak ada yang perlu Anda percayai soal apa yang terjadi pada foto Anda.",
     cta: "Potong gambar pertama",
     note: "Tanpa akun · tanpa unggah · tanpa tanda air",
     caption: "Alpha matte · 8-bit",
@@ -186,7 +186,7 @@ export const id: Dict = {
   },
   compare: {
     before: "Asli",
-    after: "Roto",
+    after: "Mattecut",
     sliderLabel: "Geser untuk membandingkan sebelum dan sesudah",
     altBefore: "Gambar asli sebelum diproses",
     altAfter: "Hasil setelah latar dihapus",
