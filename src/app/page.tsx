@@ -15,6 +15,7 @@ import { GithubIcon } from "@/components/github-icon";
 import { MattecutLogo, MattecutMark } from "@/components/logo";
 import { HeroVisual } from "@/components/hero-visual";
 import { Reveal } from "@/components/reveal";
+import { Walkthrough } from "@/components/walkthrough";
 import { LanguagePicker, ThemeToggle } from "@/components/switches";
 import { useI18n } from "@/components/preferences";
 
@@ -214,25 +215,11 @@ function Steps() {
           </h2>
         </Reveal>
 
-        <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2">
-          {t.steps.items.map((s, i) => (
-            <Reveal key={s.title} delay={i * 0.06}>
-              <div className="flex gap-5">
-                <span className="mono shrink-0 text-sm text-accent-text">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="min-w-0">
-                  <h3 className="text-base font-semibold tracking-[-0.01em]">
-                    {s.title}
-                  </h3>
-                  <p className="mt-2 text-pretty text-sm leading-relaxed text-text-dim">
-                    {s.body}
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal delay={0.06}>
+          <div className="mt-14">
+            <Walkthrough />
+          </div>
+        </Reveal>
       </div>
     </section>
   );
