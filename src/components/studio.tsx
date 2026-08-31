@@ -355,7 +355,11 @@ export function Studio() {
           const w = (p ? p.shoulderWidth * JACKET_SPREAD : 0.8) * attireScale;
           const cx = p ? p.centerX : 0.5;
           const y = (p ? p.neckY - JACKET_RISE : 0.55) + attireDrop;
-          return { blob: jacket, x: cx - w / 2, y, w };
+          // The jacket turns with the shoulders it is being hung on. Zero
+          // when the shoulders were not readable, which is honest: a guessed
+          // angle looks worse than a level one.
+          const tilt = p ? p.tilt : 0;
+          return { blob: jacket, x: cx - w / 2, y, w, tilt };
         })()
       : null;
 

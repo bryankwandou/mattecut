@@ -26,7 +26,7 @@ export function CompareSlider({
   /** CSS background for the result side; null shows the checkerboard. */
   backdrop?: string | null;
   /** Drawn over the result, in fractions of the frame. Mirrors the export. */
-  overlay?: { src: string; x: number; y: number; w: number } | null;
+  overlay?: { src: string; x: number; y: number; w: number; tilt: number } | null;
   className?: string;
 }) {
   const { t } = useI18n();
@@ -104,6 +104,11 @@ export function CompareSlider({
               left: `${overlay.x * 100}%`,
               top: `${overlay.y * 100}%`,
               width: `${overlay.w * 100}%`,
+              // Same pivot as the canvas in compose.ts: the top centre, which
+              // is the collar. Any other origin turns the jacket off the neck
+              // and makes the preview disagree with the export.
+              transform: `rotate(${overlay.tilt}rad)`,
+              transformOrigin: "top center",
             }}
             draggable={false}
           />

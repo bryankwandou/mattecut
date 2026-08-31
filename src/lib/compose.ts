@@ -34,7 +34,15 @@ export type Fit = "cover" | "contain";
  * purpose: it follows from the artwork's own aspect, so a CSS `height:auto`
  * and a canvas calculation cannot drift apart.
  */
-export type Overlay = { blob: Blob; x: number; y: number; w: number };
+export type Overlay = {
+  blob: Blob;
+  x: number;
+  y: number;
+  w: number;
+  /** Radians. Turns the garment to sit on the shoulder line rather than on
+   *  the horizon, which is the difference between worn and pasted on. */
+  tilt: number;
+};
 
 /**
  * Decoded backdrops, keyed by the Blob they came from.
@@ -138,7 +146,22 @@ export function paintOverlay(
   }
   const dw = overlay.w * w;
   const dh = (dw * img.naturalHeight) / img.naturalWidth;
-  ctx.drawImage(img, overlay.x * w, overlay.y * h, dw, dh);
+  const x = overlay.x * w;
+  const y = overlay.y * h;
+
+  if (!overlay.tilt) {
+    ctx.drawImage(img, x, y, dw, dh);
+    return;
+  }
+
+  // Rotate about the centre of the collar rather than the corner of the
+  // artwork: the collar is the part that has to stay on the neck, and any
+  // other pivot slides it off while turning.
+  ctx.save();
+  ctx.translate(x + dw / 2, y);
+  ctx.rotate(overlay.tilt);
+  ctx.drawImage(img, -dw / 2, 0, dw, dh);
+  ctx.restore();
 }
 
 /** Decode an overlay, for the same reason `prepareBackground` exists. */
