@@ -112,7 +112,7 @@ export function Studio() {
   // A netbook starts on the lightest tier without being asked. This moves
   // the default only: every stop on the slider stays reachable, so a reader
   // willing to wait is never locked out of the better cut.
-  const quality: Quality = picked ?? (weak ? "light" : "balanced");
+  const quality: Quality = picked ?? (weak ? "lite" : "balanced");
   // A warm-up is a large download with no picture on screen yet. Left
   // unannounced it reads as a dead page, which is exactly how it was read.
   const [warming, setWarming] = useState(false);
@@ -348,6 +348,9 @@ export function Studio() {
   const overlay =
     shot && jacket
       ? (() => {
+          // Always measured from this person now. The old fallback used
+          // 0.8 of the frame at 0.55 down whenever detection was unsure,
+          // which is how a jacket ended up as a slab across a chest.
           const p = shot.portrait;
           const w = (p ? p.shoulderWidth * JACKET_SPREAD : 0.8) * attireScale;
           const cx = p ? p.centerX : 0.5;
@@ -567,7 +570,7 @@ export function Studio() {
               )}
 
               <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
-                {shot.portrait ? t.studio.attireAuto : t.studio.attireManual}
+                {shot.portrait?.confident ? t.studio.attireAuto : t.studio.attireManual}
               </p>
             </fieldset>
 

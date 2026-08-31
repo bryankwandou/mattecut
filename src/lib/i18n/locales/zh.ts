@@ -231,10 +231,22 @@ export const zh: Dict = {
       "背景目录",
     catalogueCount:
       "{n} 个背景，在此设备上生成——无需下载",
+    catalogueByCount:
+      "{n} 张 CC BY 照片——可自由使用，但必须标明作者",
+    creditRequired:
+      "无论在何处分享，都必须标明：{credit}",
+    cataloguePhotoCount:
+      "{n} 张照片，公有领域或 CC0，由本站提供",
+    catalogueTabGradients: "颜色",
+    catalogueTabPhotos: "照片",
     catalogueSearch:
       "搜索：blue、soft、deep teal、gradient、#1f6fff",
     catalogueEmpty:
       "没有匹配项。试试颜色名称或十六进制代码。",
+    catalogueFailed:
+      "无法加载照片列表。请检查网络后重试。",
+    creditShown:
+      "无论在何处分享成果，请标明此照片：{credit}",
     fitCover: "填满",
     fitContain: "适应",
   },

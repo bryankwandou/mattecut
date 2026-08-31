@@ -24,15 +24,25 @@ import type { NextConfig } from "next";
  * the model, object-src is off, and the page cannot be framed.
  *
  * staticimgly.com is that CDN: the segmentation weights and the WASM
- * runtime come from there, and it is the only host the page may reach.
+ * runtime come from there.
+ *
+ * upload.wikimedia.org is the second, and it was added with its cost
+ * understood. Self-hosting the backdrop photographs was measured at 348 KB
+ * each, so the thousands asked for would have been 1.7 GB — more than a
+ * repository or a deployment will carry. The catalogue therefore stores
+ * only metadata and loads each picture from Commons when it is chosen.
+ *
+ * What that host can do here is bounded: images and fetches only, no
+ * script, and it never receives a photograph — the cut still happens in
+ * this tab, so a backdrop travels in, never out.
  */
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' blob: data:",
+  "img-src 'self' blob: data: https://upload.wikimedia.org",
   "font-src 'self' data:",
-  "connect-src 'self' https://staticimgly.com blob: data:",
+  "connect-src 'self' https://staticimgly.com https://upload.wikimedia.org blob: data:",
   "worker-src 'self' blob:",
   "media-src 'self' blob:",
   "object-src 'none'",

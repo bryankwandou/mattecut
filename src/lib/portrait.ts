@@ -24,6 +24,20 @@ export type Portrait = {
   centerX: number;
   neckY: number;
   shoulderWidth: number;
+  /**
+   * Whether the neck was actually found, or merely estimated.
+   *
+   * The distinction used to be null-or-not, and null sent the jacket to a
+   * pair of constants — 0.8 of the frame wide, 0.55 down — that had never
+   * looked at the person. On a photo where detection failed, that is what
+   * produced a black slab across the chest.
+   *
+   * A failed pinch test does not mean the mask is uninformative: the widest
+   * row below the head is still the shoulder line. So an estimate is always
+   * returned, and this flag decides only whether the interface claims the
+   * placement is automatic or asks the reader to check it.
+   */
+  confident: boolean;
 };
 
 /** Mask is sampled at this width; the shape survives, the cost does not. */
@@ -117,25 +131,44 @@ export function findPortrait(img: HTMLImageElement): Portrait | null {
     }
   }
 
-  // A pinch this shallow is not a neck. A head alone, a full-body shot, or
-  // a shoulder hidden behind a raised arm all land here, and guessing from
-  // any of them would put a collar across someone's chin.
-  if (neckY < 0 || best < 1.55) return null;
+  // A pinch this shallow is not a neck. Long hair is the common case: it
+  // falls from the head to the shoulders and fills in the very gap this
+  // test looks for, so a perfectly ordinary ID photo scores near nothing.
+  const confident = neckY >= 0 && best >= 1.55;
 
-  // The shoulders: the widest the body gets below the neck.
+  // The shoulder line is legible either way — it is the widest the subject
+  // gets below the head. Searching from the neck when there is one, and
+  // from below the head when there is not.
+  const from = confident ? neckY : top + Math.round(span * 0.3);
   let shoulderW = 0;
-  let shoulderY = neckY;
-  for (let y = neckY; y <= bottom; y++) {
+  let shoulderY = from;
+  for (let y = from; y <= bottom; y++) {
     if (width[y] > shoulderW) {
       shoulderW = width[y];
       shoulderY = y;
     }
   }
-  if (shoulderY <= neckY + 1) return null;
+  if (shoulderW <= 0) return null;
+
+  let neck = neckY;
+  if (!confident || shoulderY <= neckY + 1) {
+    // Walk up from the shoulders to where the subject has narrowed to a
+    // little over half its widest — throat, or the hair around it. Better
+    // than a constant because it is still measured from this person.
+    neck = from;
+    for (let y = shoulderY; y >= top; y--) {
+      if (width[y] <= shoulderW * 0.62) {
+        neck = y;
+        break;
+      }
+    }
+    if (neck <= top) neck = top + Math.round(span * 0.42);
+  }
 
   return {
     centerX: centre[shoulderY] / w,
-    neckY: neckY / h,
+    neckY: neck / h,
     shoulderWidth: shoulderW / w,
+    confident: confident && shoulderY > neckY + 1,
   };
 }

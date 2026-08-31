@@ -234,10 +234,22 @@ export const hi: Dict = {
       "पृष्ठभूमि सूची",
     catalogueCount:
       "{n} पृष्ठभूमियाँ, इसी डिवाइस पर बनीं — कुछ भी डाउनलोड नहीं",
+    catalogueByCount:
+      "CC BY के अंतर्गत {n} तस्वीरें — मुफ़्त हैं, पर रचयिता का नाम देना अनिवार्य है",
+    creditRequired:
+      "जहाँ भी आप इसे साझा करें, यह श्रेय देना अनिवार्य है: {credit}",
+    cataloguePhotoCount:
+      "{n} तस्वीरें, सार्वजनिक डोमेन या CC0, इसी साइट से परोसी गईं",
+    catalogueTabGradients: "रंग",
+    catalogueTabPhotos: "तस्वीरें",
     catalogueSearch:
       "खोजें: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "कुछ मेल नहीं खाता। रंग का नाम या हेक्स कोड आज़माएँ।",
+    catalogueFailed:
+      "तस्वीरों की सूची लोड नहीं हो सकी। कनेक्शन जाँचकर पुनः प्रयास करें।",
+    creditShown:
+      "जहाँ भी परिणाम साझा करें, इस तस्वीर का श्रेय दें: {credit}",
     fitCover: "भरें",
     fitContain: "फ़िट करें",
   },

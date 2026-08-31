@@ -232,10 +232,22 @@ export const ko: Dict = {
       "배경 카탈로그",
     catalogueCount:
       "배경 {n}개. 이 기기에서 생성되며 다운로드는 없습니다.",
+    catalogueByCount:
+      "CC BY 사진 {n}장. 자유롭게 쓸 수 있지만 저작자를 밝혀야 합니다.",
+    creditRequired:
+      "이것을 공유하는 모든 곳에 표기가 필요합니다: {credit}",
+    cataloguePhotoCount:
+      "사진 {n}장. 퍼블릭 도메인 또는 CC0이며 이 사이트에서 제공됩니다.",
+    catalogueTabGradients: "색상",
+    catalogueTabPhotos: "사진",
     catalogueSearch:
       "검색: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "일치하는 항목이 없습니다. 색이름이나 16진수 코드를 시도해 보세요.",
+    catalogueFailed:
+      "사진 목록을 불러오지 못했습니다. 연결을 확인하고 다시 시도하세요.",
+    creditShown:
+      "결과물을 공유하는 모든 곳에 이 사진의 출처를 밝혀 주세요: {credit}",
     fitCover: "채우기",
     fitContain: "맞추기",
   },

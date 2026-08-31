@@ -232,10 +232,22 @@ export const ar: Dict = {
       "فهرس الخلفيات",
     catalogueCount:
       "{n} خلفية، تُولّد على هذا الجهاز — دون أي تنزيل",
+    catalogueByCount:
+      "{n} صورة برخصة CC BY — حرّة الاستخدام، لكن يجب نسبتها إلى مؤلفها",
+    creditRequired:
+      "النسبة إلزامية أينما شاركت هذا: {credit}",
+    cataloguePhotoCount:
+      "{n} صورة، ملكية عامة أو CC0، تُقدّم من هذا الموقع",
+    catalogueTabGradients: "الألوان",
+    catalogueTabPhotos: "الصور",
     catalogueSearch:
       "ابحث: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "لا يوجد مطابق. جرّب اسم لون أو رمزًا ستعشريًا.",
+    catalogueFailed:
+      "تعذّر تحميل قائمة الصور. تحقق من الاتصال ثم أعد المحاولة.",
+    creditShown:
+      "انسب هذه الصورة أينما شاركت النتيجة: {credit}",
     fitCover: "ملء",
     fitContain: "احتواء",
   },

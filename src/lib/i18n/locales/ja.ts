@@ -235,10 +235,22 @@ export const ja: Dict = {
       "背景カタログ",
     catalogueCount:
       "{n} 件の背景。この端末で生成しており、ダウンロードはありません。",
+    catalogueByCount:
+      "CC BY の写真 {n} 枚。自由に使えますが、作者名の表示が必要です。",
+    creditRequired:
+      "これを共有する場所すべてで表示が必要です: {credit}",
+    cataloguePhotoCount:
+      "写真 {n} 枚。パブリックドメインまたは CC0 で、このサイトから配信しています。",
+    catalogueTabGradients: "色",
+    catalogueTabPhotos: "写真",
     catalogueSearch:
       "検索: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "一致するものがありません。色名か 16 進コードをお試しください。",
+    catalogueFailed:
+      "写真一覧を読み込めませんでした。接続を確認してやり直してください。",
+    creditShown:
+      "結果を共有する場所すべてでこの写真の出典を表示してください: {credit}",
     fitCover: "埋める",
     fitContain: "収める",
   },

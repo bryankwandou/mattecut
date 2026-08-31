@@ -124,8 +124,15 @@ export type Dict = {
     catalogueOpen: string;
     catalogueTitle: string;
     catalogueCount: string;
+    cataloguePhotoCount: string;
+    catalogueByCount: string;
+    creditRequired: string;
+    catalogueTabGradients: string;
+    catalogueTabPhotos: string;
     catalogueSearch: string;
     catalogueEmpty: string;
+    catalogueFailed: string;
+    creditShown: string;
     fitCover: string;
     fitContain: string;
   };

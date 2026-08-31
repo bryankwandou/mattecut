@@ -234,10 +234,22 @@ export const tr: Dict = {
       "Arka plan kataloğu",
     catalogueCount:
       "{n} arka plan, bu cihazda üretildi — hiçbiri indirilmedi",
+    catalogueByCount:
+      "CC BY kapsamında {n} fotoğraf — serbestçe kullanılır, ama eser sahibi belirtilmeli",
+    creditRequired:
+      "Bunu paylaştığınız her yerde belirtilmesi zorunlu: {credit}",
+    cataloguePhotoCount:
+      "{n} fotoğraf, kamu malı veya CC0, bu siteden sunuluyor",
+    catalogueTabGradients: "Renkler",
+    catalogueTabPhotos: "Fotoğraflar",
     catalogueSearch:
       "Ara: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Eşleşen yok. Bir renk adı ya da hex kodu deneyin.",
+    catalogueFailed:
+      "Fotoğraf listesi yüklenemedi. Bağlantıyı kontrol edip yeniden deneyin.",
+    creditShown:
+      "Sonucu paylaştığınız her yerde bu fotoğrafı belirtin: {credit}",
     fitCover: "Doldur",
     fitContain: "Sığdır",
   },

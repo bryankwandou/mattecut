@@ -232,10 +232,22 @@ export const th: Dict = {
       "คลังพื้นหลัง",
     catalogueCount:
       "{n} พื้นหลัง สร้างขึ้นบนเครื่องนี้ — ไม่มีการดาวน์โหลด",
+    catalogueByCount:
+      "ภาพ {n} ภาพภายใต้ CC BY — ใช้ได้อิสระ แต่ต้องให้เครดิตผู้สร้าง",
+    creditRequired:
+      "ต้องระบุเครดิตทุกที่ที่คุณแชร์: {credit}",
+    cataloguePhotoCount:
+      "ภาพ {n} ภาพ สาธารณะหรือ CC0 ให้บริการจากเว็บนี้",
+    catalogueTabGradients: "สี",
+    catalogueTabPhotos: "ภาพ",
     catalogueSearch:
       "ค้นหา: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "ไม่พบที่ตรงกัน ลองชื่อสีหรือรหัสฮีกซ์",
+    catalogueFailed:
+      "โหลดรายการภาพไม่สำเร็จ ตรวจการเชื่อมต่อแล้วลองอีกครั้ง",
+    creditShown:
+      "ระบุเครดิตภาพนี้ทุกที่ที่คุณแชร์ผลลัพธ์: {credit}",
     fitCover: "เต็มกรอบ",
     fitContain: "พอดีกรอบ",
   },

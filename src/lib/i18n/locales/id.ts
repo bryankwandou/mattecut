@@ -231,10 +231,22 @@ export const id: Dict = {
       "Katalog latar belakang",
     catalogueCount:
       "{n} latar, dibangkitkan di perangkat ini — tidak ada yang diunduh",
+    catalogueByCount:
+      "{n} foto berlisensi CC BY — bebas dipakai, tetapi nama pembuat wajib dicantumkan",
+    creditRequired:
+      "Wajib dicantumkan di mana pun hasil ini dibagikan: {credit}",
+    cataloguePhotoCount:
+      "{n} foto, domain publik atau CC0, disajikan dari situs ini",
+    catalogueTabGradients: "Warna",
+    catalogueTabPhotos: "Foto",
     catalogueSearch:
       "Cari: biru, lembut, teal gelap, gradien, #1f6fff",
     catalogueEmpty:
       "Tidak ada yang cocok. Coba nama warna, atau kode heksa.",
+    catalogueFailed:
+      "Daftar foto tidak dapat dimuat. Periksa koneksi lalu coba lagi.",
+    creditShown:
+      "Cantumkan kredit foto ini di mana pun hasilnya dibagikan: {credit}",
     fitCover: "Penuhi",
     fitContain: "Muat",
   },

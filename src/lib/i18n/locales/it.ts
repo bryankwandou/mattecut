@@ -234,10 +234,22 @@ export const it: Dict = {
       "Catalogo sfondi",
     catalogueCount:
       "{n} sfondi, generati su questo dispositivo — nulla scaricato",
+    catalogueByCount:
+      "{n} foto con licenza CC BY — libere da usare, ma l’autore va citato",
+    creditRequired:
+      "Citazione obbligatoria ovunque tu condivida questo: {credit}",
+    cataloguePhotoCount:
+      "{n} foto, dominio pubblico o CC0, servite da questo sito",
+    catalogueTabGradients: "Colori",
+    catalogueTabPhotos: "Foto",
     catalogueSearch:
       "Cerca: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Nessun risultato. Prova un nome di colore o un codice esadecimale.",
+    catalogueFailed:
+      "Impossibile caricare l’elenco delle foto. Controlla la connessione e riprova.",
+    creditShown:
+      "Cita questa foto ovunque tu condivida il risultato: {credit}",
     fitCover: "Riempi",
     fitContain: "Adatta",
   },

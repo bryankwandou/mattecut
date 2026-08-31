@@ -234,10 +234,22 @@ export const es: Dict = {
       "Catálogo de fondos",
     catalogueCount:
       "{n} fondos, generados en este equipo — nada descargado",
+    catalogueByCount:
+      "{n} fotos con CC BY: libres de usar, pero hay que acreditar al autor",
+    creditRequired:
+      "Debe acreditarse dondequiera que comparta esto: {credit}",
+    cataloguePhotoCount:
+      "{n} fotos, dominio público o CC0, servidas desde este sitio",
+    catalogueTabGradients: "Colores",
+    catalogueTabPhotos: "Fotos",
     catalogueSearch:
       "Buscar: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Nada coincide. Prueba un nombre de color o un código hex.",
+    catalogueFailed:
+      "No se pudo cargar la lista de fotos. Revise la conexión e inténtelo de nuevo.",
+    creditShown:
+      "Acredite esta foto dondequiera que comparta el resultado: {credit}",
     fitCover: "Rellenar",
     fitContain: "Ajustar",
   },

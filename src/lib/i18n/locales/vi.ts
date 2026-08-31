@@ -234,10 +234,22 @@ export const vi: Dict = {
       "Danh mục ảnh nền",
     catalogueCount:
       "{n} nền, tạo ngay trên máy này — không tải gì về",
+    catalogueByCount:
+      "{n} ảnh theo CC BY — dùng tự do, nhưng phải ghi tên tác giả",
+    creditRequired:
+      "Bắt buộc ghi nguồn ở bất cứ nơi nào bạn chia sẻ: {credit}",
+    cataloguePhotoCount:
+      "{n} ảnh, thuộc phạm vi công cộng hoặc CC0, phục vụ từ trang này",
+    catalogueTabGradients: "Màu sắc",
+    catalogueTabPhotos: "Ảnh",
     catalogueSearch:
       "Tìm: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Không có kết quả. Thử tên màu hoặc mã hex.",
+    catalogueFailed:
+      "Không tải được danh sách ảnh. Kiểm tra kết nối rồi thử lại.",
+    creditShown:
+      "Ghi nguồn ảnh này ở bất cứ nơi nào bạn chia sẻ kết quả: {credit}",
     fitCover: "Lấp đầy",
     fitContain: "Vừa khung",
   },

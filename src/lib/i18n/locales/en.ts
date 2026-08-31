@@ -233,10 +233,22 @@ export const en: Dict = {
       "Background catalogue",
     catalogueCount:
       "{n} backgrounds, generated on this device — nothing downloaded",
+    catalogueByCount:
+      "{n} photos under CC BY — free to use, but the author must be credited",
+    creditRequired:
+      "Credit required wherever you share this: {credit}",
+    cataloguePhotoCount:
+      "{n} photos, public domain or CC0, served from this site",
+    catalogueTabGradients: "Colours",
+    catalogueTabPhotos: "Photos",
     catalogueSearch:
       "Search: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Nothing matches that. Try a colour name, or a hex code.",
+    catalogueFailed:
+      "The photo list could not be loaded. Check the connection and try again.",
+    creditShown:
+      "Credit this photo wherever you share the result: {credit}",
     fitCover: "Fill",
     fitContain: "Fit",
   },

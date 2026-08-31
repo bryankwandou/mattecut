@@ -234,10 +234,22 @@ export const fr: Dict = {
       "Catalogue de fonds",
     catalogueCount:
       "{n} fonds, générés sur cet appareil — rien de téléchargé",
+    catalogueByCount:
+      "{n} photos sous CC BY — libres d’usage, mais l’auteur doit être crédité",
+    creditRequired:
+      "Crédit obligatoire partout où vous partagez ceci : {credit}",
+    cataloguePhotoCount:
+      "{n} photos, domaine public ou CC0, servies depuis ce site",
+    catalogueTabGradients: "Couleurs",
+    catalogueTabPhotos: "Photos",
     catalogueSearch:
       "Rechercher : blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Aucun résultat. Essayez un nom de couleur ou un code hex.",
+    catalogueFailed:
+      "La liste de photos n’a pas pu être chargée. Vérifiez la connexion et réessayez.",
+    creditShown:
+      "Créditez cette photo partout où vous partagez le résultat : {credit}",
     fitCover: "Remplir",
     fitContain: "Ajuster",
   },

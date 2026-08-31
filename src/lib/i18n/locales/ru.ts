@@ -234,10 +234,22 @@ export const ru: Dict = {
       "Каталог фонов",
     catalogueCount:
       "{n} фонов, созданы на этом устройстве — ничего не загружалось",
+    catalogueByCount:
+      "{n} фото по лицензии CC BY — свободны в использовании, но автора нужно указать",
+    creditRequired:
+      "Указание обязательно везде, где вы этим делитесь: {credit}",
+    cataloguePhotoCount:
+      "{n} фото, общественное достояние или CC0, раздаются с этого сайта",
+    catalogueTabGradients: "Цвета",
+    catalogueTabPhotos: "Фото",
     catalogueSearch:
       "Поиск: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Ничего не найдено. Попробуйте название цвета или hex-код.",
+    catalogueFailed:
+      "Список фото не загрузился. Проверьте соединение и повторите.",
+    creditShown:
+      "Указывайте автора везде, где делитесь результатом: {credit}",
     fitCover: "Заполнить",
     fitContain: "Вписать",
   },

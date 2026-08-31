@@ -234,10 +234,22 @@ export const de: Dict = {
       "Hintergrund-Katalog",
     catalogueCount:
       "{n} Hintergründe, auf diesem Gerät erzeugt — nichts heruntergeladen",
+    catalogueByCount:
+      "{n} Fotos unter CC BY — frei nutzbar, aber die Urheberin oder der Urheber muss genannt werden",
+    creditRequired:
+      "Überall dort, wo Sie dies teilen, ist diese Nennung Pflicht: {credit}",
+    cataloguePhotoCount:
+      "{n} Fotos, gemeinfrei oder CC0, von dieser Seite ausgeliefert",
+    catalogueTabGradients: "Farben",
+    catalogueTabPhotos: "Fotos",
     catalogueSearch:
       "Suchen: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Nichts gefunden. Versuchen Sie einen Farbnamen oder einen Hex-Code.",
+    catalogueFailed:
+      "Die Fotoliste konnte nicht geladen werden. Prüfen Sie die Verbindung und versuchen Sie es erneut.",
+    creditShown:
+      "Nennen Sie dieses Foto überall dort, wo Sie das Ergebnis teilen: {credit}",
     fitCover: "Füllen",
     fitContain: "Einpassen",
   },

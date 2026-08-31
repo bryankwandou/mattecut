@@ -234,10 +234,22 @@ export const nl: Dict = {
       "Achtergrondcatalogus",
     catalogueCount:
       "{n} achtergronden, op dit apparaat gemaakt — niets gedownload",
+    catalogueByCount:
+      "{n} foto’s onder CC BY — vrij te gebruiken, maar de maker moet vermeld worden",
+    creditRequired:
+      "Vermelding verplicht overal waar u dit deelt: {credit}",
+    cataloguePhotoCount:
+      "{n} foto’s, publiek domein of CC0, vanaf deze site geleverd",
+    catalogueTabGradients: "Kleuren",
+    catalogueTabPhotos: "Foto’s",
     catalogueSearch:
       "Zoeken: blue, soft, deep teal, gradient, #1f6fff",
     catalogueEmpty:
       "Geen resultaat. Probeer een kleurnaam of een hexcode.",
+    catalogueFailed:
+      "De fotolijst kon niet worden geladen. Controleer de verbinding en probeer opnieuw.",
+    creditShown:
+      "Vermeld deze foto overal waar u het resultaat deelt: {credit}",
     fitCover: "Vullen",
     fitContain: "Passend",
   },
