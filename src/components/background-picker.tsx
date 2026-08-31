@@ -6,6 +6,7 @@ import { parseColor, toCss, toHex, type Rgba } from "@/lib/color";
 import { backdropUrl, type Background, type Fit } from "@/lib/compose";
 import { useI18n } from "@/components/preferences";
 import { Spectrum } from "@/components/spectrum";
+import { BackdropCatalogue } from "@/components/backdrop-catalogue";
 
 /** Labels live in the dictionaries; only the values live here, indexed by
  *  position so a translator never has to touch a hex code. */
@@ -60,6 +61,7 @@ export function BackgroundPicker({
   // of the choice has to be remembered separately from the value.
   const [active, setActive] = useState<string | null>(null);
   const [fit, setFit] = useState<Fit>("cover");
+  const [catalogue, setCatalogue] = useState(false);
   const file = useRef<HTMLInputElement>(null);
 
   // Bundled backdrops are fetched and handed on as Blobs, exactly like an
@@ -151,7 +153,29 @@ export function BackgroundPicker({
             );
           })}
         </div>
+        {/* The four above are the shortcuts. The rest live in a window of
+            their own: eight thousand swatches stacked in this column would
+            bury every other control on the page. */}
+        <button
+          onClick={() => setCatalogue(true)}
+          className="mt-2 w-full rounded-lg border border-line px-3 py-2 text-xs font-medium transition-colors hover:border-text-faint"
+        >
+          {t.bg.catalogueOpen}
+        </button>
       </Row>
+
+      <BackdropCatalogue
+        open={catalogue}
+        onClose={() => setCatalogue(false)}
+        onPick={(from, to, angle) => {
+          setDraft(null);
+          setActive(null);
+          onChange(
+            to ? { kind: "gradient", from, to, angle } : { kind: "solid", color: from },
+          );
+          setCatalogue(false);
+        }}
+      />
 
       <Row label={t.bg.wallpaperLabel}>
         <div className="space-y-2">

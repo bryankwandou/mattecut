@@ -123,9 +123,13 @@ export const en: Dict = {
     pick: "Choose an image",
     formats: "JPG · PNG · WEBP — 12 MB maximum",
     qualityLabel: "Quality",
+    applyModel: "Use this model",
+    liteTitle: "Ultra light",
+    liteNote:
+      "{mb} MB model · smallest download, softest around hair",
     lightTitle: "Light",
     lightNote:
-      "{mb} MB model · lightest, for limited devices and connections",
+      "{mb} MB model · small download, sharper edges than ultra light",
     balancedTitle: "Balanced",
     balancedNote:
       "{mb} MB model · the middle choice, enough for most photos",
@@ -146,6 +150,10 @@ export const en: Dict = {
     downloadPng: "Download PNG",
     transparentSuffix: "transparent",
     exportNote: "Always exported at the original resolution, not the preview size.",
+    exportNoteCapped:
+      "Exported at {w} × {h} px, smaller than the original: this machine could not carry the full resolution through the model.",
+    lowPower:
+      "This machine reports limited memory or processor cores, so the lightest model is selected by default and photos are reduced to {px} px on the long edge before processing. Every tier is still selectable.",
     another: "Another image",
     restored: "Your last result was restored after the tab closed.",
     modelNote: "Switch model any time; the cut is redone on the same image.",
@@ -219,6 +227,16 @@ export const en: Dict = {
     ],
     upload: "Your own image",
     uploadHint: "The file stays on this device",
+    catalogueOpen:
+      "Browse all backgrounds",
+    catalogueTitle:
+      "Background catalogue",
+    catalogueCount:
+      "{n} backgrounds, generated on this device — nothing downloaded",
+    catalogueSearch:
+      "Search: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Nothing matches that. Try a colour name, or a hex code.",
     fitCover: "Fill",
     fitContain: "Fit",
   },

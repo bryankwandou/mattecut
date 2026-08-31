@@ -121,9 +121,13 @@ export const zh: Dict = {
     pick: "选择图片",
     formats: "JPG · PNG · WEBP — 最大 12 MB",
     qualityLabel: "质量",
+    applyModel: "使用此模型",
+    liteTitle: "超轻量",
+    liteNote:
+      "{mb} MB 模型 · 下载最小，发丝边缘最粗",
     lightTitle: "轻量",
     lightNote:
-      "{mb} MB 模型 · 最轻，适合配置和网络受限的设备",
+      "{mb} MB 模型 · 下载较小，边缘比超轻量更锐利",
     balancedTitle: "均衡",
     balancedNote:
       "{mb} MB 模型 · 折中选择，足够应付大多数照片",
@@ -144,6 +148,10 @@ export const zh: Dict = {
     downloadPng: "下载 PNG",
     transparentSuffix: "透明",
     exportNote: "始终按原始分辨率导出，而不是预览的尺寸。",
+    exportNoteCapped:
+      "已按 {w} × {h} px 导出，小于原图：此设备无法让完整分辨率通过模型。",
+    lowPower:
+      "此设备报告内存或处理器核心有限，因此默认选择最轻的模型，并在处理前将照片的长边缩小到 {px} px。所有档位仍可选择。",
     another: "换一张图",
     restored: "标签页关闭后，已恢复你上次的结果。",
     modelNote: "随时切换模型，将在同一张图上重新抠图。",
@@ -217,6 +225,16 @@ export const zh: Dict = {
     ],
     upload: "自己的图片",
     uploadHint: "文件留在这台设备上",
+    catalogueOpen:
+      "浏览全部背景",
+    catalogueTitle:
+      "背景目录",
+    catalogueCount:
+      "{n} 个背景，在此设备上生成——无需下载",
+    catalogueSearch:
+      "搜索：blue、soft、deep teal、gradient、#1f6fff",
+    catalogueEmpty:
+      "没有匹配项。试试颜色名称或十六进制代码。",
     fitCover: "填满",
     fitContain: "适应",
   },

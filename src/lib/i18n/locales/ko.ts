@@ -122,9 +122,13 @@ export const ko: Dict = {
     pick: "이미지 선택",
     formats: "JPG · PNG · WEBP — 최대 12MB",
     qualityLabel: "품질",
+    applyModel: "이 모델 사용",
+    liteTitle: "초경량",
+    liteNote:
+      "{mb} MB 모델 · 다운로드가 가장 작고, 머리카락 경계는 가장 거칩니다",
     lightTitle: "가볍게",
     lightNote:
-      "{mb} MB 모델 · 가장 가벼움, 사양이 낮은 기기와 느린 회선용",
+      "{mb} MB 모델 · 다운로드가 작고, 초경량보다 윗선이 선명합니다",
     balancedTitle: "균형",
     balancedNote:
       "{mb} MB 모델 · 중간 선택, 대부분의 사진에 충분",
@@ -145,6 +149,10 @@ export const ko: Dict = {
     downloadPng: "PNG 내려받기",
     transparentSuffix: "투명",
     exportNote: "미리보기 크기가 아니라 언제나 원본 해상도로 내보냅니다.",
+    exportNoteCapped:
+      "{w} × {h} px로 내보냈습니다. 원본보다 작은 이유는 이 기기가 전체 해상도를 모델에 통과시키지 못했기 때문입니다.",
+    lowPower:
+      "이 기기는 메모리나 프로세서 코어가 제한적이라고 알려 왔습니다. 그래서 가장 가벼운 모델이 기본으로 선택되고, 처리 전에 사진의 긴 변을 {px} px로 줄입니다. 모든 단계는 그대로 선택할 수 있습니다.",
     another: "다른 이미지",
     restored: "탭이 닫힌 뒤 마지막 결과를 복원했습니다.",
     modelNote: "모델은 언제든 바꿀 수 있으며, 같은 이미지로 다시 잘라냅니다.",
@@ -218,6 +226,16 @@ export const ko: Dict = {
     ],
     upload: "내 이미지",
     uploadHint: "파일은 이 기기에 남습니다",
+    catalogueOpen:
+      "모든 배경 보기",
+    catalogueTitle:
+      "배경 카탈로그",
+    catalogueCount:
+      "배경 {n}개. 이 기기에서 생성되며 다운로드는 없습니다.",
+    catalogueSearch:
+      "검색: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "일치하는 항목이 없습니다. 색이름이나 16진수 코드를 시도해 보세요.",
     fitCover: "채우기",
     fitContain: "맞추기",
   },

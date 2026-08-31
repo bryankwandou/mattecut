@@ -123,9 +123,13 @@ export const ms: Dict = {
     pick: "Pilih gambar",
     formats: "JPG · PNG · WEBP — maksimum 12 MB",
     qualityLabel: "Kualiti",
+    applyModel: "Guna model ini",
+    liteTitle: "Sangat ringan",
+    liteNote:
+      "Model {mb} MB · muat turun terkecil, paling kasar pada rambut",
     lightTitle: "Ringan",
     lightNote:
-      "Model {mb} MB · paling ringan, untuk peranti dan talian terhad",
+      "Model {mb} MB · muat turun kecil, tepi lebih tajam daripada sangat ringan",
     balancedTitle: "Seimbang",
     balancedNote:
       "Model {mb} MB · pilihan tengah, memadai untuk kebanyakan foto",
@@ -147,6 +151,10 @@ export const ms: Dict = {
     transparentSuffix: "lutsinar",
     exportNote:
       "Sentiasa dieksport pada resolusi asal, bukan saiz pratonton.",
+    exportNoteCapped:
+      "Dieksport pada {w} × {h} px, lebih kecil daripada asal: peranti ini tidak mampu membawa resolusi penuh melalui model.",
+    lowPower:
+      "Peranti ini melaporkan memori atau teras pemproses yang terhad, jadi model paling ringan dipilih secara lalai dan foto dikecilkan kepada {px} px pada sisi terpanjang sebelum diproses. Semua tahap masih boleh dipilih.",
     another: "Gambar lain",
     restored: "Hasil terakhir dipulihkan selepas tab ditutup.",
     modelNote: "Tukar model bila-bila masa; potongan diulang pada imej yang sama.",
@@ -220,6 +228,16 @@ export const ms: Dict = {
     ],
     upload: "Imej sendiri",
     uploadHint: "Fail kekal pada peranti ini",
+    catalogueOpen:
+      "Layari semua latar",
+    catalogueTitle:
+      "Katalog latar belakang",
+    catalogueCount:
+      "{n} latar, dijana pada peranti ini — tiada yang dimuat turun",
+    catalogueSearch:
+      "Cari: biru, lembut, teal gelap, kecerunan, #1f6fff",
+    catalogueEmpty:
+      "Tiada padanan. Cuba nama warna, atau kod heks.",
     fitCover: "Penuhi",
     fitContain: "Muat",
   },

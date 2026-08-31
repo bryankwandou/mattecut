@@ -121,9 +121,13 @@ export const id: Dict = {
     pick: "Pilih gambar",
     formats: "JPG · PNG · WEBP — maksimum 12 MB",
     qualityLabel: "Kualitas",
+    applyModel: "Pakai model ini",
+    liteTitle: "Sangat ringan",
+    liteNote:
+      "Model {mb} MB · unduhan terkecil, paling kasar di rambut",
     lightTitle: "Ringan",
     lightNote:
-      "Model {mb} MB · paling ringan, untuk perangkat dan jaringan terbatas",
+      "Model {mb} MB · unduhan kecil, tepi lebih tajam dari sangat ringan",
     balancedTitle: "Seimbang",
     balancedNote:
       "Model {mb} MB · pilihan tengah, cukup untuk hampir semua foto",
@@ -144,6 +148,10 @@ export const id: Dict = {
     downloadPng: "Unduh PNG",
     transparentSuffix: "transparan",
     exportNote: "Selalu diekspor pada resolusi asli, bukan ukuran pratinjau.",
+    exportNoteCapped:
+      "Diekspor pada {w} × {h} px, lebih kecil dari aslinya: perangkat ini tidak sanggup membawa resolusi penuh melewati model.",
+    lowPower:
+      "Perangkat ini melaporkan memori atau inti prosesor yang terbatas, jadi model teringan dipilih sebagai bawaan dan foto dikecilkan ke {px} px pada sisi terpanjang sebelum diproses. Semua tingkat tetap bisa dipilih.",
     another: "Gambar lain",
     restored: "Hasil terakhir dipulihkan setelah tab tertutup.",
     modelNote: "Ganti model kapan saja; potongan diulang pada gambar yang sama.",
@@ -217,6 +225,16 @@ export const id: Dict = {
     ],
     upload: "Gambar sendiri",
     uploadHint: "Berkas tetap di perangkat ini",
+    catalogueOpen:
+      "Jelajahi semua latar",
+    catalogueTitle:
+      "Katalog latar belakang",
+    catalogueCount:
+      "{n} latar, dibangkitkan di perangkat ini — tidak ada yang diunduh",
+    catalogueSearch:
+      "Cari: biru, lembut, teal gelap, gradien, #1f6fff",
+    catalogueEmpty:
+      "Tidak ada yang cocok. Coba nama warna, atau kode heksa.",
     fitCover: "Penuhi",
     fitContain: "Muat",
   },

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",
+    "@mediapipe/tasks-vision": "^1.0.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.33.0",
     "motion": "^13.1.1",

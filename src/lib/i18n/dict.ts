@@ -50,6 +50,9 @@ export type Dict = {
     pick: string;
     formats: string;
     qualityLabel: string;
+    applyModel: string;
+    liteTitle: string;
+    liteNote: string;
     lightTitle: string;
     lightNote: string;
     balancedTitle: string;
@@ -66,6 +69,8 @@ export type Dict = {
     downloadPng: string;
     transparentSuffix: string;
     exportNote: string;
+    exportNoteCapped: string;
+    lowPower: string;
     another: string;
     restored: string;
     modelNote: string;
@@ -116,6 +121,11 @@ export type Dict = {
     wallpapers: [string, string, string, string, string, string];
     upload: string;
     uploadHint: string;
+    catalogueOpen: string;
+    catalogueTitle: string;
+    catalogueCount: string;
+    catalogueSearch: string;
+    catalogueEmpty: string;
     fitCover: string;
     fitContain: string;
   };

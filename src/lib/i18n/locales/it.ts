@@ -123,9 +123,13 @@ export const it: Dict = {
     pick: "Scegli un'immagine",
     formats: "JPG · PNG · WEBP — massimo 12 MB",
     qualityLabel: "Qualità",
+    applyModel: "Usa questo modello",
+    liteTitle: "Ultraleggero",
+    liteNote:
+      "Modello da {mb} MB · il download più piccolo, più grezzo sui capelli",
     lightTitle: "Leggero",
     lightNote:
-      "Modello da {mb} MB · il più leggero, per dispositivi e reti limitati",
+      "Modello da {mb} MB · download piccolo, bordi più nitidi di ultraleggero",
     balancedTitle: "Bilanciato",
     balancedNote:
       "Modello da {mb} MB · la scelta intermedia, basta per quasi tutte le foto",
@@ -147,6 +151,10 @@ export const it: Dict = {
     transparentSuffix: "trasparente",
     exportNote:
       "Esportato sempre alla risoluzione originale, non alla dimensione dell'anteprima.",
+    exportNoteCapped:
+      "Esportato a {w} × {h} px, più piccolo dell’originale: questo dispositivo non è riuscito a portare la risoluzione piena attraverso il modello.",
+    lowPower:
+      "Questo dispositivo segnala memoria o core limitati, quindi viene scelto il modello più leggero e le foto vengono ridotte a {px} px sul lato lungo prima dell’elaborazione. Tutti i livelli restano selezionabili.",
     another: "Un'altra immagine",
     restored: "L’ultimo risultato è stato ripristinato dopo la chiusura della scheda.",
     modelNote: "Cambia modello quando vuoi; il ritaglio viene rifatto sulla stessa immagine.",
@@ -220,6 +228,16 @@ export const it: Dict = {
     ],
     upload: "Una tua immagine",
     uploadHint: "Il file resta su questo dispositivo",
+    catalogueOpen:
+      "Sfoglia tutti gli sfondi",
+    catalogueTitle:
+      "Catalogo sfondi",
+    catalogueCount:
+      "{n} sfondi, generati su questo dispositivo — nulla scaricato",
+    catalogueSearch:
+      "Cerca: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Nessun risultato. Prova un nome di colore o un codice esadecimale.",
     fitCover: "Riempi",
     fitContain: "Adatta",
   },

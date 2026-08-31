@@ -9,6 +9,9 @@
  *     module scope. Hence the dynamic import inside the call.
  */
 
+import { CAP, fitForModel } from "./fit";
+import { LITE, cutLite, loadLite } from "./lite";
+
 export type Stage = "idle" | "fetching" | "processing" | "done" | "error";
 
 /** Which sentence the UI should show. The wording lives in the
@@ -35,9 +38,14 @@ export type Progress = {
  * the file *is* the act of throwing away precision. A lighter model is
  * lighter because it knows less about edges, and hair is where that shows.
  */
-export type Quality = "light" | "balanced" | "maximum";
+export type Quality = "lite" | "light" | "balanced" | "maximum";
 
-const MODEL: Record<Quality, "isnet_quint8" | "isnet_fp16" | "isnet"> = {
+/** The three that really are one network at three precisions. The fourth
+ *  tier is a different engine on a different model and lives in ./lite, so
+ *  it deliberately does not fit in the tables below. */
+export type OnnxQuality = "light" | "balanced" | "maximum";
+
+const MODEL: Record<OnnxQuality, "isnet_quint8" | "isnet_fp16" | "isnet"> = {
   light: "isnet_quint8",
   balanced: "isnet_fp16",
   maximum: "isnet",
@@ -45,7 +53,7 @@ const MODEL: Record<Quality, "isnet_quint8" | "isnet_fp16" | "isnet"> = {
 
 /** Weights alone, as the manifest reports them. The audit panel reads the
  *  same files from the origin, so these two must agree on screen. */
-const MODEL_MB: Record<Quality, number> = {
+const MODEL_MB: Record<OnnxQuality, number> = {
   light: 42.3,
   balanced: 84.1,
   maximum: 168.0,
@@ -80,9 +88,33 @@ export async function canGpu(): Promise<boolean> {
   return gpu;
 }
 
+/**
+ * Whether this machine should be treated as a low-power one.
+ *
+ * The honest answer is that a browser will not tell you what CPU it is
+ * running on, so this is a proxy: cores and, where the browser reports it,
+ * installed memory. An Atom-class netbook reports two cores; a machine
+ * reporting 4 GB or less is in the same territory. Both are deliberately
+ * conservative, because the cost of a false positive is a smaller picture
+ * and the cost of a false negative is a dead tab.
+ */
+export function isWeakDevice(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+  if (typeof mem === "number" && mem <= 4) return true;
+  const cores = navigator.hardwareConcurrency ?? 0;
+  return cores > 0 && cores <= 2;
+}
+
+
 /** First-load download for a tier: its weights plus the runtime this
  *  browser will actually fetch. */
 export function downloadMb(quality: Quality, onGpu: boolean) {
+  // The lightest tier carries its own engine, and that engine is the same
+  // size whether or not this browser has a GPU.
+  if (quality === "lite") {
+    return Math.round((LITE.modelBytes + LITE.engineBytes) / 1_048_576);
+  }
   return Math.round(MODEL_MB[quality] + (onGpu ? RUNTIME_MB.gpu : RUNTIME_MB.cpu));
 }
 
@@ -105,14 +137,20 @@ let warmed: Quality | null = null;
 /** Kick off the asset download early so the first cut is not the slow one. */
 export async function warm(quality: Quality, onProgress?: (p: Progress) => void) {
   if (warmed === quality) return;
-  await dispatch("warm", quality, undefined, onProgress);
+  // No file, so the cap is irrelevant here; a warm-up only fetches weights.
+  await dispatch("warm", quality, undefined, CAP.normal, onProgress);
   warmed = quality;
 }
 
 type Msg =
   | { id: number; type: "progress"; key: string; cur: number; total: number }
-  | { id: number; type: "done"; blob?: Blob }
+  | { id: number; type: "done"; blob?: Blob; scaled?: boolean }
   | { id: number; type: "error"; message: string };
+
+/** What a run hands back: the cut-out, and whether the photo had to be
+ *  shrunk to get there. The second half is not a detail — it is what keeps
+ *  the export note from claiming a resolution this cut never had. */
+export type Cut = { blob?: Blob; scaled: boolean };
 
 let worker: Worker | null = null;
 /** Set only when the worker could not be constructed or died outright, not
@@ -129,7 +167,7 @@ function hire(): Worker | null {
     // not compile `new URL('./x.ts', import.meta.url)` workers — it copies
     // the TypeScript through, the worker never starts, and the fallback
     // below quietly reinstates the freeze this is here to remove.
-    worker = new Worker("/matting-worker.js", { type: "module" });
+    worker = new Worker("/matting-worker.js");
     worker.onerror = () => {
       noWorker = true;
       worker = null;
@@ -146,8 +184,9 @@ function offThread(
   quality: Quality,
   device: "cpu" | "gpu",
   file: Blob | undefined,
+  cap: number,
   onProgress?: (p: Progress) => void,
-): Promise<Blob | undefined> {
+): Promise<Cut> {
   const w = hire();
   if (!w) return Promise.reject(new Error("no worker"));
   const id = ++seq;
@@ -161,10 +200,11 @@ function offThread(
       }
       w.removeEventListener("message", listen);
       if (d.type === "error") reject(new Error(d.message));
-      else resolve(d.blob);
+      else resolve({ blob: d.blob, scaled: d.scaled === true });
     };
     w.addEventListener("message", listen);
-    w.postMessage({ id, op, model: MODEL[quality], device, file });
+    const model = quality === "lite" ? "lite" : MODEL[quality];
+    w.postMessage({ id, op, model, device, file, cap });
   });
 }
 
@@ -176,8 +216,21 @@ async function onThread(
   quality: Quality,
   device: "cpu" | "gpu",
   file: Blob | undefined,
+  cap: number,
   onProgress?: (p: Progress) => void,
-): Promise<Blob | undefined> {
+): Promise<Cut> {
+  // The lightest tier is a different engine, so it leaves here before any
+  // of the ONNX configuration below is built.
+  if (quality === "lite") {
+    const report = (cur: number, total: number) =>
+      onProgress?.(describe("fetch:model", cur, total));
+    if (op === "warm") {
+      await loadLite(report);
+      return { scaled: false };
+    }
+    return cutLite(file as Blob, cap, report);
+  }
+
   const lib = await import("@imgly/background-removal");
   const config = {
     model: MODEL[quality],
@@ -188,29 +241,34 @@ async function onThread(
   };
   if (op === "warm") {
     await lib.preload(config);
-    return undefined;
+    return { scaled: false };
   }
-  return lib.removeBackground(file as Blob, config);
+  // This path only runs when the worker could not be built, so the resize
+  // lands on the main thread with the model. Slow, but the alternative
+  // here is no picture at all.
+  const fitted = await fitForModel(file as Blob, cap);
+  return { blob: await lib.removeBackground(fitted.blob, config), scaled: fitted.scaled };
 }
 
 async function dispatch(
   op: "warm" | "cut",
   quality: Quality,
   file: Blob | undefined,
+  cap: number,
   onProgress?: (p: Progress) => void,
-): Promise<Blob | undefined> {
+): Promise<Cut> {
   const device = (await canGpu()) ? ("gpu" as const) : ("cpu" as const);
   try {
-    return await offThread(op, quality, device, file, onProgress);
+    return await offThread(op, quality, device, file, cap, onProgress);
   } catch (e) {
-    if (noWorker) return onThread(op, quality, device, file, onProgress);
+    if (noWorker) return onThread(op, quality, device, file, cap, onProgress);
     // An adapter that exists but fails mid-run would otherwise lose the
     // picture. The CPU path still works, so take it.
     if (device === "gpu") {
       gpu = false;
       warmed = null;
-      return offThread(op, quality, "cpu", file, onProgress).catch(() =>
-        onThread(op, quality, "cpu", file, onProgress),
+      return offThread(op, quality, "cpu", file, cap, onProgress).catch(() =>
+        onThread(op, quality, "cpu", file, cap, onProgress),
       );
     }
     throw e;
@@ -220,11 +278,12 @@ async function dispatch(
 export async function cutout(
   file: Blob,
   quality: Quality,
+  cap: number,
   onProgress?: (p: Progress) => void,
-): Promise<Blob> {
-  const blob = await dispatch("cut", quality, file, onProgress);
-  if (!blob) throw new Error("no image returned");
-  return blob;
+): Promise<{ blob: Blob; scaled: boolean }> {
+  const cut = await dispatch("cut", quality, file, cap, onProgress);
+  if (!cut.blob) throw new Error("no image returned");
+  return { blob: cut.blob, scaled: cut.scaled };
 }
 
 export function isWarm(quality: Quality) {

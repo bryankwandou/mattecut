@@ -247,6 +247,42 @@ input[type="range"].roto-range::-moz-range-thumb {
   background: var(--accent); border: 2px solid var(--ink);
 }
 
+/* A range whose stops are drawn rather than implied.
+   The native track is hidden so our own track and its stop marks can sit
+   underneath the thumb: a slider with four discrete positions and nothing
+   on the rail reads as continuous, which is a lie about what it does. */
+input[type="range"].roto-range.ticks::-webkit-slider-runnable-track {
+  background: transparent;
+}
+input[type="range"].roto-range.ticks::-moz-range-track {
+  background: transparent;
+}
+.range-rail {
+  position: absolute;
+  /* Half the thumb, so the first and last marks sit under its centre at
+     each end rather than beyond the travel. */
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  height: 4px;
+  transform: translateY(-50%);
+  border-radius: 99px;
+  background: var(--line);
+  pointer-events: none;
+}
+.range-stop {
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  transform: translateY(-50%);
+  border-radius: 99px;
+  background: var(--surface);
+  box-shadow: 0 0 0 1.5px var(--text-faint);
+  pointer-events: none;
+}
+
 /* Native colour picker chrome varies wildly per platform; the swatch is
    drawn by us, so the input itself only needs to be an invisible target. */
 input[type="color"] {

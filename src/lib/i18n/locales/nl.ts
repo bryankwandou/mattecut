@@ -123,9 +123,13 @@ export const nl: Dict = {
     pick: "Afbeelding kiezen",
     formats: "JPG · PNG · WEBP — maximaal 12 MB",
     qualityLabel: "Kwaliteit",
+    applyModel: "Dit model gebruiken",
+    liteTitle: "Ultralicht",
+    liteNote:
+      "Model van {mb} MB · kleinste download, grofst rond haar",
     lightTitle: "Licht",
     lightNote:
-      "Model van {mb} MB · het lichtst, voor beperkte apparaten en verbindingen",
+      "Model van {mb} MB · kleine download, scherpere randen dan ultralicht",
     balancedTitle: "Gebalanceerd",
     balancedNote:
       "Model van {mb} MB · de middenkeuze, genoeg voor de meeste foto's",
@@ -147,6 +151,10 @@ export const nl: Dict = {
     transparentSuffix: "transparant",
     exportNote:
       "Altijd geëxporteerd op de oorspronkelijke resolutie, niet op het formaat van de voorvertoning.",
+    exportNoteCapped:
+      "Geëxporteerd op {w} × {h} px, kleiner dan het origineel: dit apparaat kon de volledige resolutie niet door het model halen.",
+    lowPower:
+      "Dit apparaat meldt beperkt geheugen of weinig processorkernen, dus het lichtste model staat standaard aan en foto’s worden voor verwerking verkleind tot {px} px op de lange zijde. Alle niveaus blijven kiesbaar.",
     another: "Andere afbeelding",
     restored: "Je laatste resultaat is hersteld nadat het tabblad sloot.",
     modelNote: "Wissel altijd van model; de uitsnede wordt op dezelfde afbeelding opnieuw gemaakt.",
@@ -220,6 +228,16 @@ export const nl: Dict = {
     ],
     upload: "Je eigen afbeelding",
     uploadHint: "Het bestand blijft op dit apparaat",
+    catalogueOpen:
+      "Alle achtergronden bekijken",
+    catalogueTitle:
+      "Achtergrondcatalogus",
+    catalogueCount:
+      "{n} achtergronden, op dit apparaat gemaakt — niets gedownload",
+    catalogueSearch:
+      "Zoeken: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Geen resultaat. Probeer een kleurnaam of een hexcode.",
     fitCover: "Vullen",
     fitContain: "Passend",
   },

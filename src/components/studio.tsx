@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -26,9 +32,11 @@ import {
   isWarm,
   canGpu,
   downloadMb,
+  isWeakDevice,
   type Progress,
   type Quality,
 } from "@/lib/matting";
+import { CAP } from "@/lib/fit";
 import {
   backdropUrl,
   backgroundToCss,
@@ -42,6 +50,12 @@ import { findPortrait, type Portrait } from "@/lib/portrait";
 
 const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 12 * 1024 * 1024;
+
+/** The weak-device answer never changes within a page life, so there is
+ *  nothing to subscribe to — and the server, which has no `navigator`, is
+ *  told the safe answer instead of being made to guess. */
+const subscribeNever = () => () => {};
+const serverIsFine = () => false;
 
 /** Jacket artwork, by file name under /attire. */
 const ATTIRE = ["charcoal", "navy", "blazer"] as const;
@@ -69,13 +83,19 @@ type Shot = {
   quality: Quality;
   /** Null when the silhouette did not read as a frontal, chest-up portrait. */
   portrait: Portrait | null;
+  /** True when the photo was shrunk to fit this machine, so the export note
+   *  stops promising a resolution this cut never had. */
+  capped: boolean;
 };
 
 export function Studio() {
   const { t } = useI18n();
   const [shot, setShot] = useState<Shot | null>(null);
   const [bg, setBg] = useState<Background>({ kind: "transparent" });
-  const [quality, setQuality] = useState<Quality>("balanced");
+  // Null until someone actually picks a tier, so the default can be derived
+  // from the machine rather than written into state and then corrected. The
+  // correction is what would flash Balanced on a netbook for one frame.
+  const [picked, setPicked] = useState<Quality | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -83,6 +103,16 @@ export function Studio() {
   // Whether this browser can run the model on the GPU. It changes the size
   // of the runtime it downloads, so the tier labels wait for the answer.
   const [onGpu, setOnGpu] = useState(false);
+  // Whether this machine should be spared the heavier work. Read through
+  // useSyncExternalStore rather than an effect: `navigator` does not exist
+  // during the server render, and this is exactly the shape React provides
+  // for a value the server cannot know — false there, the real answer once
+  // the client takes over, and no hydration mismatch in between.
+  const weak = useSyncExternalStore(subscribeNever, isWeakDevice, serverIsFine);
+  // A netbook starts on the lightest tier without being asked. This moves
+  // the default only: every stop on the slider stays reachable, so a reader
+  // willing to wait is never locked out of the better cut.
+  const quality: Quality = picked ?? (weak ? "light" : "balanced");
   // A warm-up is a large download with no picture on screen yet. Left
   // unannounced it reads as a dead page, which is exactly how it was read.
   const [warming, setWarming] = useState(false);
@@ -131,7 +161,7 @@ export function Studio() {
       }
 
       setBusy(true);
-      setQuality(q);
+      setPicked(q);
       setProgress({
         stage: isWarm(q) ? "processing" : "fetching",
         ratio: null,
@@ -139,7 +169,15 @@ export function Studio() {
       });
 
       try {
-        const blob = await cutout(file, q, setProgress);
+        // The cap travels into the worker rather than being applied here:
+        // the shrink needs a full decode, and doing that on this thread is
+        // the freeze the worker exists to prevent.
+        const { blob, scaled } = await cutout(
+          file,
+          q,
+          weak ? CAP.weak : CAP.normal,
+          setProgress,
+        );
 
         const originalUrl = URL.createObjectURL(file);
         const masterUrl = URL.createObjectURL(blob);
@@ -156,6 +194,7 @@ export function Studio() {
           h: bitmap.naturalHeight,
           quality: q,
           portrait: findPortrait(bitmap),
+          capped: scaled,
         });
         setProgress({ stage: "done", ratio: 1, key: "separating" });
       } catch (e) {
@@ -167,13 +206,13 @@ export function Studio() {
         // The switcher moved the moment the chip was pressed, so a failed
         // cut has to move it back; otherwise it claims a model that never
         // produced the picture on screen.
-        setQuality(quality);
+        setPicked(quality);
         setError(t.studio.errFailed);
       } finally {
         setBusy(false);
       }
     },
-    [quality, t],
+    [quality, t, weak],
   );
 
   // A crash, a closed tab, or a stray reload should not cost the reader the
@@ -202,8 +241,9 @@ export function Studio() {
           h: bitmap.naturalHeight,
           quality: d.quality,
           portrait: findPortrait(bitmap),
+          capped: d.capped === true,
         });
-        setQuality(d.quality);
+        setPicked(d.quality);
         if (d.bg) setBg(d.bg as Background);
         // Same guard as the tier: a jacket this build no longer ships must
         // not come back as a broken fetch on the reader's first glance.
@@ -238,6 +278,7 @@ export function Studio() {
         attire,
         attireScale,
         attireDrop,
+        capped: shot.capped,
         at: Date.now(),
       });
     }, 400);
@@ -407,10 +448,11 @@ export function Studio() {
           dragOver={dragOver}
           busy={busy}
           warming={warming}
+          weak={weak}
           onGpu={onGpu}
           progress={progress}
           quality={quality}
-          onQuality={setQuality}
+          onQuality={setPicked}
           onPick={() => inputRef.current?.click()}
           onDragState={setDragOver}
           onFile={run}
@@ -441,26 +483,16 @@ export function Studio() {
               <legend className="mono px-2 text-[10px] uppercase tracking-[0.16em] text-text-faint">
                 {t.studio.qualityLabel}
               </legend>
-              <div className="grid grid-cols-3 gap-1.5">
-                <ModelChip
-                  active={quality === "light"}
-                  busy={busy}
-                  label={t.studio.lightTitle}
-                  onClick={() => void run(shot.file, "light")}
-                />
-                <ModelChip
-                  active={quality === "balanced"}
-                  busy={busy}
-                  label={t.studio.balancedTitle}
-                  onClick={() => void run(shot.file, "balanced")}
-                />
-                <ModelChip
-                  active={quality === "maximum"}
-                  busy={busy}
-                  label={t.studio.maximumTitle}
-                  onClick={() => void run(shot.file, "maximum")}
-                />
-              </div>
+              {/* Moving the slider re-cuts the same photo straight away. The
+                  fieldset disables itself the moment that starts, so a drag
+                  across the track cannot queue a second cut behind the
+                  first. */}
+              <QualitySlider
+                value={quality}
+                onChange={(q) => void run(shot.file, q)}
+                disabled={busy}
+                onGpu={onGpu}
+              />
               <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
                 {busy
                   ? progress
@@ -468,6 +500,11 @@ export function Studio() {
                     : t.progress.working
                   : t.studio.modelNote}
               </p>
+              {weak && (
+                <p className="mt-2 text-pretty text-xs leading-relaxed text-text-faint">
+                  {fill(t.studio.lowPower, { px: CAP.weak })}
+                </p>
+              )}
               <CatalogAudit />
             </fieldset>
 
@@ -560,7 +597,9 @@ export function Studio() {
                 </SecondaryButton>
               </div>
               <p className="text-center text-xs leading-relaxed text-text-faint">
-                {t.studio.exportNote}
+                {shot.capped
+                  ? fill(t.studio.exportNoteCapped, { w: shot.w, h: shot.h })
+                  : t.studio.exportNote}
               </p>
             </div>
 
@@ -612,6 +651,7 @@ function Dropzone({
   dragOver,
   busy,
   warming,
+  weak,
   onGpu,
   progress,
   quality,
@@ -623,6 +663,7 @@ function Dropzone({
   dragOver: boolean;
   busy: boolean;
   warming: boolean;
+  weak: boolean;
   onGpu: boolean;
   progress: Progress | null;
   quality: Quality;
@@ -682,29 +723,17 @@ function Dropzone({
         <legend className="mono px-2 text-[10px] uppercase tracking-[0.16em] text-text-faint">
           {t.studio.qualityLabel}
         </legend>
-        <div className="grid gap-2 sm:grid-cols-3">
-          <QualityOption
-            active={quality === "light"}
-            onClick={() => onQuality("light")}
-            title={t.studio.lightTitle}
-            note={fill(t.studio.lightNote, { mb: downloadMb("light", onGpu) })}
-            disabled={busy}
-          />
-          <QualityOption
-            active={quality === "balanced"}
-            onClick={() => onQuality("balanced")}
-            title={t.studio.balancedTitle}
-            note={fill(t.studio.balancedNote, { mb: downloadMb("balanced", onGpu) })}
-            disabled={busy}
-          />
-          <QualityOption
-            active={quality === "maximum"}
-            onClick={() => onQuality("maximum")}
-            title={t.studio.maximumTitle}
-            note={fill(t.studio.maximumNote, { mb: downloadMb("maximum", onGpu) })}
-            disabled={busy}
-          />
-        </div>
+        <QualitySlider
+          value={quality}
+          onChange={onQuality}
+          disabled={busy}
+          onGpu={onGpu}
+        />
+        {weak && (
+          <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
+            {fill(t.studio.lowPower, { px: CAP.weak })}
+          </p>
+        )}
         {warming && (
           <p
             className="mt-2.5 flex items-center gap-2 text-xs leading-relaxed text-text-faint"
@@ -726,38 +755,117 @@ function Dropzone({
   );
 }
 
-function QualityOption({
-  active,
-  onClick,
-  title,
-  note,
+/** The tiers in the order they belong on a scale, lightest first. */
+const TIERS: readonly Quality[] = ["lite", "light", "balanced", "maximum"];
+
+/**
+ * The three tiers as one slider instead of three cards.
+ *
+ * They are a single ordered scale — one network at rising precision — and
+ * three separate buttons made them look like three different products. The
+ * ends are labelled with the tier names that already exist, so the control
+ * needs no new sentence in any of the eighteen languages.
+ *
+ * A native range, deliberately. It arrives keyboard-operable and announced
+ * to a screen reader without a line of script, and the machines this whole
+ * control exists to serve are the last place to spend JavaScript on a
+ * widget the platform already ships.
+ */
+function QualitySlider({
+  value,
+  onChange,
   disabled,
+  onGpu,
 }: {
-  active: boolean;
-  onClick: () => void;
-  title: string;
-  note: string;
+  value: Quality;
+  onChange: (q: Quality) => void;
   disabled: boolean;
+  onGpu: boolean;
 }) {
+  const { t } = useI18n();
+  // Where the handle is, which is not yet what the model is. Dragging across
+  // four stops used to start four cuts; the fieldset disabling itself
+  // mid-drag hid that most of the time, which is not the same as fixing it.
+  const [pending, setPending] = useState<Quality>(value);
+
+  // The applied tier can move without this slider: a restored draft, or a
+  // failed cut putting the choice back. Follow it, or the handle ends up
+  // claiming a model that is not running. Adjusted during render rather
+  // than in an effect, which is React's own answer for state that has to
+  // track a prop — an effect here would render the stale handle first.
+  const [tracked, setTracked] = useState<Quality>(value);
+  if (tracked !== value) {
+    setTracked(value);
+    setPending(value);
+  }
+
+  const at = Math.max(0, TIERS.indexOf(pending));
+  const titles = [
+    t.studio.liteTitle,
+    t.studio.lightTitle,
+    t.studio.balancedTitle,
+    t.studio.maximumTitle,
+  ];
+  const notes = [
+    t.studio.liteNote,
+    t.studio.lightNote,
+    t.studio.balancedNote,
+    t.studio.maximumNote,
+  ];
+  const dirty = pending !== value;
+
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      aria-pressed={active}
-      className={`rounded-lg border p-3 text-start transition-colors disabled:opacity-50 ${
-        active
-          ? "border-accent bg-accent/10"
-          : "border-line hover:border-text-faint"
-      }`}
-    >
-      <span className="flex items-center gap-2 text-sm font-medium">
-        {title}
-        {active && <Sparkles size={13} className="text-accent-text" />}
-      </span>
-      <span className="mt-1 block text-xs leading-relaxed text-text-faint">
-        {note}
-      </span>
-    </button>
+    <div>
+      <p className="flex items-center gap-2 text-sm font-medium">
+        {titles[at]}
+        {!dirty && <Sparkles size={13} className="text-accent-text" />}
+      </p>
+      <div className="mt-3 flex items-center gap-3">
+        <span className="mono shrink-0 text-[10px] uppercase tracking-[0.12em] text-text-faint">
+          {titles[0]}
+        </span>
+        <div className="relative flex-1">
+          {/* Drawn under the thumb, because a four-position control with a
+              bare rail reads as continuous. */}
+          <div className="range-rail" aria-hidden="true">
+            {TIERS.map((tier, i) => (
+              <span
+                key={tier}
+                className="range-stop"
+                style={{ left: `${(i / (TIERS.length - 1)) * 100}%` }}
+              />
+            ))}
+          </div>
+          <input
+            type="range"
+            className="roto-range ticks relative w-full"
+            min={0}
+            max={TIERS.length - 1}
+            step={1}
+            value={at}
+            disabled={disabled}
+            aria-label={t.studio.qualityLabel}
+            aria-valuetext={titles[at]}
+            onChange={(e) => setPending(TIERS[Number(e.target.value)])}
+          />
+        </div>
+        <span className="mono shrink-0 text-[10px] uppercase tracking-[0.12em] text-text-faint">
+          {titles[TIERS.length - 1]}
+        </span>
+      </div>
+      <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
+        {fill(notes[at], { mb: downloadMb(pending, onGpu) })}
+      </p>
+      {dirty && (
+        <button
+          onClick={() => onChange(pending)}
+          disabled={disabled}
+          className="mt-2.5 w-full rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-on-accent transition-opacity hover:opacity-90 disabled:opacity-50"
+        >
+          {t.studio.applyModel}
+        </button>
+      )}
+    </div>
   );
 }
 

@@ -123,9 +123,13 @@ export const tr: Dict = {
     pick: "Görsel seçin",
     formats: "JPG · PNG · WEBP — en fazla 12 MB",
     qualityLabel: "Kalite",
+    applyModel: "Bu modeli kullan",
+    liteTitle: "Çok hafif",
+    liteNote:
+      "{mb} MB model · en küçük indirme, saçta en kaba sonuç",
     lightTitle: "Hafif",
     lightNote:
-      "{mb} MB model · en hafifi, sınırlı cihaz ve bağlantılar için",
+      "{mb} MB model · küçük indirme, çok hafiften daha keskin kenarlar",
     balancedTitle: "Dengeli",
     balancedNote:
       "{mb} MB model · ortadaki seçim, çoğu fotoğraf için yeterli",
@@ -147,6 +151,10 @@ export const tr: Dict = {
     transparentSuffix: "saydam",
     exportNote:
       "Her zaman önizleme boyutunda değil, özgün çözünürlükte dışa aktarılır.",
+    exportNoteCapped:
+      "{w} × {h} px olarak dışa aktarıldı; özgün boyuttan küçük: bu makine tam çözünürlüğü modelden geçiremedi.",
+    lowPower:
+      "Bu makine sınırlı bellek veya işlemci çekirdeği bildiriyor; bu yüzden en hafif model öntanımlı seçiliyor ve fotoğraflar işlenmeden önce uzun kenarı {px} px olacak şekilde küçültülüyor. Tüm kademeler yine seçilebilir.",
     another: "Başka görsel",
     restored: "Sekme kapandıktan sonra son sonucunuz geri yüklendi.",
     modelNote: "İstediğiniz zaman model değiştirin; kesim aynı görsel üzerinde yeniden yapılır.",
@@ -220,6 +228,16 @@ export const tr: Dict = {
     ],
     upload: "Kendi görselin",
     uploadHint: "Dosya bu cihazda kalır",
+    catalogueOpen:
+      "Tüm arka planlara göz at",
+    catalogueTitle:
+      "Arka plan kataloğu",
+    catalogueCount:
+      "{n} arka plan, bu cihazda üretildi — hiçbiri indirilmedi",
+    catalogueSearch:
+      "Ara: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Eşleşen yok. Bir renk adı ya da hex kodu deneyin.",
     fitCover: "Doldur",
     fitContain: "Sığdır",
   },

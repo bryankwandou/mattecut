@@ -123,9 +123,13 @@ export const de: Dict = {
     pick: "Bild auswählen",
     formats: "JPG · PNG · WEBP — höchstens 12 MB",
     qualityLabel: "Qualität",
+    applyModel: "Dieses Modell verwenden",
+    liteTitle: "Ultraleicht",
+    liteNote:
+      "{mb} MB Modell · kleinster Download, gröbste Kanten an Haaren",
     lightTitle: "Leicht",
     lightNote:
-      "{mb} MB Modell · am leichtesten, für schwache Geräte und Verbindungen",
+      "{mb} MB Modell · kleiner Download, schärfere Kanten als ultraleicht",
     balancedTitle: "Ausgewogen",
     balancedNote:
       "{mb} MB Modell · die mittlere Wahl, für die meisten Fotos genug",
@@ -147,6 +151,10 @@ export const de: Dict = {
     transparentSuffix: "transparent",
     exportNote:
       "Wird immer in der Originalauflösung exportiert, nicht in der Vorschaugröße.",
+    exportNoteCapped:
+      "Exportiert mit {w} × {h} px, kleiner als das Original: dieses Gerät konnte die volle Auflösung nicht durch das Modell tragen.",
+    lowPower:
+      "Dieses Gerät meldet begrenzten Speicher oder wenige Prozessorkerne, daher ist das leichteste Modell voreingestellt und Fotos werden vor der Verarbeitung auf {px} px an der langen Kante verkleinert. Alle Stufen bleiben wählbar.",
     another: "Anderes Bild",
     restored: "Dein letztes Ergebnis wurde nach dem Schließen des Tabs wiederhergestellt.",
     modelNote: "Modell jederzeit wechseln; der Freisteller wird auf demselben Bild neu berechnet.",
@@ -220,6 +228,16 @@ export const de: Dict = {
     ],
     upload: "Eigenes Bild",
     uploadHint: "Die Datei bleibt auf diesem Gerät",
+    catalogueOpen:
+      "Alle Hintergründe ansehen",
+    catalogueTitle:
+      "Hintergrund-Katalog",
+    catalogueCount:
+      "{n} Hintergründe, auf diesem Gerät erzeugt — nichts heruntergeladen",
+    catalogueSearch:
+      "Suchen: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Nichts gefunden. Versuchen Sie einen Farbnamen oder einen Hex-Code.",
     fitCover: "Füllen",
     fitContain: "Einpassen",
   },

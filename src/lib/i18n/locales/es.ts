@@ -123,9 +123,13 @@ export const es: Dict = {
     pick: "Elegir imagen",
     formats: "JPG · PNG · WEBP — 12 MB como máximo",
     qualityLabel: "Calidad",
+    applyModel: "Usar este modelo",
+    liteTitle: "Ultraligero",
+    liteNote:
+      "Modelo de {mb} MB · la descarga más pequeña, más basto en el pelo",
     lightTitle: "Ligero",
     lightNote:
-      "Modelo de {mb} MB · el más ligero, para equipos y conexiones limitados",
+      "Modelo de {mb} MB · descarga pequeña, bordes más nítidos que ultraligero",
     balancedTitle: "Equilibrado",
     balancedNote:
       "Modelo de {mb} MB · la opción intermedia, suficiente para casi todas las fotos",
@@ -147,6 +151,10 @@ export const es: Dict = {
     transparentSuffix: "transparente",
     exportNote:
       "Siempre se exporta a la resolución original, no al tamaño de la vista previa.",
+    exportNoteCapped:
+      "Exportado a {w} × {h} px, menor que el original: este equipo no pudo llevar la resolución completa a través del modelo.",
+    lowPower:
+      "Este equipo informa de memoria o núcleos limitados, así que se selecciona el modelo más ligero por defecto y las fotos se reducen a {px} px en el lado largo antes de procesarlas. Todos los niveles siguen disponibles.",
     another: "Otra imagen",
     restored: "Se restauró tu último resultado tras cerrarse la pestaña.",
     modelNote: "Cambia de modelo cuando quieras; el recorte se rehace sobre la misma imagen.",
@@ -220,6 +228,16 @@ export const es: Dict = {
     ],
     upload: "Tu propia imagen",
     uploadHint: "El archivo se queda en este equipo",
+    catalogueOpen:
+      "Ver todos los fondos",
+    catalogueTitle:
+      "Catálogo de fondos",
+    catalogueCount:
+      "{n} fondos, generados en este equipo — nada descargado",
+    catalogueSearch:
+      "Buscar: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Nada coincide. Prueba un nombre de color o un código hex.",
     fitCover: "Rellenar",
     fitContain: "Ajustar",
   },

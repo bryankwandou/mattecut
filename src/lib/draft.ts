@@ -18,19 +18,22 @@ const KEY = "current";
  *  surprise the reader more than help them. */
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
-const TIERS = ["light", "balanced", "maximum"] as const;
+const TIERS = ["lite", "light", "balanced", "maximum"] as const;
 
 export type Draft = {
   name: string;
   type: string;
   original: Blob;
   master: Blob;
-  quality: "light" | "balanced" | "maximum";
+  quality: "lite" | "light" | "balanced" | "maximum";
   bg: unknown;
   /** Optional so a draft written before jackets existed still loads. */
   attire?: string | null;
   attireScale?: number;
   attireDrop?: number;
+  /** Whether the cut was made from a shrunken copy. Optional, so a draft
+   *  written before low-power mode existed still loads. */
+  capped?: boolean;
   at: number;
 };
 

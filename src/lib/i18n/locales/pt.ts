@@ -123,9 +123,13 @@ export const pt: Dict = {
     pick: "Escolher imagem",
     formats: "JPG · PNG · WEBP — 12 MB no máximo",
     qualityLabel: "Qualidade",
+    applyModel: "Usar este modelo",
+    liteTitle: "Ultraleve",
+    liteNote:
+      "Modelo de {mb} MB · o menor download, mais grosseiro no cabelo",
     lightTitle: "Leve",
     lightNote:
-      "Modelo de {mb} MB · o mais leve, para aparelhos e conexões limitados",
+      "Modelo de {mb} MB · download pequeno, bordas mais nítidas que ultraleve",
     balancedTitle: "Equilibrado",
     balancedNote:
       "Modelo de {mb} MB · a opção do meio, suficiente para quase todas as fotos",
@@ -147,6 +151,10 @@ export const pt: Dict = {
     transparentSuffix: "transparente",
     exportNote:
       "Sempre exportado na resolução original, não no tamanho da prévia.",
+    exportNoteCapped:
+      "Exportado em {w} × {h} px, menor que o original: este aparelho não conseguiu levar a resolução completa através do modelo.",
+    lowPower:
+      "Este aparelho informa memória ou núcleos limitados, por isso o modelo mais leve é escolhido por padrão e as fotos são reduzidas a {px} px no lado maior antes do processamento. Todos os níveis continuam selecionáveis.",
     another: "Outra imagem",
     restored: "Seu último resultado foi restaurado depois que a aba fechou.",
     modelNote: "Troque de modelo quando quiser; o recorte é refeito na mesma imagem.",
@@ -220,6 +228,16 @@ export const pt: Dict = {
     ],
     upload: "Sua própria imagem",
     uploadHint: "O arquivo fica neste aparelho",
+    catalogueOpen:
+      "Ver todos os fundos",
+    catalogueTitle:
+      "Catálogo de fundos",
+    catalogueCount:
+      "{n} fundos, gerados neste aparelho — nada baixado",
+    catalogueSearch:
+      "Buscar: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Nada corresponde. Tente um nome de cor ou um código hex.",
     fitCover: "Preencher",
     fitContain: "Ajustar",
   },

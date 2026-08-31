@@ -123,9 +123,13 @@ export const ja: Dict = {
     pick: "画像を選ぶ",
     formats: "JPG · PNG · WEBP — 最大 12 MB",
     qualityLabel: "品質",
+    applyModel: "このモデルを使う",
+    liteTitle: "超軽量",
+    liteNote:
+      "{mb} MB モデル・ダウンロード最小、髪の境界は最も粗い",
     lightTitle: "軽量",
     lightNote:
-      "{mb} MB のモデル · 最軽量。非力な端末や細い回線向け",
+      "{mb} MB モデル・ダウンロード小さめ、超軽量より輪郭が鮮明",
     balancedTitle: "標準",
     balancedNote:
       "{mb} MB のモデル · 中間の選択。ほとんどの写真に十分",
@@ -147,6 +151,10 @@ export const ja: Dict = {
     transparentSuffix: "透明",
     exportNote:
       "書き出しは常に元の解像度で、プレビューの大きさではありません。",
+    exportNoteCapped:
+      "{w} × {h} px で書き出しました。元の解像度より小さいのは、この端末では全解像度をモデルに通せなかったためです。",
+    lowPower:
+      "この端末はメモリまたはコア数が少ないと報告しています。そのため最も軽いモデルを既定で選び、処理前に写真の長辺を {px} px まで縮小します。どの段階も引き続き選択できます。",
     another: "別の画像",
     restored: "タブが閉じたあと、直前の結果を復元しました。",
     modelNote: "モデルはいつでも切り替えられます。同じ画像で切り抜きをやり直します。",
@@ -221,6 +229,16 @@ export const ja: Dict = {
     ],
     upload: "自分の画像",
     uploadHint: "ファイルはこの端末に残ります",
+    catalogueOpen:
+      "すべての背景を見る",
+    catalogueTitle:
+      "背景カタログ",
+    catalogueCount:
+      "{n} 件の背景。この端末で生成しており、ダウンロードはありません。",
+    catalogueSearch:
+      "検索: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "一致するものがありません。色名か 16 進コードをお試しください。",
     fitCover: "埋める",
     fitContain: "収める",
   },

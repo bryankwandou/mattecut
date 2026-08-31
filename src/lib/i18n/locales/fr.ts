@@ -123,9 +123,13 @@ export const fr: Dict = {
     pick: "Choisir une image",
     formats: "JPG · PNG · WEBP — 12 Mo maximum",
     qualityLabel: "Qualité",
+    applyModel: "Utiliser ce modèle",
+    liteTitle: "Ultraléger",
+    liteNote:
+      "Modèle de {mb} Mo · le plus petit téléchargement, plus grossier sur les cheveux",
     lightTitle: "Léger",
     lightNote:
-      "Modèle de {mb} Mo · le plus léger, pour appareils et connexions limités",
+      "Modèle de {mb} Mo · petit téléchargement, bords plus nets qu’ultraléger",
     balancedTitle: "Équilibré",
     balancedNote:
       "Modèle de {mb} Mo · le choix intermédiaire, suffisant pour presque toutes les photos",
@@ -147,6 +151,10 @@ export const fr: Dict = {
     transparentSuffix: "transparent",
     exportNote:
       "Toujours exporté à la résolution d'origine, pas à la taille de l'aperçu.",
+    exportNoteCapped:
+      "Exporté en {w} × {h} px, plus petit que l’original : cette machine n’a pas pu faire passer la pleine résolution dans le modèle.",
+    lowPower:
+      "Cette machine signale une mémoire ou un nombre de cœurs limité : le modèle le plus léger est donc choisi par défaut et les photos sont réduites à {px} px sur le grand côté avant traitement. Tous les niveaux restent sélectionnables.",
     another: "Une autre image",
     restored: "Votre dernier résultat a été restauré après la fermeture de l’onglet.",
     modelNote: "Changez de modèle à tout moment ; le détourage est refait sur la même image.",
@@ -220,6 +228,16 @@ export const fr: Dict = {
     ],
     upload: "Votre propre image",
     uploadHint: "Le fichier reste sur cet appareil",
+    catalogueOpen:
+      "Parcourir tous les fonds",
+    catalogueTitle:
+      "Catalogue de fonds",
+    catalogueCount:
+      "{n} fonds, générés sur cet appareil — rien de téléchargé",
+    catalogueSearch:
+      "Rechercher : blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Aucun résultat. Essayez un nom de couleur ou un code hex.",
     fitCover: "Remplir",
     fitContain: "Ajuster",
   },

@@ -123,9 +123,13 @@ export const vi: Dict = {
     pick: "Chọn ảnh",
     formats: "JPG · PNG · WEBP — tối đa 12 MB",
     qualityLabel: "Chất lượng",
+    applyModel: "Dùng mô hình này",
+    liteTitle: "Siêu nhẹ",
+    liteNote:
+      "Mô hình {mb} MB · tải về nhỏ nhất, thô nhất ở tóc",
     lightTitle: "Nhẹ",
     lightNote:
-      "Mô hình {mb} MB · nhẹ nhất, cho máy và mạng hạn chế",
+      "Mô hình {mb} MB · tải về nhỏ, viền sắc hơn siêu nhẹ",
     balancedTitle: "Cân bằng",
     balancedNote:
       "Mô hình {mb} MB · lựa chọn ở giữa, đủ cho hầu hết ảnh",
@@ -147,6 +151,10 @@ export const vi: Dict = {
     transparentSuffix: "trong suốt",
     exportNote:
       "Luôn xuất ở độ phân giải gốc, không phải kích thước bản xem trước.",
+    exportNoteCapped:
+      "Đã xuất ở {w} × {h} px, nhỏ hơn ảnh gốc: máy này không tải nổi độ phân giải đầy đủ qua mô hình.",
+    lowPower:
+      "Máy này báo bộ nhớ hoặc số nhân xử lý hạn chế, nên mô hình nhẹ nhất được chọn mặc định và ảnh được thu nhỏ về {px} px ở cạnh dài trước khi xử lý. Mọi mức vẫn có thể chọn.",
     another: "Ảnh khác",
     restored: "Kết quả gần nhất đã được khôi phục sau khi thẻ đóng.",
     modelNote: "Đổi mô hình bất cứ lúc nào; phần tách được làm lại trên cùng ảnh.",
@@ -220,6 +228,16 @@ export const vi: Dict = {
     ],
     upload: "Ảnh của bạn",
     uploadHint: "Tệp vẫn ở trên máy này",
+    catalogueOpen:
+      "Xem tất cả nền",
+    catalogueTitle:
+      "Danh mục ảnh nền",
+    catalogueCount:
+      "{n} nền, tạo ngay trên máy này — không tải gì về",
+    catalogueSearch:
+      "Tìm: blue, soft, deep teal, gradient, #1f6fff",
+    catalogueEmpty:
+      "Không có kết quả. Thử tên màu hoặc mã hex.",
     fitCover: "Lấp đầy",
     fitContain: "Vừa khung",
   },
