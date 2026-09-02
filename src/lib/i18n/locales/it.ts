@@ -155,6 +155,9 @@ export const it: Dict = {
       "Esportato a {w} × {h} px, più piccolo dell’originale: questo dispositivo non è riuscito a portare la risoluzione piena attraverso il modello.",
     lowPower:
       "Questo dispositivo segnala memoria o core limitati, quindi viene scelto il modello più leggero e le foto vengono ridotte a {px} px sul lato lungo prima dell’elaborazione. Tutti i livelli restano selezionabili.",
+    zoomOut: "Mostra più piccolo",
+    zoomIn: "Mostra più grande",
+    zoomFit: "Adatta allo schermo",
     another: "Un'altra immagine",
     restored: "L’ultimo risultato è stato ripristinato dopo la chiusura della scheda.",
     modelNote: "Cambia modello quando vuoi; il ritaglio viene rifatto sulla stessa immagine.",

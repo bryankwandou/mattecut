@@ -71,6 +71,9 @@ export type Dict = {
     exportNote: string;
     exportNoteCapped: string;
     lowPower: string;
+    zoomOut: string;
+    zoomIn: string;
+    zoomFit: string;
     another: string;
     restored: string;
     modelNote: string;

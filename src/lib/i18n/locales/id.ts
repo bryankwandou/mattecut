@@ -152,6 +152,9 @@ export const id: Dict = {
       "Diekspor pada {w} × {h} px, lebih kecil dari aslinya: perangkat ini tidak sanggup membawa resolusi penuh melewati model.",
     lowPower:
       "Perangkat ini melaporkan memori atau inti prosesor yang terbatas, jadi model teringan dipilih sebagai bawaan dan foto dikecilkan ke {px} px pada sisi terpanjang sebelum diproses. Semua tingkat tetap bisa dipilih.",
+    zoomOut: "Perkecil tampilan",
+    zoomIn: "Perbesar tampilan",
+    zoomFit: "Muat ke layar",
     another: "Gambar lain",
     restored: "Hasil terakhir dipulihkan setelah tab tertutup.",
     modelNote: "Ganti model kapan saja; potongan diulang pada gambar yang sama.",

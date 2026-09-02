@@ -154,6 +154,9 @@ export const en: Dict = {
       "Exported at {w} × {h} px, smaller than the original: this machine could not carry the full resolution through the model.",
     lowPower:
       "This machine reports limited memory or processor cores, so the lightest model is selected by default and photos are reduced to {px} px on the long edge before processing. Every tier is still selectable.",
+    zoomOut: "Show smaller",
+    zoomIn: "Show larger",
+    zoomFit: "Fit to screen",
     another: "Another image",
     restored: "Your last result was restored after the tab closed.",
     modelNote: "Switch model any time; the cut is redone on the same image.",

@@ -155,6 +155,9 @@ export const de: Dict = {
       "Exportiert mit {w} × {h} px, kleiner als das Original: dieses Gerät konnte die volle Auflösung nicht durch das Modell tragen.",
     lowPower:
       "Dieses Gerät meldet begrenzten Speicher oder wenige Prozessorkerne, daher ist das leichteste Modell voreingestellt und Fotos werden vor der Verarbeitung auf {px} px an der langen Kante verkleinert. Alle Stufen bleiben wählbar.",
+    zoomOut: "Kleiner anzeigen",
+    zoomIn: "Größer anzeigen",
+    zoomFit: "An Bildschirm anpassen",
     another: "Anderes Bild",
     restored: "Dein letztes Ergebnis wurde nach dem Schließen des Tabs wiederhergestellt.",
     modelNote: "Modell jederzeit wechseln; der Freisteller wird auf demselben Bild neu berechnet.",

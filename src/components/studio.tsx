@@ -15,6 +15,8 @@ import {
   Loader2,
   RotateCcw,
   ShieldCheck,
+  Minus,
+  Plus,
   Sparkles,
   TriangleAlert,
   Upload,
@@ -127,6 +129,11 @@ export function Studio() {
   // sliders read as corrections rather than as the settings themselves.
   const [attireScale, setAttireScale] = useState(1);
   const [attireDrop, setAttireDrop] = useState(0);
+  // How tall the preview may be, as a share of the window. Browser zoom is
+  // not a substitute: it magnifies the whole interface, so the reader ends
+  // up with a bigger picture and a bigger sidebar and no more of either on
+  // screen. This shrinks only the picture.
+  const [viewVh, setViewVh] = useState(68);
   const inputRef = useRef<HTMLInputElement>(null);
   const urls = useRef<string[]>([]);
 
@@ -476,10 +483,36 @@ export function Studio() {
                   ? { ...overlay, src: backdropUrl(overlay.blob) }
                   : null
               }
+              maxVh={viewVh}
             />
-            <p className="mono text-[11px] text-text-faint" dir="ltr">
-              {shot.w} &times; {shot.h} px &middot; {shot.file.name}
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="mono text-[11px] text-text-faint" dir="ltr">
+                {shot.w} &times; {shot.h} px &middot; {shot.file.name}
+              </p>
+              <div className="flex items-center gap-1">
+                <ViewButton
+                  label={t.studio.zoomOut}
+                  onClick={() => setViewVh((v) => Math.max(24, v - 12))}
+                  disabled={viewVh <= 24}
+                >
+                  <Minus size={13} />
+                </ViewButton>
+                <button
+                  onClick={() => setViewVh(68)}
+                  title={t.studio.zoomFit}
+                  className="mono rounded-lg border border-line px-2.5 py-1.5 text-[11px] tabular-nums text-text-faint transition-colors hover:border-text-faint hover:text-text"
+                >
+                  {Math.round((viewVh / 68) * 100)}%
+                </button>
+                <ViewButton
+                  label={t.studio.zoomIn}
+                  onClick={() => setViewVh((v) => Math.min(92, v + 12))}
+                  disabled={viewVh >= 92}
+                >
+                  <Plus size={13} />
+                </ViewButton>
+              </div>
+            </div>
           </div>
 
           <aside className="space-y-5 sm:sticky sm:top-6 sm:self-start">
@@ -759,6 +792,32 @@ function Dropzone({
         <CatalogAudit />
       </fieldset>
     </div>
+  );
+}
+
+/** The view-size buttons. Icon-only, so the control stays the same width in
+ *  every one of the eighteen languages. */
+function ViewButton({
+  label,
+  onClick,
+  disabled,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  disabled: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title={label}
+      aria-label={label}
+      className="rounded-lg border border-line p-1.5 text-text-faint transition-colors hover:border-text-faint hover:text-text disabled:opacity-40"
+    >
+      {children}
+    </button>
   );
 }
 

@@ -155,6 +155,9 @@ export const tr: Dict = {
       "{w} × {h} px olarak dışa aktarıldı; özgün boyuttan küçük: bu makine tam çözünürlüğü modelden geçiremedi.",
     lowPower:
       "Bu makine sınırlı bellek veya işlemci çekirdeği bildiriyor; bu yüzden en hafif model öntanımlı seçiliyor ve fotoğraflar işlenmeden önce uzun kenarı {px} px olacak şekilde küçültülüyor. Tüm kademeler yine seçilebilir.",
+    zoomOut: "Küçük göster",
+    zoomIn: "Büyük göster",
+    zoomFit: "Ekrana sığdır",
     another: "Başka görsel",
     restored: "Sekme kapandıktan sonra son sonucunuz geri yüklendi.",
     modelNote: "İstediğiniz zaman model değiştirin; kesim aynı görsel üzerinde yeniden yapılır.",

@@ -155,6 +155,9 @@ export const nl: Dict = {
       "Geëxporteerd op {w} × {h} px, kleiner dan het origineel: dit apparaat kon de volledige resolutie niet door het model halen.",
     lowPower:
       "Dit apparaat meldt beperkt geheugen of weinig processorkernen, dus het lichtste model staat standaard aan en foto’s worden voor verwerking verkleind tot {px} px op de lange zijde. Alle niveaus blijven kiesbaar.",
+    zoomOut: "Kleiner tonen",
+    zoomIn: "Groter tonen",
+    zoomFit: "Passend maken",
     another: "Andere afbeelding",
     restored: "Je laatste resultaat is hersteld nadat het tabblad sloot.",
     modelNote: "Wissel altijd van model; de uitsnede wordt op dezelfde afbeelding opnieuw gemaakt.",

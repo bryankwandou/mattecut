@@ -155,6 +155,9 @@ export const ms: Dict = {
       "Dieksport pada {w} × {h} px, lebih kecil daripada asal: peranti ini tidak mampu membawa resolusi penuh melalui model.",
     lowPower:
       "Peranti ini melaporkan memori atau teras pemproses yang terhad, jadi model paling ringan dipilih secara lalai dan foto dikecilkan kepada {px} px pada sisi terpanjang sebelum diproses. Semua tahap masih boleh dipilih.",
+    zoomOut: "Kecilkan paparan",
+    zoomIn: "Besarkan paparan",
+    zoomFit: "Muat pada skrin",
     another: "Gambar lain",
     restored: "Hasil terakhir dipulihkan selepas tab ditutup.",
     modelNote: "Tukar model bila-bila masa; potongan diulang pada imej yang sama.",

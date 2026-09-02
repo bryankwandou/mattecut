@@ -155,6 +155,9 @@ export const fr: Dict = {
       "Exporté en {w} × {h} px, plus petit que l’original : cette machine n’a pas pu faire passer la pleine résolution dans le modèle.",
     lowPower:
       "Cette machine signale une mémoire ou un nombre de cœurs limité : le modèle le plus léger est donc choisi par défaut et les photos sont réduites à {px} px sur le grand côté avant traitement. Tous les niveaux restent sélectionnables.",
+    zoomOut: "Afficher plus petit",
+    zoomIn: "Afficher plus grand",
+    zoomFit: "Ajuster à l’écran",
     another: "Une autre image",
     restored: "Votre dernier résultat a été restauré après la fermeture de l’onglet.",
     modelNote: "Changez de modèle à tout moment ; le détourage est refait sur la même image.",

@@ -155,6 +155,9 @@ export const pt: Dict = {
       "Exportado em {w} × {h} px, menor que o original: este aparelho não conseguiu levar a resolução completa através do modelo.",
     lowPower:
       "Este aparelho informa memória ou núcleos limitados, por isso o modelo mais leve é escolhido por padrão e as fotos são reduzidas a {px} px no lado maior antes do processamento. Todos os níveis continuam selecionáveis.",
+    zoomOut: "Ver menor",
+    zoomIn: "Ver maior",
+    zoomFit: "Ajustar à tela",
     another: "Outra imagem",
     restored: "Seu último resultado foi restaurado depois que a aba fechou.",
     modelNote: "Troque de modelo quando quiser; o recorte é refeito na mesma imagem.",

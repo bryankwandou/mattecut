@@ -155,6 +155,9 @@ export const vi: Dict = {
       "Đã xuất ở {w} × {h} px, nhỏ hơn ảnh gốc: máy này không tải nổi độ phân giải đầy đủ qua mô hình.",
     lowPower:
       "Máy này báo bộ nhớ hoặc số nhân xử lý hạn chế, nên mô hình nhẹ nhất được chọn mặc định và ảnh được thu nhỏ về {px} px ở cạnh dài trước khi xử lý. Mọi mức vẫn có thể chọn.",
+    zoomOut: "Hiển thị nhỏ hơn",
+    zoomIn: "Hiển thị lớn hơn",
+    zoomFit: "Vừa màn hình",
     another: "Ảnh khác",
     restored: "Kết quả gần nhất đã được khôi phục sau khi thẻ đóng.",
     modelNote: "Đổi mô hình bất cứ lúc nào; phần tách được làm lại trên cùng ảnh.",

@@ -19,6 +19,7 @@ export function CompareSlider({
   after,
   backdrop = null,
   overlay = null,
+  maxVh = 68,
   className = "",
 }: {
   before: string;
@@ -27,6 +28,10 @@ export function CompareSlider({
   backdrop?: string | null;
   /** Drawn over the result, in fractions of the frame. Mirrors the export. */
   overlay?: { src: string; x: number; y: number; w: number; tilt: number } | null;
+  /** How much of the viewport height the frame may use. The reader controls
+   *  this: browser zoom is not a substitute, because it enlarges the whole
+   *  interface rather than the picture being examined. */
+  maxVh?: number;
   className?: string;
 }) {
   const { t } = useI18n();
@@ -78,7 +83,8 @@ export function CompareSlider({
         // comparison, the backdrop and the jacket together, and keeps the
         // overlay's fractional coordinates exact. A tall photo used to run
         // past the bottom of the screen with no way to pull back.
-        className="block h-auto max-h-[68vh] w-auto max-w-full"
+        className="block h-auto w-auto max-w-full"
+        style={{ maxHeight: `${maxVh}vh` }}
         draggable={false}
       />
 
