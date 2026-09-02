@@ -127,6 +127,9 @@ export const vi: Dict = {
     liteTitle: "Siêu nhẹ",
     liteNote:
       "Mô hình {mb} MB · tải về nhỏ nhất, thô nhất ở tóc",
+    fineTitle: "Nhận biết tóc",
+    fineNote:
+      "Mô hình {mb} MB · coi tóc là lớp riêng, tải về vẫn nhỏ",
     lightTitle: "Nhẹ",
     lightNote:
       "Mô hình {mb} MB · tải về nhỏ, viền sắc hơn siêu nhẹ",

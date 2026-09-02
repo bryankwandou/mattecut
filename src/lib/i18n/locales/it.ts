@@ -127,6 +127,9 @@ export const it: Dict = {
     liteTitle: "Ultraleggero",
     liteNote:
       "Modello da {mb} MB · il download più piccolo, più grezzo sui capelli",
+    fineTitle: "Attento ai capelli",
+    fineNote:
+      "Modello da {mb} MB · tratta i capelli come livello a sé, download ancora piccolo",
     lightTitle: "Leggero",
     lightNote:
       "Modello da {mb} MB · download piccolo, bordi più nitidi di ultraleggero",

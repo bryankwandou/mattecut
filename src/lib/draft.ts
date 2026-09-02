@@ -18,14 +18,14 @@ const KEY = "current";
  *  surprise the reader more than help them. */
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
-const TIERS = ["lite", "light", "balanced", "maximum"] as const;
+const TIERS = ["lite", "fine", "light", "balanced", "maximum"] as const;
 
 export type Draft = {
   name: string;
   type: string;
   original: Blob;
   master: Blob;
-  quality: "lite" | "light" | "balanced" | "maximum";
+  quality: "lite" | "fine" | "light" | "balanced" | "maximum";
   bg: unknown;
   /** Optional so a draft written before jackets existed still loads. */
   attire?: string | null;

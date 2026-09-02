@@ -127,6 +127,9 @@ export const es: Dict = {
     liteTitle: "Ultraligero",
     liteNote:
       "Modelo de {mb} MB · la descarga más pequeña, más basto en el pelo",
+    fineTitle: "Atento al pelo",
+    fineNote:
+      "Modelo de {mb} MB · trata el pelo como capa propia, descarga aún pequeña",
     lightTitle: "Ligero",
     lightNote:
       "Modelo de {mb} MB · descarga pequeña, bordes más nítidos que ultraligero",

@@ -20,7 +20,7 @@ import { cutLite, loadLite } from "../src/lib/lite";
 type Req = {
   id: number;
   op: "warm" | "cut";
-  model: "lite" | "isnet" | "isnet_fp16" | "isnet_quint8";
+  model: "lite" | "fine" | "isnet" | "isnet_fp16" | "isnet_quint8";
   device: "cpu" | "gpu";
   file?: Blob;
   /** Longest edge the photo is allowed to keep. The shrink happens here
@@ -38,15 +38,16 @@ ctx.onmessage = async (e: MessageEvent<Req>) => {
   // is handled here rather than through the ONNX config below. Running it
   // in the worker matters more than for the others, not less: the machines
   // that pick it are the ones a frozen tab actually ruins.
-  if (model === "lite") {
+  if (model === "lite" || model === "fine") {
     const report = (cur: number, total: number) =>
       ctx.postMessage({ id, type: "progress", key: "fetch:model", cur, total });
+    const mp = model === "fine" ? "multiclass" : "selfie";
     try {
       if (op === "warm") {
-        await loadLite(report);
+        await loadLite(mp, report);
         ctx.postMessage({ id, type: "done" });
       } else {
-        const cut = await cutLite(file as Blob, cap, report);
+        const cut = await cutLite(file as Blob, cap, mp, report);
         ctx.postMessage({ id, type: "done", blob: cut.blob, scaled: cut.scaled });
       }
     } catch (err) {

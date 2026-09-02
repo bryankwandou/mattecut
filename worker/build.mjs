@@ -30,8 +30,16 @@ console.log("built public/matting-worker.js");
  * The engine comes from node_modules, so it is pinned to the version in
  * package-lock and needs no network. The weights are fetched once and kept.
  */
-const MODEL_URL =
-  "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite";
+const MODELS = {
+  // The lightest tier: one figure against everything else, 249 KB.
+  "selfie_segmenter.tflite":
+    "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite",
+  // The tier above it: the same engine, but a network that labels hair as
+  // its own class rather than lumping it in with the body. Hair is where
+  // every cut-out is judged, which is what makes 16 MB worth offering.
+  "selfie_multiclass.tflite":
+    "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite",
+};
 
 await mkdir("public/mediapipe", { recursive: true });
 
@@ -42,14 +50,16 @@ await cp("node_modules/@mediapipe/tasks-vision/wasm", "public/mediapipe/wasm", {
 });
 console.log("copied public/mediapipe/wasm");
 
-const model = "public/mediapipe/selfie_segmenter.tflite";
-const have = await stat(model).catch(() => null);
-if (have && have.size > 0) {
-  console.log(`kept ${model} (${have.size} bytes)`);
-} else {
-  const res = await fetch(MODEL_URL);
-  if (!res.ok) throw new Error(`model ${res.status}`);
+for (const [name, url] of Object.entries(MODELS)) {
+  const dest = `public/mediapipe/${name}`;
+  const have = await stat(dest).catch(() => null);
+  if (have && have.size > 0) {
+    console.log(`kept ${dest} (${have.size} bytes)`);
+    continue;
+  }
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${name} ${res.status}`);
   const bytes = new Uint8Array(await res.arrayBuffer());
-  await writeFile(model, bytes);
-  console.log(`fetched ${model} (${bytes.length} bytes)`);
+  await writeFile(dest, bytes);
+  console.log(`fetched ${dest} (${bytes.length} bytes)`);
 }

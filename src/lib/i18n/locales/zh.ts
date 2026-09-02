@@ -125,6 +125,9 @@ export const zh: Dict = {
     liteTitle: "超轻量",
     liteNote:
       "{mb} MB 模型 · 下载最小，发丝边缘最粗",
+    fineTitle: "发丝感知",
+    fineNote:
+      "{mb} MB 模型 · 将头发视为独立图层，下载仍然较小",
     lightTitle: "轻量",
     lightNote:
       "{mb} MB 模型 · 下载较小，边缘比超轻量更锐利",

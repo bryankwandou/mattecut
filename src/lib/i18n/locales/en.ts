@@ -127,6 +127,9 @@ export const en: Dict = {
     liteTitle: "Ultra light",
     liteNote:
       "{mb} MB model · smallest download, softest around hair",
+    fineTitle: "Hair-aware",
+    fineNote:
+      "{mb} MB model · treats hair as its own layer, still a small download",
     lightTitle: "Light",
     lightNote:
       "{mb} MB model · small download, sharper edges than ultra light",

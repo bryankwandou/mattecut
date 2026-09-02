@@ -126,6 +126,9 @@ export const ko: Dict = {
     liteTitle: "초경량",
     liteNote:
       "{mb} MB 모델 · 다운로드가 가장 작고, 머리카락 경계는 가장 거칩니다",
+    fineTitle: "머리카락 인식",
+    fineNote:
+      "{mb} MB 모델 · 머리카락을 별도 층으로 다룹니다. 다운로드는 여전히 작습니다.",
     lightTitle: "가볍게",
     lightNote:
       "{mb} MB 모델 · 다운로드가 작고, 초경량보다 윗선이 선명합니다",

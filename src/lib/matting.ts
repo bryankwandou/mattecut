@@ -38,7 +38,7 @@ export type Progress = {
  * the file *is* the act of throwing away precision. A lighter model is
  * lighter because it knows less about edges, and hair is where that shows.
  */
-export type Quality = "lite" | "light" | "balanced" | "maximum";
+export type Quality = "lite" | "fine" | "light" | "balanced" | "maximum";
 
 /** The three that really are one network at three precisions. The fourth
  *  tier is a different engine on a different model and lives in ./lite, so
@@ -114,6 +114,9 @@ export function downloadMb(quality: Quality, onGpu: boolean) {
   // size whether or not this browser has a GPU.
   if (quality === "lite") {
     return Math.round((LITE.modelBytes + LITE.engineBytes) / 1_048_576);
+  }
+  if (quality === "fine") {
+    return Math.round((LITE.multiclassBytes + LITE.engineBytes) / 1_048_576);
   }
   return Math.round(MODEL_MB[quality] + (onGpu ? RUNTIME_MB.gpu : RUNTIME_MB.cpu));
 }
@@ -203,7 +206,8 @@ function offThread(
       else resolve({ blob: d.blob, scaled: d.scaled === true });
     };
     w.addEventListener("message", listen);
-    const model = quality === "lite" ? "lite" : MODEL[quality];
+    const model =
+      quality === "lite" || quality === "fine" ? quality : MODEL[quality];
     w.postMessage({ id, op, model, device, file, cap });
   });
 }
@@ -221,14 +225,15 @@ async function onThread(
 ): Promise<Cut> {
   // The lightest tier is a different engine, so it leaves here before any
   // of the ONNX configuration below is built.
-  if (quality === "lite") {
+  if (quality === "lite" || quality === "fine") {
+    const mp = quality === "fine" ? "multiclass" : "selfie";
     const report = (cur: number, total: number) =>
       onProgress?.(describe("fetch:model", cur, total));
     if (op === "warm") {
-      await loadLite(report);
+      await loadLite(mp, report);
       return { scaled: false };
     }
-    return cutLite(file as Blob, cap, report);
+    return cutLite(file as Blob, cap, mp, report);
   }
 
   const lib = await import("@imgly/background-removal");

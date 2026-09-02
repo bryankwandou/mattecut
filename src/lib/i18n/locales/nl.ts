@@ -127,6 +127,9 @@ export const nl: Dict = {
     liteTitle: "Ultralicht",
     liteNote:
       "Model van {mb} MB · kleinste download, grofst rond haar",
+    fineTitle: "Haarbewust",
+    fineNote:
+      "Model van {mb} MB · behandelt haar als aparte laag, download blijft klein",
     lightTitle: "Licht",
     lightNote:
       "Model van {mb} MB · kleine download, scherpere randen dan ultralicht",

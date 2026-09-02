@@ -53,6 +53,8 @@ export type Dict = {
     applyModel: string;
     liteTitle: string;
     liteNote: string;
+    fineTitle: string;
+    fineNote: string;
     lightTitle: string;
     lightNote: string;
     balancedTitle: string;

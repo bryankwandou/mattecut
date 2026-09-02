@@ -822,7 +822,7 @@ function ViewButton({
 }
 
 /** The tiers in the order they belong on a scale, lightest first. */
-const TIERS: readonly Quality[] = ["lite", "light", "balanced", "maximum"];
+const TIERS: readonly Quality[] = ["lite", "fine", "light", "balanced", "maximum"];
 
 /**
  * The three tiers as one slider instead of three cards.
@@ -868,12 +868,14 @@ function QualitySlider({
   const at = Math.max(0, TIERS.indexOf(pending));
   const titles = [
     t.studio.liteTitle,
+    t.studio.fineTitle,
     t.studio.lightTitle,
     t.studio.balancedTitle,
     t.studio.maximumTitle,
   ];
   const notes = [
     t.studio.liteNote,
+    t.studio.fineNote,
     t.studio.lightNote,
     t.studio.balancedNote,
     t.studio.maximumNote,

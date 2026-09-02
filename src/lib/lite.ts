@@ -30,17 +30,23 @@ import { fitForModel, type Fitted } from "./fit";
 /** Both served from this origin, copied in by worker/build.mjs. The page's
  *  CSP allows `connect-src 'self'`, and a product claiming to process on
  *  your device should not have to call a CDN to begin. */
+export type MpModel = "selfie" | "multiclass";
+
 export const LITE = {
   wasm: "/mediapipe/wasm",
   model: "/mediapipe/selfie_segmenter.tflite",
+  /** The multiclass network labels hair separately from the body, which is
+   *  the class every cut-out is judged on. Sixteen megabytes buys that. */
+  multiclass: "/mediapipe/selfie_multiclass.tflite",
+  multiclassBytes: 16_371_837,
   /** Bytes, as the origins reported them. The audit panel re-checks these
    *  live; they are here so the tier can be labelled before it is opened. */
   modelBytes: 249_537,
   engineBytes: 11_756_954 + 323_377,
 } as const;
 
-let segmenter: ImageSegmenter | null = null;
-let loading: Promise<ImageSegmenter> | null = null;
+const segmenters: Partial<Record<MpModel, ImageSegmenter>> = {};
+const loadings: Partial<Record<MpModel, Promise<ImageSegmenter>>> = {};
 
 /**
  * Fetch the weights ourselves rather than handing MediaPipe a URL.
@@ -50,12 +56,15 @@ let loading: Promise<ImageSegmenter> | null = null;
  * product keeps having to design around.
  */
 async function fetchModel(
+  which: MpModel,
   onProgress?: (cur: number, total: number) => void,
 ): Promise<Uint8Array> {
-  const res = await fetch(LITE.model);
+  const res = await fetch(which === "selfie" ? LITE.model : LITE.multiclass);
   if (!res.ok) throw new Error(`model ${res.status}`);
 
-  const total = Number(res.headers.get("content-length")) || LITE.modelBytes;
+  const total =
+    Number(res.headers.get("content-length")) ||
+    (which === "selfie" ? LITE.modelBytes : LITE.multiclassBytes);
   if (!res.body) return new Uint8Array(await res.arrayBuffer());
 
   const reader = res.body.getReader();
@@ -78,21 +87,27 @@ async function fetchModel(
   return out;
 }
 
-/** Built once and kept. Concurrent callers share the same promise so a
- *  double-click cannot start two 12 MB downloads. */
+/** Built once per network and kept. Concurrent callers share the one
+ *  promise, so a double-click cannot start two downloads of the same
+ *  weights — and the two networks are cached separately, so moving between
+ *  the two lightest tiers does not re-fetch what is already here. */
 export function loadLite(
+  which: MpModel = "selfie",
   onProgress?: (cur: number, total: number) => void,
 ): Promise<ImageSegmenter> {
-  if (segmenter) return Promise.resolve(segmenter);
-  if (loading) return loading;
+  const ready = segmenters[which];
+  if (ready) return Promise.resolve(ready);
 
-  loading = (async () => {
+  const running = loadings[which];
+  if (running) return running;
+
+  const p = (async () => {
     const vision = await import("@mediapipe/tasks-vision");
     const [files, modelAssetBuffer] = await Promise.all([
       vision.FilesetResolver.forVisionTasks(LITE.wasm),
-      fetchModel(onProgress),
+      fetchModel(which, onProgress),
     ]);
-    segmenter = await vision.ImageSegmenter.createFromOptions(files, {
+    const made = await vision.ImageSegmenter.createFromOptions(files, {
       baseOptions: { modelAssetBuffer },
       runningMode: "IMAGE",
       // Confidence rather than categories: a category mask is binary, and a
@@ -101,21 +116,16 @@ export function loadLite(
       outputConfidenceMasks: true,
       outputCategoryMask: false,
     });
-    return segmenter;
+    segmenters[which] = made;
+    return made;
   })();
 
-  try {
-    return loading;
-  } finally {
-    void loading.catch(() => {
-      // A failed load must not be cached as a permanent refusal.
-      loading = null;
-    });
-  }
-}
-
-export function isLiteReady() {
-  return segmenter !== null;
+  loadings[which] = p;
+  void p.catch(() => {
+    // A failed load must not be cached as a permanent refusal.
+    delete loadings[which];
+  });
+  return p;
 }
 
 /**
@@ -128,9 +138,10 @@ export function isLiteReady() {
 export async function cutLite(
   file: Blob,
   cap: number,
+  which: MpModel = "selfie",
   onProgress?: (cur: number, total: number) => void,
 ): Promise<Fitted> {
-  const seg = await loadLite(onProgress);
+  const seg = await loadLite(which, onProgress);
   const fitted = await fitForModel(file, cap);
 
   const bmp = await createImageBitmap(fitted.blob);
@@ -149,10 +160,18 @@ export async function cutLite(
     throw new Error("no mask returned");
   }
 
-  // Two categories come back as [background, person]; a single-category
-  // build returns the person directly. Taking the last entry is correct in
-  // both shapes, and wrong in neither.
-  const mask = masks[masks.length - 1];
+  // The two networks answer differently, and guessing between them is how
+  // a cut-out comes back inverted.
+  //
+  //   selfie      two categories, [background, person]. The person is last,
+  //               which was verified against a real portrait: face and body
+  //               opaque, three corners transparent.
+  //   multiclass  six categories, and index 0 is background. Everything the
+  //               subject is made of — hair, skin, clothes — is one minus
+  //               that, which also means hair arrives as its own decision
+  //               rather than as a fringe of the body.
+  const backdropFirst = which === "multiclass";
+  const mask = backdropFirst ? masks[0] : masks[masks.length - 1];
   const alpha = mask.getAsFloat32Array();
   const mw = mask.width;
   const mh = mask.height;
@@ -164,8 +183,10 @@ export async function cutLite(
     const my = mh === bmp.height ? y : Math.min(mh - 1, ((y * mh) / bmp.height) | 0);
     for (let x = 0; x < bmp.width; x++) {
       const mx = mw === bmp.width ? x : Math.min(mw - 1, ((x * mw) / bmp.width) | 0);
-      const a = alpha[my * mw + mx];
-      px[(y * bmp.width + x) * 4 + 3] = a > 1 ? 255 : Math.round(a * 255);
+      const raw = alpha[my * mw + mx];
+      const a = backdropFirst ? 1 - raw : raw;
+      px[(y * bmp.width + x) * 4 + 3] =
+        a >= 1 ? 255 : a <= 0 ? 0 : Math.round(a * 255);
     }
   }
 

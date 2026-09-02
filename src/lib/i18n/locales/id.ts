@@ -125,6 +125,9 @@ export const id: Dict = {
     liteTitle: "Sangat ringan",
     liteNote:
       "Model {mb} MB · unduhan terkecil, paling kasar di rambut",
+    fineTitle: "Peka rambut",
+    fineNote:
+      "Model {mb} MB · memperlakukan rambut sebagai lapisan tersendiri, unduhan tetap kecil",
     lightTitle: "Ringan",
     lightNote:
       "Model {mb} MB · unduhan kecil, tepi lebih tajam dari sangat ringan",

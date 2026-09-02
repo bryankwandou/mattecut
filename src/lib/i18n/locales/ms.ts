@@ -127,6 +127,9 @@ export const ms: Dict = {
     liteTitle: "Sangat ringan",
     liteNote:
       "Model {mb} MB · muat turun terkecil, paling kasar pada rambut",
+    fineTitle: "Peka rambut",
+    fineNote:
+      "Model {mb} MB · menganggap rambut sebagai lapisan tersendiri, muat turun masih kecil",
     lightTitle: "Ringan",
     lightNote:
       "Model {mb} MB · muat turun kecil, tepi lebih tajam daripada sangat ringan",

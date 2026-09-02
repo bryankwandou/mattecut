@@ -127,6 +127,9 @@ export const ja: Dict = {
     liteTitle: "超軽量",
     liteNote:
       "{mb} MB モデル・ダウンロード最小、髪の境界は最も粗い",
+    fineTitle: "髪対応",
+    fineNote:
+      "{mb} MB モデル・髪を独立した層として扱います。ダウンロードは小さめのまま。",
     lightTitle: "軽量",
     lightNote:
       "{mb} MB モデル・ダウンロード小さめ、超軽量より輪郭が鮮明",

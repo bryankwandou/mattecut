@@ -127,6 +127,9 @@ export const tr: Dict = {
     liteTitle: "Çok hafif",
     liteNote:
       "{mb} MB model · en küçük indirme, saçta en kaba sonuç",
+    fineTitle: "Saça duyarlı",
+    fineNote:
+      "{mb} MB model · saçı ayrı bir katman sayar, indirme yine küçük",
     lightTitle: "Hafif",
     lightNote:
       "{mb} MB model · küçük indirme, çok hafiften daha keskin kenarlar",
