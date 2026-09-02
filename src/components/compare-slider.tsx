@@ -61,7 +61,7 @@ export function CompareSlider({
     <div
       ref={box}
       dir="ltr"
-      className={`relative select-none overflow-hidden rounded-xl hairline ${className}`}
+      className={`relative mx-auto w-fit select-none overflow-hidden rounded-xl hairline ${className}`}
       style={{ touchAction: "pan-y" }}
       onPointerDown={(e) => {
         setDragging(true);
@@ -73,7 +73,12 @@ export function CompareSlider({
       <img
         src={before}
         alt={t.compare.altBefore}
-        className="block w-full"
+        // This image sizes the whole frame; every other layer is absolutely
+        // positioned against it. Capping its height therefore scales the
+        // comparison, the backdrop and the jacket together, and keeps the
+        // overlay's fractional coordinates exact. A tall photo used to run
+        // past the bottom of the screen with no way to pull back.
+        className="block h-auto max-h-[68vh] w-auto max-w-full"
         draggable={false}
       />
 

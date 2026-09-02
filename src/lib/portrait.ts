@@ -150,9 +150,13 @@ export function findPortrait(img: HTMLImageElement): Portrait | null {
   // gets below the head. Searching from the neck when there is one, and
   // from below the head when there is not.
   const from = confident ? neckY : top + Math.round(span * 0.3);
+  // Only the band just below the neck. Searching to the bottom of the frame
+  // found chair backs, raised hands and elbows, and called them shoulders —
+  // which is how a jacket ended up several times wider than the person.
+  const until = Math.min(bottom, from + Math.round(span * 0.28));
   let shoulderW = 0;
   let shoulderY = from;
-  for (let y = from; y <= bottom; y++) {
+  for (let y = from; y <= until; y++) {
     if (width[y] > shoulderW) {
       shoulderW = width[y];
       shoulderY = y;
