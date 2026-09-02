@@ -184,7 +184,14 @@ export async function cutLite(
     for (let x = 0; x < bmp.width; x++) {
       const mx = mw === bmp.width ? x : Math.min(mw - 1, ((x * mw) / bmp.width) | 0);
       const raw = alpha[my * mw + mx];
-      const a = backdropFirst ? 1 - raw : raw;
+      let a = backdropFirst ? 1 - raw : raw;
+      // Measured on a real portrait: the multiclass network leaves the far
+      // corners at alpha 22 to 26 rather than zero, which composites as a
+      // faint haze of the old background over the new one. Anything under a
+      // tenth of confidence is that haze, not an edge, so it is cleared —
+      // above the threshold the softness is kept, because that softness is
+      // what makes hair look cut rather than stamped.
+      if (a < 0.1) a = 0;
       px[(y * bmp.width + x) * 4 + 3] =
         a >= 1 ? 255 : a <= 0 ? 0 : Math.round(a * 255);
     }
