@@ -175,6 +175,7 @@ export const it: Dict = {
       "Posizionato automaticamente da spalle e collo nel ritaglio.",
     attireManual:
       "Le spalle non sono leggibili in questa foto. Imposta tu dimensione e altezza.",
+    attireReset: "Reimposta dimensione e altezza",
     attireSize: "Dimensione",
     attireDrop: "Altezza",
     firstDownloadNote:

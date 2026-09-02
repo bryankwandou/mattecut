@@ -84,6 +84,7 @@ export type Dict = {
     attire: [string, string, string];
     attireAuto: string;
     attireManual: string;
+    attireReset: string;
     attireSize: string;
     attireDrop: string;
     firstDownloadNote: string;

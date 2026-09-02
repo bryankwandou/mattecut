@@ -175,6 +175,7 @@ export const pt: Dict = {
       "Posicionado automaticamente a partir dos ombros e do pescoço no recorte.",
     attireManual:
       "Os ombros não puderam ser lidos nesta foto. Ajuste o tamanho e a altura você mesmo.",
+    attireReset: "Redefinir tamanho e altura",
     attireSize: "Tamanho",
     attireDrop: "Altura",
     firstDownloadNote:

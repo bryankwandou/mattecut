@@ -175,6 +175,7 @@ export const hi: Dict = {
       "कटआउट के कंधों और गर्दन से अपने आप रखा गया।",
     attireManual:
       "इस तस्वीर में कंधे पढ़े नहीं जा सके। आकार और ऊँचाई खुद तय करें।",
+    attireReset: "आकार और ऊंचाई रीसेट करें",
     attireSize: "आकार",
     attireDrop: "ऊँचाई",
     firstDownloadNote:

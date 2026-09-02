@@ -172,6 +172,7 @@ export const zh: Dict = {
       "根据抠图中的肩线与颈部自动摆放。",
     attireManual:
       "这张照片读不出肩线，请自行调整大小和高度。",
+    attireReset: "重置大小与高度",
     attireSize: "大小",
     attireDrop: "高度",
     firstDownloadNote:

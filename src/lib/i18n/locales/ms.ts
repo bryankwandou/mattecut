@@ -175,6 +175,7 @@ export const ms: Dict = {
       "Diletakkan automatik daripada bahu dan leher pada potongan.",
     attireManual:
       "Bahu tidak dapat dibaca pada foto ini. Tetapkan saiz dan ketinggian sendiri.",
+    attireReset: "Set semula saiz dan tinggi",
     attireSize: "Saiz",
     attireDrop: "Ketinggian",
     firstDownloadNote:

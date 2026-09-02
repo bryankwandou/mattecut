@@ -175,6 +175,7 @@ export const vi: Dict = {
       "Đặt tự động theo vai và cổ trên ảnh đã tách nền.",
     attireManual:
       "Không đọc được vai trong ảnh này. Hãy tự chỉnh kích thước và độ cao.",
+    attireReset: "Đặt lại kích thước và chiều cao",
     attireSize: "Kích thước",
     attireDrop: "Độ cao",
     firstDownloadNote:

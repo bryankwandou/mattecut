@@ -175,6 +175,7 @@ export const tr: Dict = {
       "Kesitteki omuz ve boyundan otomatik yerleştirildi.",
     attireManual:
       "Bu fotoğrafta omuzlar okunamadı. Boyutu ve yüksekliği kendin ayarla.",
+    attireReset: "Boyut ve yüksekliği sıfırla",
     attireSize: "Boyut",
     attireDrop: "Yükseklik",
     firstDownloadNote:

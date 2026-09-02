@@ -175,6 +175,7 @@ export const de: Dict = {
       "Automatisch aus Schultern und Hals im Freisteller platziert.",
     attireManual:
       "Die Schultern waren auf diesem Foto nicht lesbar. Größe und Höhe bitte selbst einstellen.",
+    attireReset: "Größe und Höhe zurücksetzen",
     attireSize: "Größe",
     attireDrop: "Höhe",
     firstDownloadNote:

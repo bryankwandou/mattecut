@@ -173,6 +173,7 @@ export const ko: Dict = {
       "잘라낸 이미지의 어깨와 목에서 자동으로 배치했습니다.",
     attireManual:
       "이 사진에서는 어깨를 읽지 못했습니다. 크기와 높이를 직접 맞춰 주세요.",
+    attireReset: "크기와 높이 초기화",
     attireSize: "크기",
     attireDrop: "높이",
     firstDownloadNote:

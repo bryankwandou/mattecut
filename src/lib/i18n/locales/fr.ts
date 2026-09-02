@@ -175,6 +175,7 @@ export const fr: Dict = {
       "Placée automatiquement d'après les épaules et le cou du détourage.",
     attireManual:
       "Les épaules n'ont pas pu être lues sur cette photo. Réglez la taille et la hauteur vous-même.",
+    attireReset: "Réinitialiser taille et hauteur",
     attireSize: "Taille",
     attireDrop: "Hauteur",
     firstDownloadNote:

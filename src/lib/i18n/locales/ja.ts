@@ -175,6 +175,7 @@ export const ja: Dict = {
       "切り抜きの肩と首から自動で配置しました。",
     attireManual:
       "この写真では肩を読み取れませんでした。大きさと高さはご自分で調整してください。",
+    attireReset: "サイズと高さを戻す",
     attireSize: "大きさ",
     attireDrop: "高さ",
     firstDownloadNote:

@@ -172,6 +172,7 @@ export const id: Dict = {
       "Ditempatkan otomatis dari bahu dan leher pada potongan.",
     attireManual:
       "Bahu tidak terbaca pada foto ini. Atur sendiri ukuran dan tingginya.",
+    attireReset: "Kembalikan ukuran dan tinggi",
     attireSize: "Ukuran",
     attireDrop: "Tinggi",
     firstDownloadNote:

@@ -174,6 +174,7 @@ export const en: Dict = {
       "Placed automatically from the shoulders and neck in the cut-out.",
     attireManual:
       "The shoulders were not readable in this photo. Set size and height yourself.",
+    attireReset: "Reset size and height",
     attireSize: "Size",
     attireDrop: "Height",
     firstDownloadNote:

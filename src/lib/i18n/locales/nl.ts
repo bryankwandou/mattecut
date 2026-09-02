@@ -175,6 +175,7 @@ export const nl: Dict = {
       "Automatisch geplaatst op basis van schouders en hals in de uitsnede.",
     attireManual:
       "De schouders waren niet leesbaar op deze foto. Stel grootte en hoogte zelf in.",
+    attireReset: "Grootte en hoogte herstellen",
     attireSize: "Grootte",
     attireDrop: "Hoogte",
     firstDownloadNote:

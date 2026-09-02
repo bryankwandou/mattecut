@@ -173,6 +173,7 @@ export const th: Dict = {
       "วางอัตโนมัติจากไหล่และคอในภาพที่ตัดแล้ว",
     attireManual:
       "อ่านตำแหน่งไหล่จากภาพนี้ไม่ได้ กรุณาปรับขนาดและความสูงเอง",
+    attireReset: "รีเซ็ตขนาดและความสูง",
     attireSize: "ขนาด",
     attireDrop: "ความสูง",
     firstDownloadNote:

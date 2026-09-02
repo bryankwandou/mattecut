@@ -614,6 +614,17 @@ export function Studio() {
                 disabled={busy}
                 onGpu={onGpu}
               />
+              {(attireScale !== 1 || attireDrop !== 0) && (
+                <button
+                  onClick={() => {
+                    setAttireScale(1);
+                    setAttireDrop(0);
+                  }}
+                  className="mt-2.5 w-full rounded-lg border border-line px-3 py-2 text-xs font-medium transition-colors hover:border-text-faint"
+                >
+                  {t.studio.attireReset}
+                </button>
+              )}
               <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
                 {busy
                   ? progress
@@ -688,7 +699,10 @@ export function Studio() {
               )}
 
               <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
-                {shot.portrait?.confident ? t.studio.attireAuto : t.studio.attireManual}
+                {shoulders || (clothes && clothesFor === shot.file) ||
+                shot.portrait?.confident
+                  ? t.studio.attireAuto
+                  : t.studio.attireManual}
               </p>
             </fieldset>
 

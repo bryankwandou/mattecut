@@ -175,6 +175,7 @@ export const es: Dict = {
       "Colocada automáticamente a partir de los hombros y el cuello del recorte.",
     attireManual:
       "No se pudieron leer los hombros en esta foto. Ajusta el tamaño y la altura a mano.",
+    attireReset: "Restablecer tamaño y altura",
     attireSize: "Tamaño",
     attireDrop: "Altura",
     firstDownloadNote:
