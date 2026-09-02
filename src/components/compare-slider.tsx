@@ -27,7 +27,16 @@ export function CompareSlider({
   /** CSS background for the result side; null shows the checkerboard. */
   backdrop?: string | null;
   /** Drawn over the result, in fractions of the frame. Mirrors the export. */
-  overlay?: { src: string; x: number; y: number; w: number; tilt: number } | null;
+  overlay?: {
+    src: string;
+    x: number;
+    y: number;
+    w: number;
+    tilt: number;
+    /** Same clothing mask the export uses, applied here as a CSS mask so the
+     *  preview keeps predicting the file. */
+    mask?: string | null;
+  } | null;
   /** How much of the viewport height the frame may use. The reader controls
    *  this: browser zoom is not a substitute, because it enlarges the whole
    *  interface rather than the picture being examined. */
@@ -105,24 +114,41 @@ export function CompareSlider({
           draggable={false}
         />
         {overlay && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={overlay.src}
-            alt=""
-            aria-hidden
-            className="absolute"
-            style={{
-              left: `${overlay.x * 100}%`,
-              top: `${overlay.y * 100}%`,
-              width: `${overlay.w * 100}%`,
-              // Same pivot as the canvas in compose.ts: the top centre, which
-              // is the collar. Any other origin turns the jacket off the neck
-              // and makes the preview disagree with the export.
-              transform: `rotate(${overlay.tilt}rad)`,
-              transformOrigin: "top center",
-            }}
-            draggable={false}
-          />
+          // The clothing mask covers the whole frame, so it is applied to a
+          // frame-sized layer rather than to the garment's own box. Same
+          // shape the canvas uses in compose.ts, so what is on screen still
+          // predicts the exported file.
+          <div
+            className="absolute inset-0"
+            style={
+              overlay.mask
+                ? {
+                    maskImage: `url("${overlay.mask}")`,
+                    WebkitMaskImage: `url("${overlay.mask}")`,
+                    maskSize: "100% 100%",
+                    WebkitMaskSize: "100% 100%",
+                  }
+                : undefined
+            }
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={overlay.src}
+              alt=""
+              aria-hidden
+              className="absolute"
+              style={{
+                left: `${overlay.x * 100}%`,
+                top: `${overlay.y * 100}%`,
+                width: `${overlay.w * 100}%`,
+                // Same pivot as the canvas: the top centre, which is the
+                // collar. Any other origin turns the jacket off the neck.
+                transform: `rotate(${overlay.tilt}rad)`,
+                transformOrigin: "top center",
+              }}
+              draggable={false}
+            />
+          </div>
         )}
       </div>
 

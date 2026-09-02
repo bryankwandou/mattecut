@@ -42,6 +42,10 @@ export type Overlay = {
   /** Radians. Turns the garment to sit on the shoulder line rather than on
    *  the horizon, which is the difference between worn and pasted on. */
   tilt: number;
+  /** White where the person's own clothing is. When present the garment is
+   *  clipped to it, so it can only ever land on cloth — never across a face
+   *  and never out onto the background. */
+  mask?: Blob | null;
 };
 
 /**
@@ -148,29 +152,52 @@ export function paintOverlay(
   const dh = (dw * img.naturalHeight) / img.naturalWidth;
   const x = overlay.x * w;
   const y = overlay.y * h;
+  const maskImg = overlay.mask ? decoded.get(overlay.mask) : null;
 
-  if (!overlay.tilt) {
-    ctx.drawImage(img, x, y, dw, dh);
+  const place = (c: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) => {
+    if (!overlay.tilt) {
+      c.drawImage(img, x, y, dw, dh);
+      return;
+    }
+    // Rotate about the centre of the collar rather than the corner of the
+    // artwork: the collar is the part that has to stay on the neck, and any
+    // other pivot slides it off while turning.
+    c.save();
+    c.translate(x + dw / 2, y);
+    c.rotate(overlay.tilt);
+    c.drawImage(img, -dw / 2, 0, dw, dh);
+    c.restore();
+  };
+
+  if (!maskImg) {
+    place(ctx);
     return;
   }
 
-  // Rotate about the centre of the collar rather than the corner of the
-  // artwork: the collar is the part that has to stay on the neck, and any
-  // other pivot slides it off while turning.
-  ctx.save();
-  ctx.translate(x + dw / 2, y);
-  ctx.rotate(overlay.tilt);
-  ctx.drawImage(img, -dw / 2, 0, dw, dh);
-  ctx.restore();
+  // Drawn on its own surface first, then cut to the clothing before it is
+  // laid down. Clipping in place would erase the picture underneath it.
+  const layer = new OffscreenCanvas(w, h);
+  const lc = layer.getContext("2d");
+  if (!lc) {
+    place(ctx);
+    return;
+  }
+  place(lc);
+  lc.globalCompositeOperation = "destination-in";
+  lc.drawImage(maskImg, 0, 0, w, h);
+  ctx.drawImage(layer, 0, 0);
 }
 
 /** Decode an overlay, for the same reason `prepareBackground` exists. */
 export async function prepareOverlay(overlay: Overlay | null): Promise<void> {
-  if (!overlay || decoded.has(overlay.blob)) return;
-  const img = new Image();
-  img.src = backdropUrl(overlay.blob);
-  await img.decode();
-  decoded.set(overlay.blob, img);
+  if (!overlay) return;
+  for (const blob of [overlay.blob, overlay.mask]) {
+    if (!blob || decoded.has(blob)) continue;
+    const img = new Image();
+    img.src = backdropUrl(blob);
+    await img.decode();
+    decoded.set(blob, img);
+  }
 }
 
 /** Draw subject over background into an existing canvas. */

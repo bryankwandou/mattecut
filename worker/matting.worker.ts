@@ -15,11 +15,11 @@
  */
 import { preload, removeBackground } from "@imgly/background-removal";
 import { fitForModel } from "../src/lib/fit";
-import { cutLite, loadLite } from "../src/lib/lite";
+import { clothesRegion, cutLite, loadLite } from "../src/lib/lite";
 
 type Req = {
   id: number;
-  op: "warm" | "cut";
+  op: "warm" | "cut" | "clothes";
   model: "lite" | "fine" | "isnet" | "isnet_fp16" | "isnet_quint8";
   device: "cpu" | "gpu";
   file?: Blob;
@@ -33,6 +33,21 @@ const ctx = self as unknown as DedicatedWorkerGlobalScope;
 
 ctx.onmessage = async (e: MessageEvent<Req>) => {
   const { id, op, model, device, file, cap } = e.data;
+
+  // Finding the clothing is its own question, asked only when a jacket is
+  // chosen. It always uses the multiclass network regardless of which tier
+  // is cutting the picture, because that is the only one that labels cloth.
+  if (op === "clothes") {
+    try {
+      const found = await clothesRegion(file as Blob, cap, (cur, total) =>
+        ctx.postMessage({ id, type: "progress", key: "fetch:model", cur, total }),
+      );
+      ctx.postMessage({ id, type: "clothes", clothes: found });
+    } catch (err) {
+      ctx.postMessage({ id, type: "error", message: String(err) });
+    }
+    return;
+  }
 
   // The lightest tier runs a different engine on a different model, so it
   // is handled here rather than through the ONNX config below. Running it

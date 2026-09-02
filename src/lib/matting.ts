@@ -10,7 +10,13 @@
  */
 
 import { CAP, fitForModel } from "./fit";
-import { LITE, cutLite, loadLite } from "./lite";
+import {
+  LITE,
+  clothesRegion,
+  cutLite,
+  loadLite,
+  type Clothes,
+} from "./lite";
 
 export type Stage = "idle" | "fetching" | "processing" | "done" | "error";
 
@@ -147,6 +153,7 @@ export async function warm(quality: Quality, onProgress?: (p: Progress) => void)
 
 type Msg =
   | { id: number; type: "progress"; key: string; cur: number; total: number }
+  | { id: number; type: "clothes"; clothes: Clothes | null }
   | { id: number; type: "done"; blob?: Blob; scaled?: boolean }
   | { id: number; type: "error"; message: string };
 
@@ -203,7 +210,11 @@ function offThread(
       }
       w.removeEventListener("message", listen);
       if (d.type === "error") reject(new Error(d.message));
-      else resolve({ blob: d.blob, scaled: d.scaled === true });
+      // A clothes answer arriving here would mean two requests crossed; the
+      // id check above makes that impossible, and the guard keeps the types
+      // honest about it.
+      else if (d.type === "done") resolve({ blob: d.blob, scaled: d.scaled === true });
+      else reject(new Error("unexpected reply"));
     };
     w.addEventListener("message", listen);
     const model =
@@ -293,4 +304,41 @@ export async function cutout(
 
 export function isWarm(quality: Quality) {
   return warmed === quality;
+}
+
+/**
+ * Ask where the clothing is.
+ *
+ * Separate from `cutout` on purpose. It runs only when somebody chooses a
+ * jacket, it always uses the multiclass network whatever tier is cutting
+ * the picture, and it fails quietly: a null answer means the garment falls
+ * back to the silhouette estimate rather than nothing happening at all.
+ */
+export async function findClothes(
+  file: Blob,
+  cap: number,
+  onProgress?: (p: Progress) => void,
+): Promise<Clothes | null> {
+  const w = hire();
+  if (!w) {
+    // No worker means the main thread, which is slower but not wrong.
+    return clothesRegion(file, cap).catch(() => null);
+  }
+  const id = ++seq;
+  return new Promise<Clothes | null>((resolve, reject) => {
+    const listen = (e: MessageEvent<Msg>) => {
+      const d = e.data;
+      if (d.id !== id) return;
+      if (d.type === "progress") {
+        onProgress?.(describe(d.key, d.cur, d.total));
+        return;
+      }
+      w.removeEventListener("message", listen);
+      if (d.type === "error") reject(new Error(d.message));
+      else if (d.type === "clothes") resolve(d.clothes);
+      else resolve(null);
+    };
+    w.addEventListener("message", listen);
+    w.postMessage({ id, op: "clothes", model: "fine", device: "cpu", file, cap });
+  }).catch(() => null);
 }

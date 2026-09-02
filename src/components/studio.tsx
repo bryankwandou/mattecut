@@ -30,6 +30,7 @@ import { useI18n } from "@/components/preferences";
 import { fill } from "@/lib/i18n";
 import {
   cutout,
+  findClothes,
   warm,
   isWarm,
   canGpu,
@@ -39,6 +40,7 @@ import {
   type Quality,
 } from "@/lib/matting";
 import { CAP } from "@/lib/fit";
+import type { Clothes } from "@/lib/lite";
 import {
   backdropUrl,
   backgroundToCss,
@@ -129,6 +131,11 @@ export function Studio() {
   // sliders read as corrections rather than as the settings themselves.
   const [attireScale, setAttireScale] = useState(1);
   const [attireDrop, setAttireDrop] = useState(0);
+  // Where this photo's own clothing is. Asked for once per picture, and only
+  // when a jacket is actually wanted, because it costs a 16 MB download that
+  // nobody choosing "no jacket" should pay for.
+  const [clothes, setClothes] = useState<Clothes | null>(null);
+  const [clothesFor, setClothesFor] = useState<File | null>(null);
   // How tall the preview may be, as a share of the window. Browser zoom is
   // not a substitute: it magnifies the whole interface, so the reader ends
   // up with a bigger picture and a bigger sidebar and no more of either on
@@ -327,6 +334,23 @@ export function Studio() {
     };
   }, [quality, shot, busy]);
 
+  // The clothing region, found the first time a jacket is chosen for a
+  // picture. A null answer is not a failure: the garment falls back to the
+  // silhouette estimate, which is what it always used before.
+  useEffect(() => {
+    if (!shot || !attire) return;
+    if (clothesFor === shot.file) return;
+    let alive = true;
+    void findClothes(shot.file, weak ? CAP.weak : CAP.normal).then((found) => {
+      if (!alive) return;
+      setClothes(found);
+      setClothesFor(shot.file);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [shot, attire, clothesFor, weak]);
+
   // Jacket artwork is fetched into a Blob, like every other image in the
   // studio, so preview and export read from one decoded copy.
   useEffect(() => {
@@ -355,9 +379,26 @@ export function Studio() {
   const overlay =
     shot && jacket
       ? (() => {
-          // Always measured from this person now. The old fallback used
-          // 0.8 of the frame at 0.55 down whenever detection was unsure,
-          // which is how a jacket ended up as a slab across a chest.
+          // Measured clothing beats an inferred silhouette. This box is
+          // where cloth actually is, so the collar lands on the real
+          // neckline, the width is the person's own, and the garment is
+          // clipped to it — which is why it can no longer reach a face or
+          // spread out to the size of a chair.
+          if (clothes && clothesFor === shot.file) {
+            const cw = clothes.w * attireScale;
+            return {
+              blob: jacket,
+              x: clothes.x + (clothes.w - cw) / 2,
+              y: clothes.y + attireDrop,
+              w: cw,
+              tilt: shot.portrait ? shot.portrait.tilt : 0,
+              mask: clothes.mask,
+            };
+          }
+
+          // Fallback for a photo where no cloth was found: bare shoulders,
+          // or a network that misread it. Measured from the silhouette,
+          // which is less reliable but never nothing.
           const p = shot.portrait;
           const w = (p ? p.shoulderWidth * JACKET_SPREAD : 0.8) * attireScale;
           const cx = p ? p.centerX : 0.5;
@@ -366,7 +407,7 @@ export function Studio() {
           // when the shoulders were not readable, which is honest: a guessed
           // angle looks worse than a level one.
           const tilt = p ? p.tilt : 0;
-          return { blob: jacket, x: cx - w / 2, y, w, tilt };
+          return { blob: jacket, x: cx - w / 2, y, w, tilt, mask: null };
         })()
       : null;
 
@@ -480,7 +521,11 @@ export function Studio() {
               backdrop={backgroundToCss(bg)}
               overlay={
                 overlay
-                  ? { ...overlay, src: backdropUrl(overlay.blob) }
+                  ? {
+                      ...overlay,
+                      src: backdropUrl(overlay.blob),
+                      mask: overlay.mask ? backdropUrl(overlay.mask) : null,
+                    }
                   : null
               }
               maxVh={viewVh}
