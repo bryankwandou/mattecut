@@ -41,6 +41,7 @@ import {
 } from "@/lib/matting";
 import { CAP } from "@/lib/fit";
 import type { Clothes } from "@/lib/lite";
+import type { Shoulders } from "@/lib/pose";
 import {
   backdropUrl,
   backgroundToCss,
@@ -73,6 +74,11 @@ const JACKET_SPREAD = 1.2;
 
 /** How far above the detected neck the collar sits, in image heights. */
 const JACKET_RISE = 0.035;
+
+/** The same idea measured against the shoulder span instead of the frame,
+ *  so it survives any crop: a collar sits about a fifth of a shoulder width
+ *  above the line between the shoulders. */
+const JACKET_RISE_SPAN = 0.2;
 
 type Shot = {
   file: File;
@@ -135,6 +141,10 @@ export function Studio() {
   // when a jacket is actually wanted, because it costs a 16 MB download that
   // nobody choosing "no jacket" should pay for.
   const [clothes, setClothes] = useState<Clothes | null>(null);
+  // Shoulder points, when the pose network found them. They decide the
+  // garment's width, centre and angle; the clothing mask decides where it
+  // is allowed to show. Neither replaces the other.
+  const [shoulders, setShoulders] = useState<Shoulders | null>(null);
   const [clothesFor, setClothesFor] = useState<File | null>(null);
   // How tall the preview may be, as a share of the window. Browser zoom is
   // not a substitute: it magnifies the whole interface, so the reader ends
@@ -341,9 +351,10 @@ export function Studio() {
     if (!shot || !attire) return;
     if (clothesFor === shot.file) return;
     let alive = true;
-    void findClothes(shot.file, weak ? CAP.weak : CAP.normal).then((found) => {
+    void findClothes(shot.file, weak ? CAP.weak : CAP.normal).then((fit) => {
       if (!alive) return;
-      setClothes(found);
+      setClothes(fit.clothes);
+      setShoulders(fit.shoulders);
       setClothesFor(shot.file);
     });
     return () => {
@@ -384,7 +395,32 @@ export function Studio() {
           // neckline, the width is the person's own, and the garment is
           // clipped to it — which is why it can no longer reach a face or
           // spread out to the size of a chair.
-          if (clothes && clothesFor === shot.file) {
+          const measured = clothesFor === shot.file;
+
+          // Shoulders first when the pose network saw them. Two points give
+          // the width, the centre and the angle outright, so none of the
+          // three is an estimate any more. The clothing mask still clips.
+          if (measured && shoulders) {
+            const dx = shoulders.leftX - shoulders.rightX;
+            const dy = shoulders.leftY - shoulders.rightY;
+            const span = Math.hypot(dx, dy);
+            const cw = span * JACKET_SPREAD * attireScale;
+            const cx = (shoulders.leftX + shoulders.rightX) / 2;
+            const cy = (shoulders.leftY + shoulders.rightY) / 2;
+            return {
+              blob: jacket,
+              x: cx - cw / 2,
+              // The collar sits a little above the shoulder line, where a
+              // real one does, measured against the shoulder span so it
+              // holds at any crop.
+              y: cy - span * JACKET_RISE_SPAN + attireDrop,
+              w: cw,
+              tilt: Math.atan2(dy, dx),
+              mask: clothes ? clothes.mask : null,
+            };
+          }
+
+          if (clothes && measured) {
             const cw = clothes.w * attireScale;
             return {
               blob: jacket,

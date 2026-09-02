@@ -39,6 +39,12 @@ const MODELS = {
   // every cut-out is judged, which is what makes 16 MB worth offering.
   "selfie_multiclass.tflite":
     "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite",
+  // Shoulder coordinates for hanging a jacket. The lite model, because
+  // finding two shoulders on a portrait is the easiest thing any of the
+  // three do — the heavy one costs 25 MB more for accuracy on limbs this
+  // product never looks at.
+  "pose_landmarker_lite.task":
+    "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
 };
 
 await mkdir("public/mediapipe", { recursive: true });

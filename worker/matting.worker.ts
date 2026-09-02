@@ -16,6 +16,7 @@
 import { preload, removeBackground } from "@imgly/background-removal";
 import { fitForModel } from "../src/lib/fit";
 import { clothesRegion, cutLite, loadLite } from "../src/lib/lite";
+import { findShoulders } from "../src/lib/pose";
 
 type Req = {
   id: number;
@@ -38,11 +39,17 @@ ctx.onmessage = async (e: MessageEvent<Req>) => {
   // chosen. It always uses the multiclass network regardless of which tier
   // is cutting the picture, because that is the only one that labels cloth.
   if (op === "clothes") {
+    const report = (cur: number, total: number) =>
+      ctx.postMessage({ id, type: "progress", key: "fetch:model", cur, total });
     try {
-      const found = await clothesRegion(file as Blob, cap, (cur, total) =>
-        ctx.postMessage({ id, type: "progress", key: "fetch:model", cur, total }),
+      // Both questions in one trip: where the cloth is, and where the
+      // shoulders are. They share an engine, and asking separately would
+      // mean two round trips and two progress bars for one decision.
+      const found = await clothesRegion(file as Blob, cap, report);
+      const shoulders = await findShoulders(file as Blob, cap, report).catch(
+        () => null,
       );
-      ctx.postMessage({ id, type: "clothes", clothes: found });
+      ctx.postMessage({ id, type: "clothes", clothes: found, shoulders });
     } catch (err) {
       ctx.postMessage({ id, type: "error", message: String(err) });
     }

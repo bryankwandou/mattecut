@@ -17,6 +17,7 @@ import {
   loadLite,
   type Clothes,
 } from "./lite";
+import { findShoulders, type Shoulders } from "./pose";
 
 export type Stage = "idle" | "fetching" | "processing" | "done" | "error";
 
@@ -153,7 +154,12 @@ export async function warm(quality: Quality, onProgress?: (p: Progress) => void)
 
 type Msg =
   | { id: number; type: "progress"; key: string; cur: number; total: number }
-  | { id: number; type: "clothes"; clothes: Clothes | null }
+  | {
+      id: number;
+      type: "clothes";
+      clothes: Clothes | null;
+      shoulders: Shoulders | null;
+    }
   | { id: number; type: "done"; blob?: Blob; scaled?: boolean }
   | { id: number; type: "error"; message: string };
 
@@ -314,18 +320,22 @@ export function isWarm(quality: Quality) {
  * the picture, and it fails quietly: a null answer means the garment falls
  * back to the silhouette estimate rather than nothing happening at all.
  */
+export type Fit = { clothes: Clothes | null; shoulders: Shoulders | null };
+
 export async function findClothes(
   file: Blob,
   cap: number,
   onProgress?: (p: Progress) => void,
-): Promise<Clothes | null> {
+): Promise<Fit> {
   const w = hire();
   if (!w) {
     // No worker means the main thread, which is slower but not wrong.
-    return clothesRegion(file, cap).catch(() => null);
+    const clothes = await clothesRegion(file, cap).catch(() => null);
+    const shoulders = await findShoulders(file, cap).catch(() => null);
+    return { clothes, shoulders };
   }
   const id = ++seq;
-  return new Promise<Clothes | null>((resolve, reject) => {
+  return new Promise<Fit>((resolve, reject) => {
     const listen = (e: MessageEvent<Msg>) => {
       const d = e.data;
       if (d.id !== id) return;
@@ -335,10 +345,11 @@ export async function findClothes(
       }
       w.removeEventListener("message", listen);
       if (d.type === "error") reject(new Error(d.message));
-      else if (d.type === "clothes") resolve(d.clothes);
-      else resolve(null);
+      else if (d.type === "clothes")
+        resolve({ clothes: d.clothes, shoulders: d.shoulders });
+      else resolve({ clothes: null, shoulders: null });
     };
     w.addEventListener("message", listen);
     w.postMessage({ id, op: "clothes", model: "fine", device: "cpu", file, cap });
-  }).catch(() => null);
+  }).catch(() => ({ clothes: null, shoulders: null }));
 }
