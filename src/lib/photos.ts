@@ -13,6 +13,8 @@
  * allows exactly one outside host.
  */
 
+import { VOCAB } from "./vocab";
+
 /** Keys are short because they are repeated six thousand times. */
 export type Photo = {
   /** Commons thumbnail URL, at whatever width Commons rounded to. */
@@ -88,8 +90,53 @@ export function fullSize(thumb: string, width = 2048): string {
 export function searchPhotos(all: Photo[], raw: string): Photo[] {
   const q = raw.trim().toLowerCase();
   if (!q) return all;
-  const words = q.split(/\s+/).filter(Boolean);
-  return all.filter((p) => words.every((w) => p.q.includes(w)));
+  const words = q.split(/\s+/).filter(Boolean).map(expand);
+
+  // Every typed word must match something, but each word may match through
+  // any of its translations.
+  const strict = all.filter((p) => words.every((alts) => hits(p.q, alts)));
+  if (strict.length > 0) return strict;
+
+  // Two words where only one is known should still show the one. An empty
+  // screen teaches the reader that the catalogue is small, which is a lie.
+  const loose = all.filter((p) => words.some((alts) => hits(p.q, alts)));
+  return loose;
+}
+
+function hits(hay: string, alts: string[]): boolean {
+  for (const a of alts) if (hay.includes(a)) return true;
+  return false;
+}
+
+/**
+ * Everything the index might hold for a word somebody typed.
+ *
+ * The catalogue stores English, because that is the language of Commons
+ * file names and of our own category list. The interface speaks eighteen
+ * languages, so a reader typing "perpustakaan" was searching a vocabulary
+ * that had never heard of them.
+ *
+ * Three passes, cheapest first: the word itself, its translations, and —
+ * for a typo or a half-typed word — any entry it is the beginning of.
+ */
+export function expand(word: string): string[] {
+  const out = new Set<string>([word]);
+
+  const exact = VOCAB[word];
+  if (exact) for (const e of exact) out.add(e);
+
+  if (!exact && word.length >= 3) {
+    let found = 0;
+    for (const key in VOCAB) {
+      if (found >= 4) break;
+      if (key.startsWith(word) || word.startsWith(key)) {
+        for (const e of VOCAB[key]) out.add(e);
+        found++;
+      }
+    }
+  }
+
+  return [...out];
 }
 
 /** One line of credit, in the form CC BY asks for: who made it, and under

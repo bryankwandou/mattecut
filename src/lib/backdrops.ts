@@ -12,6 +12,7 @@
  * photograph carries terms; a computed colour does not.
  */
 import { hsvToRgb, toHex, type Rgba } from "./color";
+import { expand } from "./photos";
 
 export type Swatch = {
   id: string;
@@ -147,9 +148,16 @@ export function search(all: Swatch[], raw: string): Swatch[] {
   const q = raw.trim().toLowerCase();
   if (!q) return all;
 
-  const words = q.split(/\s+/).filter(Boolean);
-  return all.filter((s) => {
-    const hay = `${s.terms} ${toHex(s.from)} ${s.to ? toHex(s.to) : ""}`;
-    return words.every((w) => hay.includes(w));
-  });
+  // The colour names are English in the data and the interface is not, so a
+  // reader typing "biru" was searching a vocabulary that had never heard of
+  // them. Each word carries its translations with it.
+  const words = q.split(/\s+/).filter(Boolean).map(expand);
+  const match = (hay: string, alts: string[]) => alts.some((a) => hay.includes(a));
+
+  const hay = (s: Swatch) =>
+    `${s.terms} ${toHex(s.from)} ${s.to ? toHex(s.to) : ""}`;
+
+  const strict = all.filter((s) => words.every((alts) => match(hay(s), alts)));
+  if (strict.length > 0) return strict;
+  return all.filter((s) => words.some((alts) => match(hay(s), alts)));
 }
