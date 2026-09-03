@@ -152,6 +152,13 @@ export const de: Dict = {
       "Der Katalog ließ sich nicht lesen — das Netz versagte oder der Ursprung verweigerte die Antwort. Die Größen oben sind derzeit unbestätigt.",
     downloadPng: "PNG herunterladen",
     transparentSuffix: "transparent",
+    sharpenLabel: "Schärfe",
+    sharpenLevels: ["Aus", "Leicht", "Mittel", "Stark"],
+    sharpenNote:
+      "Erhöht den Kantenkontrast nur der Farbe, nie der Schnittkante. Es entsteht kein Detail, das die Kamera nicht aufgenommen hat.",
+    keepOriginal: "Originalhintergrund behalten",
+    keepOriginalNote:
+      "Exportiert das Foto wie es ankam: schärfer, ungeschnitten.",
     exportNote:
       "Wird immer in der Originalauflösung exportiert, nicht in der Vorschaugröße.",
     exportNoteCapped:

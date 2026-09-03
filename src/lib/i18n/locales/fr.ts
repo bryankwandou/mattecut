@@ -152,6 +152,13 @@ export const fr: Dict = {
       "Le catalogue n’a pas pu être lu — la connexion a échoué ou l’origine a refusé. Les tailles des niveaux ci-dessus ne sont pas vérifiées pour l’instant.",
     downloadPng: "Télécharger le PNG",
     transparentSuffix: "transparent",
+    sharpenLabel: "Netteté",
+    sharpenLevels: ["Désactivé", "Léger", "Moyen", "Fort"],
+    sharpenNote:
+      "Ajoute du contraste de bord à la couleur seulement, jamais au bord de la découpe. Aucun détail non enregistré par le capteur n’est inventé.",
+    keepOriginal: "Conserver le fond d’origine",
+    keepOriginalNote:
+      "Exporte la photo telle quelle : plus nette, sans découpe.",
     exportNote:
       "Toujours exporté à la résolution d'origine, pas à la taille de l'aperçu.",
     exportNoteCapped:

@@ -1,4 +1,5 @@
 import type { Rgba } from "./color";
+import { sharpenTo, type SharpenLevel } from "./sharpen";
 import { toCss } from "./color";
 
 /**
@@ -274,6 +275,14 @@ export async function exportImage(
   /** The photograph as it arrived, at its own resolution. When it is larger
    *  than the cut-out, the export is made at *its* size. */
   source: { img: CanvasImageSource; w: number; h: number } | null = null,
+  /** Edge contrast, 0 for none. Applied to colour only — never to the
+   *  matte, which would put a hard rim around a deliberately soft edge. */
+  sharpen: SharpenLevel = 0,
+  /** Write the photograph untouched instead of the cut-out. This is what
+   *  makes sharpening usable on its own: a reader who only wants a crisper
+   *  file, with the background they already had, never has to accept a cut
+   *  they did not ask for. */
+  keepOriginal = false,
 ): Promise<Blob> {
   // Only worth doing when there is detail to recover and the browser will
   // actually allocate the surface.
@@ -302,10 +311,16 @@ export async function exportImage(
     paintBackground(ctx, bg, outW, outH);
   }
 
-  if (bigger) {
-    ctx.drawImage(stencil(source!.img, subject, outW, outH), 0, 0);
+  if (keepOriginal && source) {
+    // No cut at all: the photograph as it arrived, only sharper.
+    ctx.drawImage(sharpenTo(source.img, outW, outH, sharpen), 0, 0, outW, outH);
+  } else if (bigger) {
+    // Sharpen after stencilling, so the operation sees the finished pixels
+    // and the alpha it must leave alone is already in place.
+    const cut = stencil(source!.img, subject, outW, outH);
+    ctx.drawImage(sharpenTo(cut, outW, outH, sharpen), 0, 0);
   } else {
-    ctx.drawImage(subject, 0, 0, outW, outH);
+    ctx.drawImage(sharpenTo(subject, outW, outH, sharpen), 0, 0, outW, outH);
   }
   if (overlay) paintOverlay(ctx, overlay, outW, outH);
 

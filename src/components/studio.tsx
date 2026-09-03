@@ -52,6 +52,7 @@ import {
 } from "@/lib/compose";
 import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
 import { findPortrait, type Portrait } from "@/lib/portrait";
+import { SHARPEN_STEPS, sharpenTo, type SharpenLevel } from "@/lib/sharpen";
 
 const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 12 * 1024 * 1024;
@@ -155,6 +156,20 @@ export function Studio() {
   // up with a bigger picture and a bigger sidebar and no more of either on
   // screen. This shrinks only the picture.
   const [viewVh, setViewVh] = useState(68);
+  // Edge contrast, applied to the exported file and to the preview alike.
+  const [sharpen, setSharpen] = useState<SharpenLevel>(0);
+  // Skip the cut entirely and write the photograph as it arrived. This is
+  // what makes sharpening useful on its own: somebody who only wants a
+  // crisper file should not have to accept a cut-out to get one.
+  const [keepOriginal, setKeepOriginal] = useState(false);
+  /** A sharpened copy of the cut, at preview size, tagged with the level it
+   *  was made for. The tag is what stops a stale preview being shown for a
+   *  new setting — and keeping it means the effect never has to clear the
+   *  state synchronously, which React rightly warns about. */
+  const [sharpPreview, setSharpPreview] = useState<{
+    level: SharpenLevel;
+    url: string;
+  } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const urls = useRef<string[]>([]);
 
@@ -171,6 +186,28 @@ export function Studio() {
     const held = urls.current;
     return () => held.forEach((u) => URL.revokeObjectURL(u));
   }, []);
+
+  // Sharpening the preview, at preview size. The same function runs at full
+  // size on export, so one algorithm and one set of numbers decide both.
+  useEffect(() => {
+    if (!shot || sharpen === 0) return;
+    let alive = true;
+    let made: string | null = null;
+    const w = Math.min(shot.w, 1400);
+    const h = Math.round((w * shot.h) / shot.w);
+    const out = sharpenTo(shot.bitmap, w, h, sharpen);
+    if (!(out instanceof HTMLCanvasElement)) return;
+    out.toBlob((blob) => {
+      if (!alive || !blob) return;
+      made = URL.createObjectURL(blob);
+      urls.current.push(made);
+      setSharpPreview({ level: sharpen, url: made });
+    }, "image/png");
+    return () => {
+      alive = false;
+      if (made) URL.revokeObjectURL(made);
+    };
+  }, [shot, sharpen]);
 
   const run = useCallback(
     async (file: File, q: Quality = quality) => {
@@ -507,6 +544,8 @@ export function Studio() {
         0.95,
         overlay,
         source,
+        sharpen,
+        keepOriginal,
       );
       downloadBlob(blob, outputName(shot.file.name, ext));
     } catch (e) {
@@ -588,7 +627,13 @@ export function Studio() {
           <div className="min-w-0 space-y-3">
             <CompareSlider
               before={shot.originalUrl}
-              after={shot.masterUrl}
+              after={
+                // Only the preview made for the level now selected. Anything
+                // else would show the reader a sharpness they did not pick.
+                sharpen > 0 && sharpPreview?.level === sharpen
+                  ? sharpPreview.url
+                  : shot.masterUrl
+              }
               backdrop={backgroundToCss(bg)}
               overlay={
                 overlay
@@ -744,6 +789,54 @@ export function Studio() {
             <div className="rounded-xl border border-line bg-surface p-5">
               <BackgroundPicker value={bg} onChange={setBg} />
             </div>
+
+            <fieldset className="rounded-xl border border-line bg-surface p-5">
+              <legend className="mono px-1 text-[11px] uppercase tracking-[0.14em] text-text-faint">
+                {t.studio.sharpenLabel}
+              </legend>
+
+              <div className="mt-1 flex items-baseline justify-between gap-3">
+                <span className="text-sm font-semibold">
+                  {t.studio.sharpenLevels[sharpen]}
+                </span>
+                <span className="mono text-[11px] text-text-faint">
+                  {sharpen}/{SHARPEN_STEPS - 1}
+                </span>
+              </div>
+
+              <input
+                type="range"
+                min={0}
+                max={SHARPEN_STEPS - 1}
+                step={1}
+                value={sharpen}
+                onChange={(e) =>
+                  setSharpen(Number(e.target.value) as SharpenLevel)
+                }
+                aria-label={t.studio.sharpenLabel}
+                aria-valuetext={t.studio.sharpenLevels[sharpen]}
+                className="mc-range mt-3 w-full"
+              />
+
+              <label className="mt-4 flex cursor-pointer items-start gap-2.5">
+                <input
+                  type="checkbox"
+                  checked={keepOriginal}
+                  onChange={(e) => setKeepOriginal(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]"
+                />
+                <span className="text-xs leading-relaxed">
+                  {t.studio.keepOriginal}
+                  <span className="mt-1 block text-text-faint">
+                    {t.studio.keepOriginalNote}
+                  </span>
+                </span>
+              </label>
+
+              <p className="mt-3 text-pretty text-xs leading-relaxed text-text-faint">
+                {t.studio.sharpenNote}
+              </p>
+            </fieldset>
 
             <div className="space-y-2.5">
               <button

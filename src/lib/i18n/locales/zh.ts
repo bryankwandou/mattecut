@@ -150,6 +150,13 @@ export const zh: Dict = {
       "清单读取失败 — 网络中断或来源拒绝了请求。上面各档位标注的大小目前没有得到证实。",
     downloadPng: "下载 PNG",
     transparentSuffix: "透明",
+    sharpenLabel: "锐度",
+    sharpenLevels: ["关闭", "轻", "中", "强"],
+    sharpenNote:
+      "仅对颜色增加边缘对比，不影响裁切边缘，也不会凭空造出相机未记录的细节。",
+    keepOriginal: "保留原背景",
+    keepOriginalNote:
+      "按原样导出照片：更锐利，不裁切。",
     exportNote: "始终按原始分辨率导出，而不是预览的尺寸。",
     exportNoteCapped:
       "已按 {w} × {h} px 导出，小于原图：此设备无法让完整分辨率通过模型。",

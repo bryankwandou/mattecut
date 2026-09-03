@@ -70,6 +70,11 @@ export type Dict = {
     auditFailed: string;
     downloadPng: string;
     transparentSuffix: string;
+    sharpenLabel: string;
+    sharpenLevels: [string, string, string, string];
+    sharpenNote: string;
+    keepOriginal: string;
+    keepOriginalNote: string;
     exportNote: string;
     exportNoteCapped: string;
     exportNoteRestored: string;

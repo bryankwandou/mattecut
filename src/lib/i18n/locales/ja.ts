@@ -152,6 +152,13 @@ export const ja: Dict = {
       "一覧を読み取れませんでした — 通信に失敗したか、配信元が応答を拒みました。上の段階に表示された容量は今は裏付けがありません。",
     downloadPng: "PNG をダウンロード",
     transparentSuffix: "透明",
+    sharpenLabel: "シャープネス",
+    sharpenLevels: ["オフ", "弱", "中", "強"],
+    sharpenNote:
+      "輪郭のコントラストを色にだけ加えます。切り口には触れず、カメラが記録していない細部を作り出しません。",
+    keepOriginal: "元の背景を残す",
+    keepOriginalNote:
+      "写真をそのまま書き出します。鮮明に、切り抜かずに。",
     exportNote:
       "書き出しは常に元の解像度で、プレビューの大きさではありません。",
     exportNoteCapped:

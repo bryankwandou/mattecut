@@ -152,6 +152,13 @@ export const tr: Dict = {
       "Katalog okunamadı — ağ başarısız oldu ya da kaynak reddetti. Yukarıdaki kademelerin boyutları şu anda doğrulanmamış durumda.",
     downloadPng: "PNG indir",
     transparentSuffix: "saydam",
+    sharpenLabel: "Keskinlik",
+    sharpenLevels: ["Kapalı", "Hafif", "Orta", "Güçlü"],
+    sharpenNote:
+      "Kenar kontrastını yalnızca renge ekler, kesim kenarına asla. Kameranın kaydetmediği ayrıntıyı geri getirmez.",
+    keepOriginal: "Orijinal arka planı koru",
+    keepOriginalNote:
+      "Fotoğrafı geldiği gibi dışa aktarır: daha keskin, kesilmemiş.",
     exportNote:
       "Her zaman önizleme boyutunda değil, özgün çözünürlükte dışa aktarılır.",
     exportNoteCapped:

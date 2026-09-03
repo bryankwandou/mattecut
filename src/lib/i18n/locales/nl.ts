@@ -152,6 +152,13 @@ export const nl: Dict = {
       "De catalogus kon niet worden gelezen — het netwerk faalde of de bron weigerde. De formaten bij de niveaus hierboven zijn nu niet geverifieerd.",
     downloadPng: "PNG downloaden",
     transparentSuffix: "transparant",
+    sharpenLabel: "Scherpte",
+    sharpenLevels: ["Uit", "Licht", "Gemiddeld", "Sterk"],
+    sharpenNote:
+      "Voegt randcontrast toe aan alleen de kleur, nooit aan de sniprand. Het haalt geen detail terug dat de camera niet vastlegde.",
+    keepOriginal: "Originele achtergrond behouden",
+    keepOriginalNote:
+      "Exporteert de foto zoals hij kwam: scherper, ongeknipt.",
     exportNote:
       "Altijd geëxporteerd op de oorspronkelijke resolutie, niet op het formaat van de voorvertoning.",
     exportNoteCapped:

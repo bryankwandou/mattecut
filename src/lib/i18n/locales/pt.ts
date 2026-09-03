@@ -152,6 +152,13 @@ export const pt: Dict = {
       "O catálogo não pôde ser lido — a rede falhou ou a origem recusou. Os tamanhos nos níveis acima estão sem verificação agora.",
     downloadPng: "Baixar PNG",
     transparentSuffix: "transparente",
+    sharpenLabel: "Nitidez",
+    sharpenLevels: ["Desligado", "Leve", "Média", "Forte"],
+    sharpenNote:
+      "Adiciona contraste de borda apenas à cor, nunca à borda do recorte. Não recupera detalhe que a câmera não gravou.",
+    keepOriginal: "Manter o fundo original",
+    keepOriginalNote:
+      "Exporta a foto como chegou: mais nítida, sem recorte.",
     exportNote:
       "Sempre exportado na resolução original, não no tamanho da prévia.",
     exportNoteCapped:

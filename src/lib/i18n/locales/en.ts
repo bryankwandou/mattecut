@@ -152,6 +152,13 @@ export const en: Dict = {
       "The catalogue could not be read — the network failed or the origin refused. The sizes on the tiers above are unverified right now.",
     downloadPng: "Download PNG",
     transparentSuffix: "transparent",
+    sharpenLabel: "Sharpness",
+    sharpenLevels: ["Off", "Light", "Medium", "Strong"],
+    sharpenNote:
+      "Adds edge contrast to the colour only, never to the cut edge. It recovers no detail the camera did not record.",
+    keepOriginal: "Keep the original background",
+    keepOriginalNote:
+      "Exports the photograph as it arrived, sharpened but uncut.",
     exportNote: "Always exported at the original resolution, not the preview size.",
     exportNoteCapped:
       "Exported at {w} × {h} px, smaller than the original: this machine could not carry the full resolution through the model.",

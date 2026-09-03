@@ -152,6 +152,13 @@ export const vi: Dict = {
       "Không đọc được danh mục — mạng lỗi hoặc máy chủ gốc từ chối. Các dung lượng ở những mức trên hiện chưa được xác minh.",
     downloadPng: "Tải PNG",
     transparentSuffix: "trong suốt",
+    sharpenLabel: "Độ sắc nét",
+    sharpenLevels: ["Tắt", "Nhẹ", "Vừa", "Mạnh"],
+    sharpenNote:
+      "Chỉ tăng tương phản viền cho màu, không bao giờ cho viền cắt. Nó không tạo ra chi tiết máy ảnh không ghi được.",
+    keepOriginal: "Giữ nền gốc",
+    keepOriginalNote:
+      "Xuất ảnh nguyên trạng: sắc nét hơn, không cắt.",
     exportNote:
       "Luôn xuất ở độ phân giải gốc, không phải kích thước bản xem trước.",
     exportNoteCapped:

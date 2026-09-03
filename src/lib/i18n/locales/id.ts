@@ -150,6 +150,13 @@ export const id: Dict = {
       "Katalog tidak terbaca — jaringan gagal atau server asal menolak. Angka pada tingkat kualitas di atas tidak terbukti saat ini.",
     downloadPng: "Unduh PNG",
     transparentSuffix: "transparan",
+    sharpenLabel: "Ketajaman",
+    sharpenLevels: ["Mati", "Ringan", "Sedang", "Kuat"],
+    sharpenNote:
+      "Menambah kontras tepi hanya pada warna, tidak pernah pada tepi potongan. Ia tidak memunculkan detail yang tidak direkam kamera.",
+    keepOriginal: "Pertahankan latar asli",
+    keepOriginalNote:
+      "Mengekspor foto apa adanya — dipertajam, tanpa dipotong.",
     exportNote: "Selalu diekspor pada resolusi asli, bukan ukuran pratinjau.",
     exportNoteCapped:
       "Diekspor pada {w} × {h} px, lebih kecil dari aslinya: perangkat ini tidak sanggup membawa resolusi penuh melewati model.",

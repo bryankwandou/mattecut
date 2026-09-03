@@ -151,6 +151,13 @@ export const ko: Dict = {
       "목록을 읽지 못했습니다 — 네트워크가 실패했거나 원본이 거부했습니다. 위 단계에 적힌 용량은 지금은 확인되지 않은 값입니다.",
     downloadPng: "PNG 내려받기",
     transparentSuffix: "투명",
+    sharpenLabel: "선명도",
+    sharpenLevels: ["끕", "약하게", "보통", "강하게"],
+    sharpenNote:
+      "색상에만 율곽 대비를 더합니다. 잘라난 가장자리에는 적용되지 않으며, 카메라가 기록하지 않은 세부를 만들지 않습니다.",
+    keepOriginal: "원본 배경 유지",
+    keepOriginalNote:
+      "사진을 그대로 내보냅니다. 더 선명하게, 자르지 않고.",
     exportNote: "미리보기 크기가 아니라 언제나 원본 해상도로 내보냅니다.",
     exportNoteCapped:
       "{w} × {h} px로 내보냈습니다. 원본보다 작은 이유는 이 기기가 전체 해상도를 모델에 통과시키지 못했기 때문입니다.",

@@ -152,6 +152,13 @@ export const it: Dict = {
       "Il catalogo non è stato letto — la rete ha fallito o l’origine ha rifiutato. Le dimensioni dei livelli qui sopra ora non sono verificate.",
     downloadPng: "Scarica il PNG",
     transparentSuffix: "trasparente",
+    sharpenLabel: "Nitidezza",
+    sharpenLevels: ["Spento", "Lieve", "Media", "Forte"],
+    sharpenNote:
+      "Aggiunge contrasto ai bordi solo del colore, mai al bordo del ritaglio. Non recupera dettagli che la fotocamera non ha registrato.",
+    keepOriginal: "Mantieni lo sfondo originale",
+    keepOriginalNote:
+      "Esporta la foto com’è arrivata: più nitida, senza ritaglio.",
     exportNote:
       "Esportato sempre alla risoluzione originale, non alla dimensione dell'anteprima.",
     exportNoteCapped:
