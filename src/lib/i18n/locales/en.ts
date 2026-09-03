@@ -155,6 +155,8 @@ export const en: Dict = {
     exportNote: "Always exported at the original resolution, not the preview size.",
     exportNoteCapped:
       "Exported at {w} × {h} px, smaller than the original: this machine could not carry the full resolution through the model.",
+    exportNoteRestored:
+      "Exported at the full {w} × {h} px of your file. The model ran on a smaller copy, so only the cut edge is softer — every pixel inside the subject is your original.",
     lowPower:
       "This machine reports limited memory or processor cores, so the lightest model is selected by default and photos are reduced to {px} px on the long edge before processing. Every tier is still selectable.",
     zoomOut: "Show smaller",
@@ -242,6 +244,9 @@ export const en: Dict = {
       "{n} backgrounds, generated on this device — nothing downloaded",
     catalogueByCount:
       "{n} photos under CC BY — free to use, but the author must be credited",
+    catalogueOfflineCount:
+      "{n} photos stored in the app itself — these work with no connection",
+    catalogueTabOffline: "Offline",
     creditRequired:
       "Credit required wherever you share this: {credit}",
     cataloguePhotoCount:

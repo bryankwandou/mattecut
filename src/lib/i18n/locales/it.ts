@@ -156,6 +156,8 @@ export const it: Dict = {
       "Esportato sempre alla risoluzione originale, non alla dimensione dell'anteprima.",
     exportNoteCapped:
       "Esportato a {w} × {h} px, più piccolo dell’originale: questo dispositivo non è riuscito a portare la risoluzione piena attraverso il modello.",
+    exportNoteRestored:
+      "Esportato agli interi {w} × {h} px del tuo file. Il modello ha lavorato su una copia ridotta, quindi solo il bordo del ritaglio è più morbido: ogni pixel del soggetto è il tuo originale.",
     lowPower:
       "Questo dispositivo segnala memoria o core limitati, quindi viene scelto il modello più leggero e le foto vengono ridotte a {px} px sul lato lungo prima dell’elaborazione. Tutti i livelli restano selezionabili.",
     zoomOut: "Mostra più piccolo",
@@ -243,6 +245,9 @@ export const it: Dict = {
       "{n} sfondi, generati su questo dispositivo — nulla scaricato",
     catalogueByCount:
       "{n} foto con licenza CC BY — libere da usare, ma l’autore va citato",
+    catalogueOfflineCount:
+      "{n} foto salvate nell’app — funzionano senza connessione",
+    catalogueTabOffline: "Offline",
     creditRequired:
       "Citazione obbligatoria ovunque tu condivida questo: {credit}",
     cataloguePhotoCount:

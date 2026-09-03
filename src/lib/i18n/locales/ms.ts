@@ -156,6 +156,8 @@ export const ms: Dict = {
       "Sentiasa dieksport pada resolusi asal, bukan saiz pratonton.",
     exportNoteCapped:
       "Dieksport pada {w} × {h} px, lebih kecil daripada asal: peranti ini tidak mampu membawa resolusi penuh melalui model.",
+    exportNoteRestored:
+      "Dieksport pada {w} × {h} px penuh fail anda. Model berjalan pada salinan lebih kecil, jadi hanya tepi potongan lebih lembut — setiap piksel dalam subjek ialah asal anda.",
     lowPower:
       "Peranti ini melaporkan memori atau teras pemproses yang terhad, jadi model paling ringan dipilih secara lalai dan foto dikecilkan kepada {px} px pada sisi terpanjang sebelum diproses. Semua tahap masih boleh dipilih.",
     zoomOut: "Kecilkan paparan",
@@ -243,6 +245,9 @@ export const ms: Dict = {
       "{n} latar, dijana pada peranti ini — tiada yang dimuat turun",
     catalogueByCount:
       "{n} foto di bawah CC BY — bebas digunakan, tetapi nama pencipta wajib dinyatakan",
+    catalogueOfflineCount:
+      "{n} foto tersimpan dalam aplikasi — ini berfungsi tanpa sambungan",
+    catalogueTabOffline: "Luar talian",
     creditRequired:
       "Wajib dinyatakan di mana sahaja hasil ini dikongsi: {credit}",
     cataloguePhotoCount:

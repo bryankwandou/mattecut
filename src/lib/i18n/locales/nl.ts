@@ -156,6 +156,8 @@ export const nl: Dict = {
       "Altijd geëxporteerd op de oorspronkelijke resolutie, niet op het formaat van de voorvertoning.",
     exportNoteCapped:
       "Geëxporteerd op {w} × {h} px, kleiner dan het origineel: dit apparaat kon de volledige resolutie niet door het model halen.",
+    exportNoteRestored:
+      "Geëxporteerd op de volle {w} × {h} px van uw bestand. Het model werkte op een kleinere kopie, dus alleen de sniprand is zachter — elke pixel in het onderwerp is uw origineel.",
     lowPower:
       "Dit apparaat meldt beperkt geheugen of weinig processorkernen, dus het lichtste model staat standaard aan en foto’s worden voor verwerking verkleind tot {px} px op de lange zijde. Alle niveaus blijven kiesbaar.",
     zoomOut: "Kleiner tonen",
@@ -243,6 +245,9 @@ export const nl: Dict = {
       "{n} achtergronden, op dit apparaat gemaakt — niets gedownload",
     catalogueByCount:
       "{n} foto’s onder CC BY — vrij te gebruiken, maar de maker moet vermeld worden",
+    catalogueOfflineCount:
+      "{n} foto’s in de app zelf — die werken zonder verbinding",
+    catalogueTabOffline: "Offline",
     creditRequired:
       "Vermelding verplicht overal waar u dit deelt: {credit}",
     cataloguePhotoCount:

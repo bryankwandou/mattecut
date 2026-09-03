@@ -96,6 +96,10 @@ type Shot = {
   /** True when the photo was shrunk to fit this machine, so the export note
    *  stops promising a resolution this cut never had. */
   capped: boolean;
+  /** The photograph's own size. The model works on a shrunk copy, but the
+   *  export is written at these numbers, so they are what the note quotes. */
+  srcW: number;
+  srcH: number;
 };
 
 export function Studio() {
@@ -208,6 +212,12 @@ export function Studio() {
         urls.current.push(originalUrl, masterUrl);
 
         const bitmap = await loadImage(masterUrl, t.studio.errDecode);
+        // The original's own dimensions. Cheap here — the browser has just
+        // decoded this file for the preview — and it is what the export and
+        // its note are measured against.
+        const src = await loadImage(originalUrl, t.studio.errDecode).catch(
+          () => null,
+        );
         setShot({
           file,
           originalUrl,
@@ -219,6 +229,8 @@ export function Studio() {
           quality: q,
           portrait: findPortrait(bitmap),
           capped: scaled,
+          srcW: src?.naturalWidth ?? bitmap.naturalWidth,
+          srcH: src?.naturalHeight ?? bitmap.naturalHeight,
         });
         setProgress({ stage: "done", ratio: 1, key: "separating" });
       } catch (e) {
@@ -254,6 +266,9 @@ export function Studio() {
         // This string is never shown: the catch discards the draft rather
         // than blaming the reader for a record they cannot even see.
         const bitmap = await loadImage(masterUrl, "draft decode failed");
+        const src = await loadImage(originalUrl, "draft decode failed").catch(
+          () => null,
+        );
         if (!alive) return;
         setShot({
           file,
@@ -266,6 +281,8 @@ export function Studio() {
           quality: d.quality,
           portrait: findPortrait(bitmap),
           capped: d.capped === true,
+          srcW: src?.naturalWidth ?? bitmap.naturalWidth,
+          srcH: src?.naturalHeight ?? bitmap.naturalHeight,
         });
         setPicked(d.quality);
         if (d.bg) setBg(d.bg as Background);
@@ -464,6 +481,23 @@ export function Studio() {
     const ext =
       format === "image/png" ? "png" : format === "image/jpeg" ? "jpg" : "webp";
     try {
+      // The photograph at its own resolution. The model ran on a shrunk
+      // copy, but the colour never had to be shrunk with it — only the mask
+      // came from the model. Decoded here rather than held for the life of
+      // the page, because a 48 MP bitmap in memory is what the cap exists
+      // to avoid in the first place.
+      let source: { img: HTMLImageElement; w: number; h: number } | null = null;
+      if (shot.capped) {
+        try {
+          const img = await loadImage(shot.originalUrl, t.studio.errDecode);
+          source = { img, w: img.naturalWidth, h: img.naturalHeight };
+        } catch {
+          // Falling back to the cut's own size is the old behaviour, which
+          // is worse but still produces a file.
+          source = null;
+        }
+      }
+
       const blob = await exportImage(
         shot.bitmap,
         shot.w,
@@ -472,6 +506,7 @@ export function Studio() {
         format,
         0.95,
         overlay,
+        source,
       );
       downloadBlob(blob, outputName(shot.file.name, ext));
     } catch (e) {
@@ -732,9 +767,15 @@ export function Studio() {
                 </SecondaryButton>
               </div>
               <p className="text-center text-xs leading-relaxed text-text-faint">
-                {shot.capped
-                  ? fill(t.studio.exportNoteCapped, { w: shot.w, h: shot.h })
-                  : t.studio.exportNote}
+                {!shot.capped
+                  ? t.studio.exportNote
+                  : shot.srcW > shot.w
+                    ? // The cut was made small; the file is written large.
+                      fill(t.studio.exportNoteRestored, {
+                        w: shot.srcW,
+                        h: shot.srcH,
+                      })
+                    : fill(t.studio.exportNoteCapped, { w: shot.w, h: shot.h })}
               </p>
             </div>
 

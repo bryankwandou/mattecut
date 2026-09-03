@@ -153,6 +153,8 @@ export const id: Dict = {
     exportNote: "Selalu diekspor pada resolusi asli, bukan ukuran pratinjau.",
     exportNoteCapped:
       "Diekspor pada {w} × {h} px, lebih kecil dari aslinya: perangkat ini tidak sanggup membawa resolusi penuh melewati model.",
+    exportNoteRestored:
+      "Diekspor pada {w} × {h} px penuh sesuai berkas Anda. Model berjalan pada salinan lebih kecil, jadi hanya tepi potongannya yang lebih lembut — seluruh piksel di dalam subjek adalah asli milik Anda.",
     lowPower:
       "Perangkat ini melaporkan memori atau inti prosesor yang terbatas, jadi model teringan dipilih sebagai bawaan dan foto dikecilkan ke {px} px pada sisi terpanjang sebelum diproses. Semua tingkat tetap bisa dipilih.",
     zoomOut: "Perkecil tampilan",
@@ -240,6 +242,9 @@ export const id: Dict = {
       "{n} latar, dibangkitkan di perangkat ini — tidak ada yang diunduh",
     catalogueByCount:
       "{n} foto berlisensi CC BY — bebas dipakai, tetapi nama pembuat wajib dicantumkan",
+    catalogueOfflineCount:
+      "{n} foto tersimpan di dalam aplikasi — ini bekerja tanpa koneksi",
+    catalogueTabOffline: "Tanpa jaringan",
     creditRequired:
       "Wajib dicantumkan di mana pun hasil ini dibagikan: {credit}",
     cataloguePhotoCount:

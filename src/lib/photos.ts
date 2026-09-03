@@ -17,8 +17,11 @@ import { VOCAB } from "./vocab";
 
 /** Keys are short because they are repeated six thousand times. */
 export type Photo = {
-  /** Commons thumbnail URL, at whatever width Commons rounded to. */
-  t: string;
+  /** Commons thumbnail URL, at whatever width Commons rounded to. Absent on
+   *  offline rows, which carry `f` instead. */
+  t?: string;
+  /** File stem under /offline, for the rows that ship with the app. */
+  f?: string;
   /** File name, cleaned of the "File:" prefix and extension. */
   n: string;
   /** Licence exactly as Commons reported it. */
@@ -40,11 +43,14 @@ export type Photo = {
  * was built: ShareAlike would travel into the composited portrait, and
  * NC/ND forbid the composite outright.
  */
-export type Bucket = "public" | "by";
+export type Bucket = "public" | "by" | "offline";
 
 const FILES: Record<Bucket, string> = {
   public: "/catalogue/photos.json",
   by: "/catalogue/photos-by.json",
+  // The pack that actually ships. Its rows carry a file name instead of a
+  // Commons URL, and `photoSrc` below is what tells the two apart.
+  offline: "/catalogue/offline.json",
 };
 
 const cache: Partial<Record<Bucket, Photo[]>> = {};
@@ -85,6 +91,19 @@ export function loadPhotos(bucket: Bucket): Promise<Photo[]> {
  */
 export function fullSize(thumb: string, width = 2048): string {
   return thumb.replace(/\/(\d+)px-/, `/${width}px-`);
+}
+
+/**
+ * Where to load a row's picture from.
+ *
+ * Offline rows are files in this deployment and need no network at all —
+ * that is the entire point of them. Indexed rows are Commons URLs, and the
+ * grid asks for the thumbnail while a pick asks for the full size.
+ */
+export function photoSrc(p: Photo, full = false): string {
+  if (p.f) return `/offline/${p.f}.webp`;
+  const t = p.t ?? "";
+  return full ? fullSize(t) : t;
 }
 
 export function searchPhotos(all: Photo[], raw: string): Photo[] {

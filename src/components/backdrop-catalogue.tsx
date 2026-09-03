@@ -5,8 +5,8 @@ import { Loader2, X } from "lucide-react";
 import { catalogue, search, swatchCss, type Swatch } from "@/lib/backdrops";
 import {
   creditLine,
-  fullSize,
   loadPhotos,
+  photoSrc,
   searchPhotos,
   type Bucket,
   type Photo,
@@ -23,7 +23,7 @@ const ROW = CELL + GAP;
 /** Rows drawn beyond the viewport, so a flick does not reveal blank space. */
 const OVERSCAN = 3;
 
-type Tab = "colours" | "public" | "by";
+type Tab = "colours" | "offline" | "public" | "by";
 
 /**
  * The backdrop catalogue, in a window of its own.
@@ -139,16 +139,20 @@ export function BackdropCatalogue({
   const count =
     tab === "colours"
       ? t.bg.catalogueCount
-      : tab === "public"
-        ? t.bg.cataloguePhotoCount
-        : t.bg.catalogueByCount;
+      : tab === "offline"
+        ? t.bg.catalogueOfflineCount
+        : tab === "public"
+          ? t.bg.cataloguePhotoCount
+          : t.bg.catalogueByCount;
 
   const takePhoto = async (p: Photo) => {
-    setFetching(p.t);
+    setFetching(p.f ?? p.t ?? "");
     try {
-      const res = await fetch(fullSize(p.t));
+      const res = await fetch(photoSrc(p, true));
       const blob = await res.blob();
       // Only CC BY carries an obligation, so only CC BY sends a credit back.
+      // Only CC BY carries an obligation. The offline pack is public domain
+      // and CC0 only, which is why it is the part that ships.
       onPickPhoto(blob, tab === "by" ? creditLine(p) : null);
     } catch {
       setPickFailed(true);
@@ -159,6 +163,9 @@ export function BackdropCatalogue({
 
   const tabs: [Tab, string][] = [
     ["colours", t.bg.catalogueTabGradients],
+    // Second, deliberately: for a reader with no signal it is the only tab
+    // that works, and it should not be the last one they find.
+    ["offline", t.bg.catalogueTabOffline],
     ["public", t.bg.catalogueTabPhotos],
     ["by", "CC BY"],
   ];
@@ -279,7 +286,7 @@ export function BackdropCatalogue({
                 ))}
                 {photoSlice.map((p) => (
                   <button
-                    key={p.t}
+                    key={p.f ?? p.t}
                     onClick={() => void takePhoto(p)}
                     disabled={fetching !== null}
                     // The licence and the author travel with the picture, so
@@ -287,9 +294,9 @@ export function BackdropCatalogue({
                     title={creditLine(p)}
                     aria-label={creditLine(p)}
                     className="relative h-16 overflow-hidden rounded-lg border border-line bg-cover bg-center transition-transform hover:scale-105 disabled:opacity-60"
-                    style={{ backgroundImage: `url("${p.t}")` }}
+                    style={{ backgroundImage: `url("${photoSrc(p)}")` }}
                   >
-                    {fetching === p.t && (
+                    {fetching === (p.f ?? p.t) && (
                       <span className="absolute inset-0 grid place-items-center bg-ink/50">
                         <Loader2 size={14} className="animate-spin text-white" />
                       </span>

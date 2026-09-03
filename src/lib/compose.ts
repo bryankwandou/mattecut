@@ -222,6 +222,47 @@ export function composite(
  * is transparent; JPEG cannot, so we refuse that combination upstream
  * rather than silently handing back a black-backed image.
  */
+/** Chrome refuses a canvas past roughly this many pixels, and a refusal is a
+ *  blank export rather than an error. Measured in the browser rather than
+ *  taken from a blog post: 16384x16384 allocates, 40960x23040 does not. */
+const MAX_CANVAS_PX = 16384 * 16384;
+
+/**
+ * Restore the original resolution the model could not carry.
+ *
+ * The model runs on a shrunk copy — it has to, or a 48 MP photo exhausts
+ * the tab. The old export then wrote that shrunk copy out, so a 6000 px
+ * source came back at 4096 and a third of the detail was gone for no reason
+ * anybody could defend.
+ *
+ * The reason it was unnecessary: only the *mask* comes from the model. The
+ * colour comes from the photograph, which never left the machine at full
+ * size. So the original is drawn at its own resolution and the cut-out is
+ * used as a stencil over it — `destination-in` keeps the original's pixels
+ * exactly where the cut-out is opaque.
+ *
+ * What that costs is the edge, not the picture: the mask is enlarged, so
+ * the boundary is as soft as the model made it. Every pixel inside the
+ * subject is the photographer's own.
+ */
+function stencil(
+  source: CanvasImageSource,
+  subject: CanvasImageSource,
+  w: number,
+  h: number,
+): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  const g = c.getContext("2d");
+  if (!g) throw new Error("Canvas 2D tidak tersedia di peramban ini.");
+  g.imageSmoothingQuality = "high";
+  g.drawImage(source, 0, 0, w, h);
+  g.globalCompositeOperation = "destination-in";
+  g.drawImage(subject, 0, 0, w, h);
+  return c;
+}
+
 export async function exportImage(
   subject: CanvasImageSource,
   w: number,
@@ -230,10 +271,23 @@ export async function exportImage(
   format: "image/png" | "image/jpeg" | "image/webp" = "image/png",
   quality = 0.95,
   overlay: Overlay | null = null,
+  /** The photograph as it arrived, at its own resolution. When it is larger
+   *  than the cut-out, the export is made at *its* size. */
+  source: { img: CanvasImageSource; w: number; h: number } | null = null,
 ): Promise<Blob> {
+  // Only worth doing when there is detail to recover and the browser will
+  // actually allocate the surface.
+  const bigger =
+    source !== null &&
+    source.w > w &&
+    source.w * source.h <= MAX_CANVAS_PX;
+
+  const outW = bigger ? source!.w : w;
+  const outH = bigger ? source!.h : h;
+
   const canvas = document.createElement("canvas");
-  canvas.width = w;
-  canvas.height = h;
+  canvas.width = outW;
+  canvas.height = outH;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas 2D tidak tersedia di peramban ini.");
 
@@ -243,12 +297,17 @@ export async function exportImage(
 
   if (format === "image/jpeg" && bg.kind === "transparent") {
     ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(0, 0, outW, outH);
   } else {
-    paintBackground(ctx, bg, w, h);
+    paintBackground(ctx, bg, outW, outH);
   }
-  ctx.drawImage(subject, 0, 0, w, h);
-  if (overlay) paintOverlay(ctx, overlay, w, h);
+
+  if (bigger) {
+    ctx.drawImage(stencil(source!.img, subject, outW, outH), 0, 0);
+  } else {
+    ctx.drawImage(subject, 0, 0, outW, outH);
+  }
+  if (overlay) paintOverlay(ctx, overlay, outW, outH);
 
   return new Promise((resolve, reject) => {
     canvas.toBlob(

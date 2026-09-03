@@ -156,6 +156,8 @@ export const tr: Dict = {
       "Her zaman önizleme boyutunda değil, özgün çözünürlükte dışa aktarılır.",
     exportNoteCapped:
       "{w} × {h} px olarak dışa aktarıldı; özgün boyuttan küçük: bu makine tam çözünürlüğü modelden geçiremedi.",
+    exportNoteRestored:
+      "Dosyanızın tam {w} × {h} px ölçüsünde dışa aktarıldı. Model daha küçük bir kopyada çalıştı, bu yüzden yalnızca kesim kenarı daha yumuşak — öznedeki her piksel sizin aslınız.",
     lowPower:
       "Bu makine sınırlı bellek veya işlemci çekirdeği bildiriyor; bu yüzden en hafif model öntanımlı seçiliyor ve fotoğraflar işlenmeden önce uzun kenarı {px} px olacak şekilde küçültülüyor. Tüm kademeler yine seçilebilir.",
     zoomOut: "Küçük göster",
@@ -243,6 +245,9 @@ export const tr: Dict = {
       "{n} arka plan, bu cihazda üretildi — hiçbiri indirilmedi",
     catalogueByCount:
       "CC BY kapsamında {n} fotoğraf — serbestçe kullanılır, ama eser sahibi belirtilmeli",
+    catalogueOfflineCount:
+      "{n} fotoğraf uygulamanın içinde — bağlantı olmadan çalışır",
+    catalogueTabOffline: "Çevrimdışı",
     creditRequired:
       "Bunu paylaştığınız her yerde belirtilmesi zorunlu: {credit}",
     cataloguePhotoCount:

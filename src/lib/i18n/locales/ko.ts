@@ -154,6 +154,8 @@ export const ko: Dict = {
     exportNote: "미리보기 크기가 아니라 언제나 원본 해상도로 내보냅니다.",
     exportNoteCapped:
       "{w} × {h} px로 내보냈습니다. 원본보다 작은 이유는 이 기기가 전체 해상도를 모델에 통과시키지 못했기 때문입니다.",
+    exportNoteRestored:
+      "파일 전체 {w} × {h} px로 내보냈습니다. 모델은 축소본에서 실행되어 잘라난 가장자리만 부드러울 뿐, 피사체 안의 모든 픽셀은 원본입니다.",
     lowPower:
       "이 기기는 메모리나 프로세서 코어가 제한적이라고 알려 왔습니다. 그래서 가장 가벼운 모델이 기본으로 선택되고, 처리 전에 사진의 긴 변을 {px} px로 줄입니다. 모든 단계는 그대로 선택할 수 있습니다.",
     zoomOut: "작게 보기",
@@ -241,6 +243,9 @@ export const ko: Dict = {
       "배경 {n}개. 이 기기에서 생성되며 다운로드는 없습니다.",
     catalogueByCount:
       "CC BY 사진 {n}장. 자유롭게 쓸 수 있지만 저작자를 밝혀야 합니다.",
+    catalogueOfflineCount:
+      "앱 안에 저장된 사진 {n}장 — 연결 없이도 쓸 수 있습니다",
+    catalogueTabOffline: "오프라인",
     creditRequired:
       "이것을 공유하는 모든 곳에 표기가 필요합니다: {credit}",
     cataloguePhotoCount:

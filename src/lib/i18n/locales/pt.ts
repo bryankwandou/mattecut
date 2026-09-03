@@ -156,6 +156,8 @@ export const pt: Dict = {
       "Sempre exportado na resolução original, não no tamanho da prévia.",
     exportNoteCapped:
       "Exportado em {w} × {h} px, menor que o original: este aparelho não conseguiu levar a resolução completa através do modelo.",
+    exportNoteRestored:
+      "Exportado nos {w} × {h} px completos do seu arquivo. O modelo rodou numa cópia menor, então só a borda do recorte fica mais suave — cada pixel do sujeito é o seu original.",
     lowPower:
       "Este aparelho informa memória ou núcleos limitados, por isso o modelo mais leve é escolhido por padrão e as fotos são reduzidas a {px} px no lado maior antes do processamento. Todos os níveis continuam selecionáveis.",
     zoomOut: "Ver menor",
@@ -243,6 +245,9 @@ export const pt: Dict = {
       "{n} fundos, gerados neste aparelho — nada baixado",
     catalogueByCount:
       "{n} fotos sob CC BY — livres para usar, mas o autor deve ser creditado",
+    catalogueOfflineCount:
+      "{n} fotos guardadas no próprio app — funcionam sem conexão",
+    catalogueTabOffline: "Offline",
     creditRequired:
       "Crédito obrigatório onde quer que você compartilhe isto: {credit}",
     cataloguePhotoCount:

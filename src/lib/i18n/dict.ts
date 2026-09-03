@@ -72,6 +72,7 @@ export type Dict = {
     transparentSuffix: string;
     exportNote: string;
     exportNoteCapped: string;
+    exportNoteRestored: string;
     lowPower: string;
     zoomOut: string;
     zoomIn: string;
@@ -132,6 +133,8 @@ export type Dict = {
     catalogueCount: string;
     cataloguePhotoCount: string;
     catalogueByCount: string;
+    catalogueOfflineCount: string;
+    catalogueTabOffline: string;
     creditRequired: string;
     catalogueTabGradients: string;
     catalogueTabPhotos: string;

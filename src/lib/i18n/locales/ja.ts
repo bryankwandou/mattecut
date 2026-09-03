@@ -156,6 +156,8 @@ export const ja: Dict = {
       "書き出しは常に元の解像度で、プレビューの大きさではありません。",
     exportNoteCapped:
       "{w} × {h} px で書き出しました。元の解像度より小さいのは、この端末では全解像度をモデルに通せなかったためです。",
+    exportNoteRestored:
+      "ファイルの完全な {w} × {h} px で書き出しました。モデルは縮小コピーで動いたため、柔らかいのは切り口だけです。被写体の画素はすべて元のままです。",
     lowPower:
       "この端末はメモリまたはコア数が少ないと報告しています。そのため最も軽いモデルを既定で選び、処理前に写真の長辺を {px} px まで縮小します。どの段階も引き続き選択できます。",
     zoomOut: "小さく表示",
@@ -244,6 +246,9 @@ export const ja: Dict = {
       "{n} 件の背景。この端末で生成しており、ダウンロードはありません。",
     catalogueByCount:
       "CC BY の写真 {n} 枚。自由に使えますが、作者名の表示が必要です。",
+    catalogueOfflineCount:
+      "アプリ内に {n} 枚。接続なしで使えます。",
+    catalogueTabOffline: "オフライン",
     creditRequired:
       "これを共有する場所すべてで表示が必要です: {credit}",
     cataloguePhotoCount:

@@ -156,6 +156,8 @@ export const vi: Dict = {
       "Luôn xuất ở độ phân giải gốc, không phải kích thước bản xem trước.",
     exportNoteCapped:
       "Đã xuất ở {w} × {h} px, nhỏ hơn ảnh gốc: máy này không tải nổi độ phân giải đầy đủ qua mô hình.",
+    exportNoteRestored:
+      "Xuất ở đủ {w} × {h} px của tệp bạn. Mô hình chạy trên bản nhỏ hơn nên chỉ viền cắt là mềm hơn — mọi điểm ảnh trong chủ thể là bản gốc của bạn.",
     lowPower:
       "Máy này báo bộ nhớ hoặc số nhân xử lý hạn chế, nên mô hình nhẹ nhất được chọn mặc định và ảnh được thu nhỏ về {px} px ở cạnh dài trước khi xử lý. Mọi mức vẫn có thể chọn.",
     zoomOut: "Hiển thị nhỏ hơn",
@@ -243,6 +245,9 @@ export const vi: Dict = {
       "{n} nền, tạo ngay trên máy này — không tải gì về",
     catalogueByCount:
       "{n} ảnh theo CC BY — dùng tự do, nhưng phải ghi tên tác giả",
+    catalogueOfflineCount:
+      "{n} ảnh lưu ngay trong ứng dụng — dùng được khi không có mạng",
+    catalogueTabOffline: "Ngoại tuyến",
     creditRequired:
       "Bắt buộc ghi nguồn ở bất cứ nơi nào bạn chia sẻ: {credit}",
     cataloguePhotoCount:

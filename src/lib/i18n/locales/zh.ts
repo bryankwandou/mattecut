@@ -153,6 +153,8 @@ export const zh: Dict = {
     exportNote: "始终按原始分辨率导出，而不是预览的尺寸。",
     exportNoteCapped:
       "已按 {w} × {h} px 导出，小于原图：此设备无法让完整分辨率通过模型。",
+    exportNoteRestored:
+      "已按您文件的完整 {w} × {h} px 导出。模型在缩小副本上运行，因此仅裁切边缘较柔和——主体内的每个像素都是您的原图。",
     lowPower:
       "此设备报告内存或处理器核心有限，因此默认选择最轻的模型，并在处理前将照片的长边缩小到 {px} px。所有档位仍可选择。",
     zoomOut: "缩小显示",
@@ -240,6 +242,9 @@ export const zh: Dict = {
       "{n} 个背景，在此设备上生成——无需下载",
     catalogueByCount:
       "{n} 张 CC BY 照片——可自由使用，但必须标明作者",
+    catalogueOfflineCount:
+      "{n} 张照片存在应用内——无需联网即可使用",
+    catalogueTabOffline: "离线",
     creditRequired:
       "无论在何处分享，都必须标明：{credit}",
     cataloguePhotoCount:
