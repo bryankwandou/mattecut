@@ -94,21 +94,54 @@ export function clothingSpans(
   let first = -1;
   let last = -1;
   for (let y = 0; y < mh; y++) {
-    let min = -1;
-    let max = -1;
-    for (let x = 0; x < mw; x++) {
-      if (data[(y * mw + x) * 4 + 3] > OPAQUE) {
-        if (min < 0) min = x;
-        max = x;
+    // The longest unbroken run of cloth, not the outermost pixels.
+    //
+    // Taking the first and last opaque pixel bridges whatever sits between
+    // them, so an arm held away from the body, a hand at the hip or a strap
+    // over a shoulder would stretch the garment across the gap. A torso is
+    // the widest connected thing on its row; the gap is not part of it.
+    let bestStart = -1;
+    let bestLen = 0;
+    let runStart = -1;
+    for (let x = 0; x <= mw; x++) {
+      const on = x < mw && data[(y * mw + x) * 4 + 3] > OPAQUE;
+      if (on) {
+        if (runStart < 0) runStart = x;
+      } else if (runStart >= 0) {
+        const len = x - runStart;
+        if (len > bestLen) {
+          bestLen = len;
+          bestStart = runStart;
+        }
+        runStart = -1;
       }
     }
-    rows[y * 2] = min;
-    rows[y * 2 + 1] = max;
-    if (min >= 0) {
+
+    if (bestLen > 0) {
+      rows[y * 2] = bestStart;
+      rows[y * 2 + 1] = bestStart + bestLen - 1;
       if (first < 0) first = y;
       last = y;
+    } else {
+      rows[y * 2] = -1;
+      rows[y * 2 + 1] = -1;
     }
   }
+
+  // A single misread row would otherwise cut a notch into the garment's
+  // edge. Three-row median keeps the shoulder line and the taper while
+  // removing spikes that are one row deep.
+  const smooth = Int32Array.from(rows);
+  for (let y = 1; y < mh - 1; y++) {
+    for (let k = 0; k < 2; k++) {
+      const a = rows[(y - 1) * 2 + k];
+      const b = rows[y * 2 + k];
+      const c = rows[(y + 1) * 2 + k];
+      if (a < 0 || b < 0 || c < 0) continue;
+      smooth[y * 2 + k] = Math.max(Math.min(a, b), Math.min(Math.max(a, b), c));
+    }
+  }
+  rows.set(smooth);
 
   // A span this short is noise, not a torso.
   if (first < 0 || last - first < 8) return null;
