@@ -344,6 +344,9 @@ export async function exportImage(
    *  file, with the background they already had, never has to accept a cut
    *  they did not ask for. */
   keepOriginal = false,
+  /** Output multiplier. Resampling only — it enlarges, it does not restore
+   *  anything the sensor never recorded, and the interface says so. */
+  enlarge = 1,
 ): Promise<Blob> {
   // Only worth doing when there is detail to recover and the browser will
   // actually allocate the surface.
@@ -352,8 +355,17 @@ export async function exportImage(
     source.w > w &&
     source.w * source.h <= MAX_CANVAS_PX;
 
-  const outW = bigger ? source!.w : w;
-  const outH = bigger ? source!.h : h;
+  const baseW = bigger ? source!.w : w;
+  const baseH = bigger ? source!.h : h;
+
+  // Enlargement is refused rather than silently ignored when the result
+  // would exceed what the browser will allocate: a canvas past the ceiling
+  // comes back blank, and a blank file is worse than a smaller one.
+  const wanted = Math.max(1, Math.round(enlarge));
+  const fits = baseW * wanted * baseH * wanted <= MAX_CANVAS_PX;
+  const factor = fits ? wanted : 1;
+  const outW = baseW * factor;
+  const outH = baseH * factor;
 
   const canvas = document.createElement("canvas");
   canvas.width = outW;

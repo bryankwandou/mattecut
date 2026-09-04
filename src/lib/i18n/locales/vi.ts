@@ -152,6 +152,15 @@ export const vi: Dict = {
       "Không đọc được danh mục — mạng lỗi hoặc máy chủ gốc từ chối. Các dung lượng ở những mức trên hiện chưa được xác minh.",
     downloadPng: "Tải PNG",
     transparentSuffix: "trong suốt",
+    cutToggle: "Xóa nền",
+    cutToggleNote:
+      "Để tắt nếu chỉ muốn làm nét, phóng to hoặc thêm áo. Mô hình không hề được tải.",
+    cutSkipped: "Nền được giữ nguyên. Không cắt gì cả.",
+    bgNeedsCut:
+      "Đổi nền cần có bước cắt. Bật xóa nền rồi tải lại ảnh.",
+    enlargeLabel: "Phóng to",
+    enlargeNote:
+      "Lấy mẫu lại sang kích thước lớn hơn. Nó không khôi phục chi tiết máy ảnh chưa từng ghi.",
     sharpenLabel: "Độ sắc nét",
     sharpenLevels: ["Tắt", "Nhẹ", "Vừa", "Mạnh"],
     sharpenNote:

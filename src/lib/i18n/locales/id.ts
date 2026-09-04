@@ -150,6 +150,16 @@ export const id: Dict = {
       "Katalog tidak terbaca — jaringan gagal atau server asal menolak. Angka pada tingkat kualitas di atas tidak terbukti saat ini.",
     downloadPng: "Unduh PNG",
     transparentSuffix: "transparan",
+    cutToggle: "Hapus latar belakang",
+    cutToggleNote:
+      "Biarkan mati kalau hanya ingin mempertajam, memperbesar, atau menambah jas. Modelnya tidak diunduh sama sekali.",
+    cutSkipped:
+      "Latar dipertahankan. Tidak ada yang dipotong.",
+    bgNeedsCut:
+      "Mengganti latar memerlukan pemotongan. Nyalakan penghapusan latar lalu muat ulang gambarnya.",
+    enlargeLabel: "Perbesar",
+    enlargeNote:
+      "Mengambil ulang sampel ke ukuran lebih besar. Ia tidak memunculkan detail yang tidak pernah direkam kamera — ini penskalaan, bukan penyelamatan.",
     sharpenLabel: "Ketajaman",
     sharpenLevels: ["Mati", "Ringan", "Sedang", "Kuat"],
     sharpenNote:

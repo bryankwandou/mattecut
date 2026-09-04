@@ -152,6 +152,16 @@ export const en: Dict = {
       "The catalogue could not be read — the network failed or the origin refused. The sizes on the tiers above are unverified right now.",
     downloadPng: "Download PNG",
     transparentSuffix: "transparent",
+    cutToggle: "Remove the background",
+    cutToggleNote:
+      "Leave this off to only sharpen, enlarge or add a jacket. The model is not downloaded at all.",
+    cutSkipped:
+      "The background was kept. Nothing was cut.",
+    bgNeedsCut:
+      "Changing the background needs the cut. Turn on background removal and load the image again.",
+    enlargeLabel: "Enlarge",
+    enlargeNote:
+      "Resamples to a larger size. It does not recover detail the camera never recorded, so it is scaling, not rescue.",
     sharpenLabel: "Sharpness",
     sharpenLevels: ["Off", "Light", "Medium", "Strong"],
     sharpenNote:

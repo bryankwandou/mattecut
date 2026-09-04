@@ -152,6 +152,16 @@ export const it: Dict = {
       "Il catalogo non è stato letto — la rete ha fallito o l’origine ha rifiutato. Le dimensioni dei livelli qui sopra ora non sono verificate.",
     downloadPng: "Scarica il PNG",
     transparentSuffix: "trasparente",
+    cutToggle: "Rimuovi lo sfondo",
+    cutToggleNote:
+      "Lascialo spento per solo nitidezza, ingrandimento o giacca. Il modello non viene neppure scaricato.",
+    cutSkipped:
+      "Lo sfondo è stato mantenuto. Nulla è stato ritagliato.",
+    bgNeedsCut:
+      "Cambiare sfondo richiede il ritaglio. Attiva la rimozione e ricarica l’immagine.",
+    enlargeLabel: "Ingrandisci",
+    enlargeNote:
+      "Ricampiona a una dimensione maggiore. Non recupera dettagli mai registrati dalla fotocamera: è scalatura, non recupero.",
     sharpenLabel: "Nitidezza",
     sharpenLevels: ["Spento", "Lieve", "Media", "Forte"],
     sharpenNote:

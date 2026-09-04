@@ -150,6 +150,12 @@ export const zh: Dict = {
       "清单读取失败 — 网络中断或来源拒绝了请求。上面各档位标注的大小目前没有得到证实。",
     downloadPng: "下载 PNG",
     transparentSuffix: "透明",
+    cutToggle: "移除背景",
+    cutToggleNote: "只想锐化、放大或加西装时请保持关闭，模型根本不会下载。",
+    cutSkipped: "背景已保留，未做任何裁切。",
+    bgNeedsCut: "更换背景需要先裁切。请开启背景移除并重新加载图片。",
+    enlargeLabel: "放大",
+    enlargeNote: "重新采样到更大尺寸。它无法找回相机从未记录的细节。",
     sharpenLabel: "锐度",
     sharpenLevels: ["关闭", "轻", "中", "强"],
     sharpenNote:

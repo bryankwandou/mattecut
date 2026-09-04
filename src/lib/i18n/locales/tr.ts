@@ -152,6 +152,16 @@ export const tr: Dict = {
       "Katalog okunamadı — ağ başarısız oldu ya da kaynak reddetti. Yukarıdaki kademelerin boyutları şu anda doğrulanmamış durumda.",
     downloadPng: "PNG indir",
     transparentSuffix: "saydam",
+    cutToggle: "Arka planı kaldır",
+    cutToggleNote:
+      "Yalnızca keskinleştirmek, büyütmek veya ceket eklemek için kapalı bırakın. Model hiç indirilmez.",
+    cutSkipped:
+      "Arka plan korundu. Hiçbir şey kesilmedi.",
+    bgNeedsCut:
+      "Arka planı değiştirmek kesim gerektirir. Kaldırmayı açıp görseli yeniden yükleyin.",
+    enlargeLabel: "Büyüt",
+    enlargeNote:
+      "Daha büyük bir boyuta yeniden örnekler. Kameranın hiç kaydetmediği ayrıntıyı geri getirmez.",
     sharpenLabel: "Keskinlik",
     sharpenLevels: ["Kapalı", "Hafif", "Orta", "Güçlü"],
     sharpenNote:

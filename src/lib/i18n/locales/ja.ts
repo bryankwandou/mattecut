@@ -152,6 +152,14 @@ export const ja: Dict = {
       "一覧を読み取れませんでした — 通信に失敗したか、配信元が応答を拒みました。上の段階に表示された容量は今は裏付けがありません。",
     downloadPng: "PNG をダウンロード",
     transparentSuffix: "透明",
+    cutToggle: "背景を削除",
+    cutToggleNote:
+      "鮮明化、拡大、上着の追加だけならオフのままで。モデルは一切ダウンロードされません。",
+    cutSkipped: "背景はそのままです。切り抜きは行いませんでした。",
+    bgNeedsCut:
+      "背景の変更には切り抜きが必要です。背景削除を有効にして画像を読み直してください。",
+    enlargeLabel: "拡大",
+    enlargeNote: "大きいサイズに再サンプルします。カメラが記録しなかった細部は戻りません。",
     sharpenLabel: "シャープネス",
     sharpenLevels: ["オフ", "弱", "中", "強"],
     sharpenNote:

@@ -152,6 +152,15 @@ export const ms: Dict = {
       "Katalog tidak dapat dibaca — rangkaian gagal atau pelayan asal menolak. Saiz pada tahap di atas belum disahkan buat masa ini.",
     downloadPng: "Muat turun PNG",
     transparentSuffix: "lutsinar",
+    cutToggle: "Buang latar belakang",
+    cutToggleNote:
+      "Biarkan mati jika hanya mahu menajamkan, membesarkan, atau menambah jaket. Model tidak dimuat turun langsung.",
+    cutSkipped: "Latar dikekalkan. Tiada yang dipotong.",
+    bgNeedsCut:
+      "Menukar latar memerlukan potongan. Hidupkan pembuangan latar dan muatkan semula imej.",
+    enlargeLabel: "Besarkan",
+    enlargeNote:
+      "Mengambil semula sampel ke saiz lebih besar. Ia tidak memulihkan perincian yang tidak pernah dirakam kamera.",
     sharpenLabel: "Ketajaman",
     sharpenLevels: ["Mati", "Ringan", "Sederhana", "Kuat"],
     sharpenNote:

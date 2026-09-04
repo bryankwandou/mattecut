@@ -151,6 +151,15 @@ export const ko: Dict = {
       "목록을 읽지 못했습니다 — 네트워크가 실패했거나 원본이 거부했습니다. 위 단계에 적힌 용량은 지금은 확인되지 않은 값입니다.",
     downloadPng: "PNG 내려받기",
     transparentSuffix: "투명",
+    cutToggle: "배경 제거",
+    cutToggleNote:
+      "선명하게 하거나 확대하거나 재킷만 더할 거라면 꺼 두세요. 모델은 아예 내려받지 않습니다.",
+    cutSkipped: "배경을 그대로 두었습니다. 잘라낸 것은 없습니다.",
+    bgNeedsCut:
+      "배경을 바꾸려면 잘라내기가 필요합니다. 배경 제거를 켜고 이미지를 다시 불러오세요.",
+    enlargeLabel: "확대",
+    enlargeNote:
+      "더 큰 크기로 다시 샘플링합니다. 카메라가 기록하지 않은 세부는 되살리지 못합니다.",
     sharpenLabel: "선명도",
     sharpenLevels: ["끕", "약하게", "보통", "강하게"],
     sharpenNote:

@@ -152,6 +152,16 @@ export const es: Dict = {
       "No se pudo leer el catálogo: falló la red o el origen lo rechazó. Los tamaños de los niveles de arriba no están verificados ahora mismo.",
     downloadPng: "Descargar PNG",
     transparentSuffix: "transparente",
+    cutToggle: "Quitar el fondo",
+    cutToggleNote:
+      "Déjelo apagado para solo enfocar, ampliar o añadir una chaqueta. El modelo no se descarga.",
+    cutSkipped:
+      "Se conservó el fondo. No se recortó nada.",
+    bgNeedsCut:
+      "Cambiar el fondo requiere el recorte. Active la eliminación y cargue la imagen otra vez.",
+    enlargeLabel: "Ampliar",
+    enlargeNote:
+      "Remuestrea a un tamaño mayor. No recupera detalle que la cámara nunca grabó: es escalar, no rescatar.",
     sharpenLabel: "Nitidez",
     sharpenLevels: ["Apagado", "Suave", "Media", "Fuerte"],
     sharpenNote:

@@ -152,6 +152,16 @@ export const de: Dict = {
       "Der Katalog ließ sich nicht lesen — das Netz versagte oder der Ursprung verweigerte die Antwort. Die Größen oben sind derzeit unbestätigt.",
     downloadPng: "PNG herunterladen",
     transparentSuffix: "transparent",
+    cutToggle: "Hintergrund entfernen",
+    cutToggleNote:
+      "Aus lassen, wenn Sie nur schärfen, vergrößern oder ein Sakko hinzufügen wollen. Das Modell wird gar nicht geladen.",
+    cutSkipped:
+      "Der Hintergrund blieb erhalten. Es wurde nichts freigestellt.",
+    bgNeedsCut:
+      "Ein neuer Hintergrund braucht den Freisteller. Schalten Sie ihn ein und laden Sie das Bild erneut.",
+    enlargeLabel: "Vergrößern",
+    enlargeNote:
+      "Rechnet auf eine größere Größe hoch. Es entsteht kein Detail, das die Kamera nie aufgenommen hat — Skalierung, keine Rettung.",
     sharpenLabel: "Schärfe",
     sharpenLevels: ["Aus", "Leicht", "Mittel", "Stark"],
     sharpenNote:

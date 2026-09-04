@@ -152,6 +152,16 @@ export const fr: Dict = {
       "Le catalogue n’a pas pu être lu — la connexion a échoué ou l’origine a refusé. Les tailles des niveaux ci-dessus ne sont pas vérifiées pour l’instant.",
     downloadPng: "Télécharger le PNG",
     transparentSuffix: "transparent",
+    cutToggle: "Enlever le fond",
+    cutToggleNote:
+      "Laissez désactivé pour seulement affiner, agrandir ou ajouter une veste. Le modèle n’est pas téléchargé.",
+    cutSkipped:
+      "Le fond a été conservé. Rien n’a été découpé.",
+    bgNeedsCut:
+      "Changer le fond exige la découpe. Activez la suppression et rechargez l’image.",
+    enlargeLabel: "Agrandir",
+    enlargeNote:
+      "Rééchantillonne vers une taille supérieure. Aucun détail non enregistré n’est retrouvé : c’est un agrandissement, pas un sauvetage.",
     sharpenLabel: "Netteté",
     sharpenLevels: ["Désactivé", "Léger", "Moyen", "Fort"],
     sharpenNote:

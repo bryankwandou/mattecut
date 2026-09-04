@@ -152,6 +152,16 @@ export const nl: Dict = {
       "De catalogus kon niet worden gelezen — het netwerk faalde of de bron weigerde. De formaten bij de niveaus hierboven zijn nu niet geverifieerd.",
     downloadPng: "PNG downloaden",
     transparentSuffix: "transparant",
+    cutToggle: "Achtergrond verwijderen",
+    cutToggleNote:
+      "Laat uit als u alleen wilt verscherpen, vergroten of een colbert wilt toevoegen. Het model wordt niet gedownload.",
+    cutSkipped:
+      "De achtergrond bleef staan. Er is niets uitgeknipt.",
+    bgNeedsCut:
+      "Een andere achtergrond vereist de uitsnede. Zet verwijderen aan en laad de afbeelding opnieuw.",
+    enlargeLabel: "Vergroten",
+    enlargeNote:
+      "Herbemonstert naar een groter formaat. Het haalt geen detail terug dat de camera nooit vastlegde.",
     sharpenLabel: "Scherpte",
     sharpenLevels: ["Uit", "Licht", "Gemiddeld", "Sterk"],
     sharpenNote:

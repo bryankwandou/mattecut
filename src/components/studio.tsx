@@ -102,6 +102,10 @@ type Shot = {
    *  export is written at these numbers, so they are what the note quotes. */
   srcW: number;
   srcH: number;
+  /** False when the reader asked for everything except the cut. The master
+   *  is then the photograph itself, and the background picker has nothing
+   *  to paint behind. */
+  cut: boolean;
 };
 
 export function Studio() {
@@ -161,6 +165,17 @@ export function Studio() {
   // that looks idle while it works invites a second press — which is how a
   // slow export becomes two slow exports.
   const [saving, setSaving] = useState(false);
+  /**
+   * Whether the background is removed at all.
+   *
+   * Removing it used to be compulsory, which meant somebody who only wanted
+   * a sharper file or a jacket still waited for a ninety-five megabyte
+   * download and a cut they never asked for. On the connections this
+   * product was built for, that wait was the entire cost of using it.
+   */
+  const [cutBg, setCutBg] = useState(true);
+  /** Output multiplier. Resampling only, and the note under it says so. */
+  const [enlarge, setEnlarge] = useState(1);
   // Edge contrast, applied to the exported file and to the preview alike.
   const [sharpen, setSharpen] = useState<SharpenLevel>(0);
   // Skip the cut entirely and write the photograph as it arrived. This is
@@ -290,22 +305,26 @@ export function Studio() {
 
       setBusy(true);
       setPicked(q);
-      setProgress({
-        stage: isWarm(q) ? "processing" : "fetching",
-        ratio: null,
-        key: isWarm(q) ? "separating" : "engine",
-      });
+      setProgress(
+        cutBg
+          ? {
+              stage: isWarm(q) ? "processing" : "fetching",
+              ratio: null,
+              key: isWarm(q) ? "separating" : "engine",
+            }
+          : null,
+      );
 
       try {
         // The cap travels into the worker rather than being applied here:
         // the shrink needs a full decode, and doing that on this thread is
         // the freeze the worker exists to prevent.
-        const { blob, scaled } = await cutout(
-          file,
-          q,
-          weak ? CAP.weak : CAP.normal,
-          setProgress,
-        );
+        //
+        // With the cut turned off none of that happens: no worker, no
+        // weights, no wait. The photograph is its own master.
+        const { blob, scaled } = cutBg
+          ? await cutout(file, q, weak ? CAP.weak : CAP.normal, setProgress)
+          : { blob: file as Blob, scaled: false };
 
         const originalUrl = URL.createObjectURL(file);
         const masterUrl = URL.createObjectURL(blob);
@@ -331,8 +350,9 @@ export function Studio() {
           capped: scaled,
           srcW: src?.naturalWidth ?? bitmap.naturalWidth,
           srcH: src?.naturalHeight ?? bitmap.naturalHeight,
+          cut: cutBg,
         });
-        setProgress({ stage: "done", ratio: 1, key: "separating" });
+        setProgress(cutBg ? { stage: "done", ratio: 1, key: "separating" } : null);
       } catch (e) {
         // The library's messages are English internals; a translated
         // sentence the user can act on beats a leaked stack trace. The
@@ -348,7 +368,7 @@ export function Studio() {
         setBusy(false);
       }
     },
-    [quality, t, weak],
+    [quality, t, weak, cutBg],
   );
 
   // A crash, a closed tab, or a stray reload should not cost the reader the
@@ -383,6 +403,8 @@ export function Studio() {
           capped: d.capped === true,
           srcW: src?.naturalWidth ?? bitmap.naturalWidth,
           srcH: src?.naturalHeight ?? bitmap.naturalHeight,
+          // Drafts predate this flag and were always cuts.
+          cut: true,
         });
         setPicked(d.quality);
         if (d.bg) setBg(d.bg as Background);
@@ -589,7 +611,7 @@ export function Studio() {
       // the page, because a 48 MP bitmap in memory is what the cap exists
       // to avoid in the first place.
       let source: { img: HTMLImageElement; w: number; h: number } | null = null;
-      if (shot.capped) {
+      if (shot.capped || !shot.cut || enlarge > 1) {
         try {
           const img = await loadImage(shot.originalUrl, t.studio.errDecode);
           source = { img, w: img.naturalWidth, h: img.naturalHeight };
@@ -610,7 +632,8 @@ export function Studio() {
         overlay,
         source,
         sharpen,
-        keepOriginal,
+        keepOriginal || !shot.cut,
+        enlarge,
       );
       downloadBlob(blob, outputName(shot.file.name, ext));
     } catch (e) {
@@ -686,6 +709,8 @@ export function Studio() {
           weak={weak}
           onGpu={onGpu}
           progress={progress}
+          cutBg={cutBg}
+          onCutBg={setCutBg}
           quality={quality}
           onQuality={setPicked}
           onPick={() => inputRef.current?.click()}
@@ -863,7 +888,15 @@ export function Studio() {
             </fieldset>
 
             <div className="rounded-xl border border-line bg-surface p-5">
-              <BackgroundPicker value={bg} onChange={setBg} />
+              {shot.cut ? (
+                <BackgroundPicker value={bg} onChange={setBg} />
+              ) : (
+                // Painting a backdrop behind an opaque photograph changes
+                // nothing, so the picker says why instead of pretending.
+                <p className="text-pretty text-xs leading-relaxed text-text-faint">
+                  {t.studio.bgNeedsCut}
+                </p>
+              )}
             </div>
 
             <fieldset className="rounded-xl border border-line bg-surface p-5">
@@ -912,6 +945,37 @@ export function Studio() {
               <p className="mt-3 text-pretty text-xs leading-relaxed text-text-faint">
                 {t.studio.sharpenNote}
               </p>
+
+              <div className="mt-5 border-t border-line pt-4">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="mono text-[11px] uppercase tracking-[0.14em] text-text-faint">
+                    {t.studio.enlargeLabel}
+                  </span>
+                  <span className="mono text-[11px] tabular-nums">
+                    {enlarge}&times; &middot; {shot.srcW * enlarge}&nbsp;&times;&nbsp;
+                    {shot.srcH * enlarge}
+                  </span>
+                </div>
+                <div className="mt-2.5 grid grid-cols-4 gap-1.5">
+                  {[1, 2, 3, 4].map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => setEnlarge(n)}
+                      aria-pressed={enlarge === n}
+                      className={`mono rounded-lg border px-2 py-2 text-xs transition-colors ${
+                        enlarge === n
+                          ? "border-accent bg-accent/10 text-text"
+                          : "border-line text-text-faint hover:border-text-faint"
+                      }`}
+                    >
+                      {n}&times;
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
+                  {t.studio.enlargeNote}
+                </p>
+              </div>
             </fieldset>
 
             <div className="space-y-2.5">
@@ -1009,7 +1073,13 @@ function Dropzone({
   onPick,
   onDragState,
   onFile,
+  cutBg,
+  onCutBg,
 }: {
+  /** Whether the background will be removed at all. Asked before the upload
+   *  because the answer decides whether a 95 MB model is fetched. */
+  cutBg: boolean;
+  onCutBg: (v: boolean) => void;
   dragOver: boolean;
   busy: boolean;
   warming: boolean;
@@ -1062,6 +1132,20 @@ function Dropzone({
               <Upload size={16} />
               {t.studio.pick}
             </button>
+            <label className="mx-auto mt-6 flex max-w-sm cursor-pointer items-start gap-2.5 rounded-xl border border-line p-3 text-start">
+              <input
+                type="checkbox"
+                checked={cutBg}
+                onChange={(e) => onCutBg(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]"
+              />
+              <span className="text-xs leading-relaxed">
+                {t.studio.cutToggle}
+                <span className="mt-1 block text-text-faint">
+                  {t.studio.cutToggleNote}
+                </span>
+              </span>
+            </label>
             <p className="mono mt-5 text-[11px] text-text-faint">
               {t.studio.formats}
             </p>
@@ -1069,7 +1153,11 @@ function Dropzone({
         )}
       </div>
 
-      <fieldset className="rounded-xl border border-line bg-surface p-4">
+      <fieldset
+        className="rounded-xl border border-line bg-surface p-4"
+        // A model that is not going to run has no quality to choose.
+        hidden={!cutBg}
+      >
         <legend className="mono px-2 text-[10px] uppercase tracking-[0.16em] text-text-faint">
           {t.studio.qualityLabel}
         </legend>
