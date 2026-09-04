@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Loader2, X } from "lucide-react";
-import { catalogue, search, swatchCss, type Swatch } from "@/lib/backdrops";
+import { select, swatchCss, type Swatch } from "@/lib/backdrops";
 import {
   creditLine,
   loadPhotos,
@@ -22,6 +22,20 @@ const GAP = 8;
 const ROW = CELL + GAP;
 /** Rows drawn beyond the viewport, so a flick does not reveal blank space. */
 const OVERSCAN = 3;
+
+/**
+ * The tallest element a browser will actually scroll.
+ *
+ * Measured, not assumed: at one column, 487,680 rows of 72 px is 35.1
+ * million pixels, and Chrome reported a scrollHeight of exactly 33,554,432
+ * — two to the twenty-fifth. Past that the element stops growing and the
+ * end of the catalogue simply cannot be reached.
+ *
+ * So when the true height exceeds this, the spacer is capped and the
+ * scroll position is scaled up to compensate. The scrollbar becomes
+ * slightly coarser; every swatch stays reachable, which matters more.
+ */
+const MAX_SPACER = 33_000_000;
 
 type Tab = "colours" | "offline" | "public" | "by";
 
@@ -63,8 +77,9 @@ export function BackdropCatalogue({
   const [fetching, setFetching] = useState<string | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
 
-  const all = useMemo(() => catalogue(), []);
-  const shown = useMemo(() => search(all, query), [all, query]);
+  // Never a list — a count and an accessor. Half a million swatches as
+  // objects would be 150 MB of heap on a phone that has none to spare.
+  const colours = useMemo(() => select(query), [query]);
 
   const bucket: Bucket | null = tab === "colours" ? null : tab;
   const list = bucket ? photos[bucket] : undefined;
@@ -121,13 +136,27 @@ export function BackdropCatalogue({
 
   if (!open) return null;
 
-  const total = tab === "colours" ? shown.length : shownPhotos.length;
+  const total = tab === "colours" ? colours.count : shownPhotos.length;
   const cols = Math.max(1, Math.floor((box.w + GAP) / ROW));
   const rows = Math.ceil(total / cols);
-  const first = Math.max(0, Math.floor(scrollTop / ROW) - OVERSCAN);
-  const last = Math.min(rows, Math.ceil((scrollTop + box.h) / ROW) + OVERSCAN);
-  const colourSlice: Swatch[] =
-    tab === "colours" ? shown.slice(first * cols, last * cols) : [];
+  const wanted = Math.max(0, rows * ROW - GAP);
+  const spacer = Math.min(wanted, MAX_SPACER);
+  // Above the browser's ceiling the scrollbar represents more rows per
+  // pixel, so a position is read back through the same ratio.
+  const zoom = wanted > MAX_SPACER ? wanted / MAX_SPACER : 1;
+  const virtualTop = scrollTop * zoom;
+  const first = Math.max(0, Math.floor(virtualTop / ROW) - OVERSCAN);
+  const last = Math.min(
+    rows,
+    Math.ceil((virtualTop + box.h * zoom) / ROW) + OVERSCAN,
+  );
+  // Only the swatches about to be drawn are ever built.
+  const colourSlice: Swatch[] = [];
+  if (tab === "colours") {
+    const from = first * cols;
+    const to = Math.min(colours.count, last * cols);
+    for (let k = from; k < to; k++) colourSlice.push(colours.at(k));
+  }
   const photoSlice: Photo[] =
     tab === "colours" ? [] : shownPhotos.slice(first * cols, last * cols);
 
@@ -261,11 +290,13 @@ export function BackdropCatalogue({
           ) : (
             // One tall spacer holds the scrollbar honest; only the visible
             // rows are translated into place inside it.
-            <div style={{ height: rows * ROW - GAP, position: "relative" }}>
+            <div style={{ height: spacer, position: "relative" }}>
               <div
                 style={{
                   position: "absolute",
-                  top: first * ROW,
+                  // Divided by the same ratio, so the drawn block lands
+                  // under the scrollbar position that asked for it.
+                  top: (first * ROW) / zoom,
                   left: 0,
                   right: 0,
                   display: "grid",
