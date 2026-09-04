@@ -159,6 +159,77 @@ export function clothingSpans(
   }
   rows.set(smooth);
 
+  // Collapses, which a median cannot reach.
+  //
+  // Measured on a real portrait: the garment's width ran 307, 330, 113,
+  // 310 down the chest. A hundred and thirteen is not a waist — it is the
+  // clothing mask breaking where a tie or an open collar reads as a
+  // different class, and the longest-run rule then honestly reporting the
+  // widest surviving fragment. A body does not pinch to a third of itself
+  // and widen again over a few rows.
+  //
+  // So a row far narrower than its neighbourhood is treated as missing and
+  // rebuilt from the nearest rows that are not. Real tapering survives,
+  // because a taper is gradual and never trips the threshold.
+  const HALF = 12;
+  const COLLAPSE = 0.62;
+  const width = new Int32Array(mh);
+  for (let y = 0; y < mh; y++) {
+    const l = rows[y * 2];
+    const r = rows[y * 2 + 1];
+    width[y] = l < 0 || r <= l ? 0 : r - l;
+  }
+
+  const fixed = Int32Array.from(rows);
+  const nearby: number[] = [];
+  for (let y = 0; y < mh; y++) {
+    if (width[y] === 0) continue;
+    nearby.length = 0;
+    for (let j = Math.max(0, y - HALF); j <= Math.min(mh - 1, y + HALF); j++) {
+      if (width[j] > 0) nearby.push(width[j]);
+    }
+    if (nearby.length < 5) continue;
+    nearby.sort((a, b) => a - b);
+    // The upper quartile, not the median.
+    //
+    // A median assumes most of the window is intact, and that assumption
+    // fails exactly when it is needed: a fourteen-row break inside a
+    // twenty-five-row window makes the broken rows the majority, so the
+    // median becomes the collapse and the collapse looks normal. Measured
+    // on that case, the median left a 112 pixel pinch in a 330 pixel torso
+    // untouched; the upper quartile repaired all four sampled rows.
+    const ref = nearby[Math.min(nearby.length - 1, Math.floor(nearby.length * 0.75))];
+    if (width[y] >= ref * COLLAPSE) continue;
+
+    // Nearest rows on each side that are not themselves collapsed.
+    let up = -1;
+    for (let j = y - 1; j >= 0 && j >= y - HALF * 2; j--) {
+      if (width[j] > ref * COLLAPSE) {
+        up = j;
+        break;
+      }
+    }
+    let down = -1;
+    for (let j = y + 1; j < mh && j <= y + HALF * 2; j++) {
+      if (width[j] > ref * COLLAPSE) {
+        down = j;
+        break;
+      }
+    }
+    if (up < 0 && down < 0) continue;
+    if (up < 0) up = down;
+    if (down < 0) down = up;
+
+    const span = down - up || 1;
+    const f = (y - up) / span;
+    for (let k = 0; k < 2; k++) {
+      const a = rows[up * 2 + k];
+      const b = rows[down * 2 + k];
+      fixed[y * 2 + k] = Math.round(a + (b - a) * f);
+    }
+  }
+  rows.set(fixed);
+
   // A span this short is noise, not a torso.
   if (first < 0 || last - first < 8) return null;
 
