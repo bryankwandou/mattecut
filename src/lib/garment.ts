@@ -50,6 +50,22 @@ const SHADING = 0.55;
  *  in pixels of a 1000 px image. */
 const DETAIL_RADIUS = 9;
 
+/**
+ * How far a jacket reaches below the neckline, as a multiple of shoulder
+ * width.
+ *
+ * A garment needs a length of its own. Stretched instead over every pixel
+ * the clothing model found, a full-length photograph turned the jacket into
+ * a sheet from the collar to below the knee — covering the dress, the arms
+ * and the boots, because all of those are clothing.
+ *
+ * Tailoring gives the ratio: a suit jacket runs roughly one and a half to
+ * one and three-quarter shoulder widths from the shoulder seam. 1.65 sits
+ * in the middle, and it holds whatever the crop, because it is measured
+ * against the body rather than against the frame.
+ */
+const JACKET_DROP = 1.65;
+
 function surface(w: number, h: number): HTMLCanvasElement {
   const c = document.createElement("canvas");
   c.width = w;
@@ -191,6 +207,26 @@ export function fitGarment(
       break;
     }
   }
+
+  // The shoulders: the widest the body gets in the top third of the cloth,
+  // which is where shoulders are on any upright person.
+  const shoulderLimit = startRow + Math.max(1, Math.round((lastRow - startRow) / 3));
+  let widest = 0;
+  for (let i = startRow; i <= shoulderLimit; i++) {
+    const l = span.rows[i * 2];
+    const r = span.rows[i * 2 + 1];
+    if (l >= 0 && r > l) widest = Math.max(widest, r - l);
+  }
+
+  // A jacket has a hem. Without one, a full-length photograph gets a
+  // garment from the collar to the shoe, because every one of those pixels
+  // is clothing to the model that found them.
+  if (widest > 0) {
+    const shoulderPx = (widest / 1000) * w;
+    const dropRows = Math.round(((shoulderPx * JACKET_DROP) / h) * rowCount);
+    lastRow = Math.min(lastRow, startRow + Math.max(4, dropRows));
+  }
+
   const usedRows = lastRow - startRow + 1;
   if (usedRows < 4) return null;
 
