@@ -26,13 +26,61 @@ export type Photo = {
   n: string;
   /** Licence exactly as Commons reported it. */
   l: string;
-  /** Author. Mandatory for CC BY, since the credit cannot be given without it. */
-  a: string;
-  /** The Commons page, so provenance is one click away. */
-  p: string;
-  /** Lower-cased words the search matches. */
-  q: string;
+  /** Author. Mandatory for CC BY, since the credit cannot be given without
+   *  it, and simply absent on the public-domain rows that have none —
+   *  storing an empty string 24,000 times is not information. */
+  a?: string;
+  /** The category this row was indexed under. All the search words the name
+   *  does not already carry — the name itself used to be repeated here in
+   *  lower case, and across 48,000 rows that repetition was 1.6 MB. */
+  c?: string;
 };
+
+/**
+ * The prefix stripped from every stored thumbnail path.
+ *
+ * The same fifty-two characters began all 48,379 rows. Written once here
+ * and reattached on use costs one string concatenation and saved 1.3 MB
+ * that a reader on a phone would otherwise download before seeing a single
+ * picture. `@` marks the rows that came from the other Commons host.
+ */
+/**
+ * Commons answers on two hosts and the index was written with the wrong one.
+ *
+ * Every stored path came back as thumb.wikimedia.org, and the page's policy
+ * permits upload.wikimedia.org and nothing else — so all 48,379 photographs
+ * would have loaded as empty tiles, blocked before they left the browser.
+ * The two hosts return the same bytes for the same path, verified: 24,200
+ * either way. Reattaching the permitted one costs nothing and keeps the
+ * policy at a single outside host, which is the point of having it.
+ */
+const THUMB_PREFIX = "https://upload.wikimedia.org/wikipedia/commons/thumb/";
+const THUMB_ALT = THUMB_PREFIX;
+
+/** Reassemble a stored path into the URL it stands for. */
+export function thumbUrl(stored: string): string {
+  if (!stored) return "";
+  if (stored.startsWith("http")) return stored;
+  return stored.startsWith("@")
+    ? THUMB_ALT + stored.slice(1)
+    : THUMB_PREFIX + stored;
+}
+
+/**
+ * The Commons page for a row, so provenance stays one click away.
+ *
+ * Derived rather than stored: the thumbnail path already ends in the file
+ * name, and every one of the 48,379 page URLs was the same standard form
+ * built from it. Storing them cost 2.4 MB to say nothing new.
+ */
+export function commonsPage(row: Photo): string {
+  const t = row.t ?? "";
+  const file = t.split("/").pop() ?? "";
+  // ".../800px-Name.jpg" — the width prefix is not part of the file name.
+  const name = file.replace(/^\d+px-/, "");
+  if (!name) return "";
+  return `https://commons.wikimedia.org/wiki/File:${name}`;
+}
 
 /**
  * Two buckets that are never mixed.
@@ -102,7 +150,7 @@ export function fullSize(thumb: string, width = 2048): string {
  */
 export function photoSrc(p: Photo, full = false): string {
   if (p.f) return `/offline/${p.f}.webp`;
-  const t = p.t ?? "";
+  const t = thumbUrl(p.t ?? "");
   return full ? fullSize(t) : t;
 }
 
@@ -113,12 +161,16 @@ export function searchPhotos(all: Photo[], raw: string): Photo[] {
 
   // Every typed word must match something, but each word may match through
   // any of its translations.
-  const strict = all.filter((p) => words.every((alts) => hits(p.q, alts)));
+  // Built here rather than stored: the name in lower case plus the category
+  // is exactly what the old `q` field held, and holding it cost 1.6 MB.
+  const hay = (p: Photo) => `${p.n.toLowerCase()} ${p.c ?? ""}`;
+
+  const strict = all.filter((p) => words.every((alts) => hits(hay(p), alts)));
   if (strict.length > 0) return strict;
 
   // Two words where only one is known should still show the one. An empty
   // screen teaches the reader that the catalogue is small, which is a lie.
-  const loose = all.filter((p) => words.some((alts) => hits(p.q, alts)));
+  const loose = all.filter((p) => words.some((alts) => hits(hay(p), alts)));
   return loose;
 }
 
