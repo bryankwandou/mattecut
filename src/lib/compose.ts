@@ -77,12 +77,50 @@ export function backdropUrl(blob: Blob): string {
  * write a picture with no background at all, which is the worst kind of
  * bug: the file looks fine until someone opens it.
  */
+/**
+ * Decode with a deadline.
+ *
+ * `HTMLImageElement.decode()` is specified to settle, and in practice does
+ * not always: a source that neither finishes nor errors leaves the promise
+ * pending forever. Awaited on the export path that is the worst failure
+ * this product can have — the reader presses Download and receives silence,
+ * with no file, no message and nothing to retry.
+ *
+ * So every decode carries a deadline and every deadline names its stage,
+ * because "export failed" without a stage is a bug report nobody can act
+ * on.
+ */
+export async function decodeWithin(
+  blob: Blob,
+  stage: string,
+  ms = 20_000,
+): Promise<HTMLImageElement> {
+  const held = decoded.get(blob);
+  if (held) return held;
+
+  const img = new Image();
+  img.src = backdropUrl(blob);
+
+  const settled = new Promise<HTMLImageElement>((resolve, reject) => {
+    // Both paths, because decode() and the load events do not always agree
+    // about SVG sources.
+    img.decode().then(() => resolve(img), () => undefined);
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error(`${stage}: could not decode`));
+  });
+
+  const timer = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error(`${stage}: timed out after ${ms}ms`)), ms),
+  );
+
+  const out = await Promise.race([settled, timer]);
+  decoded.set(blob, out);
+  return out;
+}
+
 export async function prepareBackground(bg: Background): Promise<void> {
   if (bg.kind !== "image" || decoded.has(bg.blob)) return;
-  const img = new Image();
-  img.src = backdropUrl(bg.blob);
-  await img.decode();
-  decoded.set(bg.blob, img);
+  await decodeWithin(bg.blob, "backdrop");
 }
 
 /** Where a backdrop lands inside w×h under the chosen fit. */
@@ -220,13 +258,8 @@ export function paintOverlay(
 /** Decode an overlay, for the same reason `prepareBackground` exists. */
 export async function prepareOverlay(overlay: Overlay | null): Promise<void> {
   if (!overlay) return;
-  for (const blob of [overlay.blob, overlay.mask]) {
-    if (!blob || decoded.has(blob)) continue;
-    const img = new Image();
-    img.src = backdropUrl(blob);
-    await img.decode();
-    decoded.set(blob, img);
-  }
+  if (overlay.blob) await decodeWithin(overlay.blob, "garment");
+  if (overlay.mask) await decodeWithin(overlay.mask, "clothing mask");
 }
 
 /** Draw subject over background into an existing canvas. */

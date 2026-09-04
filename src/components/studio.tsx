@@ -157,6 +157,10 @@ export function Studio() {
   // up with a bigger picture and a bigger sidebar and no more of either on
   // screen. This shrinks only the picture.
   const [viewVh, setViewVh] = useState(68);
+  // Writing the file is not instant on a large photograph, and a button
+  // that looks idle while it works invites a second press — which is how a
+  // slow export becomes two slow exports.
+  const [saving, setSaving] = useState(false);
   // Edge contrast, applied to the exported file and to the preview alike.
   const [sharpen, setSharpen] = useState<SharpenLevel>(0);
   // Skip the cut entirely and write the photograph as it arrived. This is
@@ -573,7 +577,9 @@ export function Studio() {
   };
 
   const save = async (format: "image/png" | "image/jpeg" | "image/webp") => {
-    if (!shot) return;
+    if (!shot || saving) return;
+    setSaving(true);
+    setError(null);
     const ext =
       format === "image/png" ? "png" : format === "image/jpeg" ? "jpg" : "webp";
     try {
@@ -608,8 +614,13 @@ export function Studio() {
       );
       downloadBlob(blob, outputName(shot.file.name, ext));
     } catch (e) {
+      // The stage travels with the message. "Export failed" on its own is a
+      // report nobody can act on, and this path used to produce no message
+      // at all — it simply never finished.
       console.error("[mattecut] export failed", e);
-      setError(t.studio.errExport);
+      setError(`${t.studio.errExport} (${String(e).slice(0, 90)})`);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -906,9 +917,14 @@ export function Studio() {
             <div className="space-y-2.5">
               <button
                 onClick={() => void save("image/png")}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3.5 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hi"
+                disabled={saving}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3.5 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hi disabled:opacity-60"
               >
-                <Download size={16} />
+                {saving ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Download size={16} />
+                )}
                 {t.studio.downloadPng}
                 {bg.kind === "transparent" && (
                   <span className="opacity-70">
