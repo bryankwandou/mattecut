@@ -36,6 +36,9 @@ export function CompareSlider({
     /** Same clothing mask the export uses, applied here as a CSS mask so the
      *  preview keeps predicting the file. */
     mask?: string | null;
+    /** True when the image already covers the whole frame because it was
+     *  poured into the body outline. Nothing left to place or turn. */
+    fitted?: boolean;
   } | null;
   /** How much of the viewport height the frame may use. The reader controls
    *  this: browser zoom is not a substitute, because it enlarges the whole
@@ -136,8 +139,8 @@ export function CompareSlider({
               src={overlay.src}
               alt=""
               aria-hidden
-              className="absolute"
-              style={{
+              className={overlay.fitted ? "absolute inset-0 h-full w-full" : "absolute"}
+              style={overlay.fitted ? undefined : {
                 left: `${overlay.x * 100}%`,
                 top: `${overlay.y * 100}%`,
                 width: `${overlay.w * 100}%`,

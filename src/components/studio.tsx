@@ -53,6 +53,7 @@ import {
 import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
 import { findPortrait, type Portrait } from "@/lib/portrait";
 import { SHARPEN_STEPS, sharpenTo, type SharpenLevel } from "@/lib/sharpen";
+import { clothingSpans, fitGarment } from "@/lib/garment";
 
 const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 12 * 1024 * 1024;
@@ -166,6 +167,10 @@ export function Studio() {
    *  was made for. The tag is what stops a stale preview being shown for a
    *  new setting — and keeping it means the effect never has to clear the
    *  state synchronously, which React rightly warns about. */
+  /** The garment, poured into this body's outline and carrying its folds.
+   *  Built at preview size by the same functions the export uses at full
+   *  size, so the screen keeps predicting the file. */
+  const [fittedUrl, setFittedUrl] = useState<string | null>(null);
   const [sharpPreview, setSharpPreview] = useState<{
     level: SharpenLevel;
     url: string;
@@ -186,6 +191,60 @@ export function Studio() {
     const held = urls.current;
     return () => held.forEach((u) => URL.revokeObjectURL(u));
   }, []);
+
+  // Fitting the garment for the preview. The same two functions run at full
+  // size inside the export, so this is a smaller copy of the real thing
+  // rather than an approximation of it.
+  useEffect(() => {
+    if (!shot || !art || !clothes || clothesFor !== shot.file) return;
+    let alive = true;
+    let made: string | null = null;
+    void (async () => {
+      try {
+        // Image elements, not createImageBitmap. The jacket artwork is an
+        // SVG, and createImageBitmap refuses an SVG blob outright —
+        // InvalidStateError, decoded as nothing. That failure was silent
+        // here for a while, which is the real lesson: an empty catch turned
+        // a broken feature into a feature that merely never appeared.
+        const [artBmp, maskBmp] = await Promise.all([
+          // The message is never surfaced on this path: the catch below
+          // logs and falls back, so it stays out of the dependency list.
+          loadImage(backdropUrl(art.blob), "garment decode failed"),
+          loadImage(backdropUrl(clothes.mask), "mask decode failed"),
+        ]);
+        const w = Math.min(shot.w, 1400);
+        const h = Math.round((w * shot.h) / shot.w);
+        const span = clothingSpans(maskBmp, w, h);
+        if (!span || !alive) return;
+        const out = fitGarment(
+          artBmp,
+          artBmp.naturalWidth,
+          artBmp.naturalHeight,
+          span,
+          shot.bitmap,
+          w,
+          h,
+        );
+        if (!out || !alive) return;
+        out.toBlob((blob) => {
+          if (!alive || !blob) return;
+          made = URL.createObjectURL(blob);
+          urls.current.push(made);
+          setFittedUrl(made);
+        }, "image/png");
+      } catch (e) {
+        // The fit falls back to the placed-and-clipped garment, which is
+        // what shipped before and is still correct, just flatter. Logged
+        // rather than swallowed: silence here once hid a broken decode for
+        // an entire deploy.
+        console.error("[mattecut] garment fit failed", e);
+      }
+    })();
+    return () => {
+      alive = false;
+      if (made) URL.revokeObjectURL(made);
+    };
+  }, [shot, art, clothes, clothesFor]);
 
   // Sharpening the preview, at preview size. The same function runs at full
   // size on export, so one algorithm and one set of numbers decide both.
@@ -639,8 +698,14 @@ export function Studio() {
                 overlay
                   ? {
                       ...overlay,
-                      src: backdropUrl(overlay.blob),
-                      mask: overlay.mask ? backdropUrl(overlay.mask) : null,
+                      src: fittedUrl ?? backdropUrl(overlay.blob),
+                      // A fitted garment already covers the frame, so the
+                      // preview must stop positioning and rotating it.
+                      fitted: fittedUrl !== null,
+                      mask:
+                        fittedUrl !== null || !overlay.mask
+                          ? null
+                          : backdropUrl(overlay.mask),
                     }
                   : null
               }

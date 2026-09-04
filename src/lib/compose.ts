@@ -1,5 +1,6 @@
 import type { Rgba } from "./color";
 import { sharpenTo, type SharpenLevel } from "./sharpen";
+import { clothingSpans, fitGarment } from "./garment";
 import { toCss } from "./color";
 
 /**
@@ -44,8 +45,8 @@ export type Overlay = {
    *  the horizon, which is the difference between worn and pasted on. */
   tilt: number;
   /** White where the person's own clothing is. When present the garment is
-   *  clipped to it, so it can only ever land on cloth — never across a face
-   *  and never out onto the background. */
+   *  poured into it row by row, so it follows the shoulders and the taper
+   *  of the body instead of being a rectangle with its corners hidden. */
   mask?: Blob | null;
 };
 
@@ -143,17 +144,44 @@ export function paintOverlay(
   overlay: Overlay,
   w: number,
   h: number,
+  /** The original photograph, used only as a source of shading for the
+   *  fitted garment. Never drawn. */
+  photo: CanvasImageSource | null = null,
 ) {
   const img = decoded.get(overlay.blob);
   if (!img) {
     console.error("[mattecut] overlay painted before decode");
     return;
   }
+  const maskImg = overlay.mask ? decoded.get(overlay.mask) : null;
+
+  // The fitted path. The clothing mask knows where the body starts and ends
+  // on every row, so the artwork is stretched into that outline and the
+  // photograph's own folds are laid over it. What comes back already covers
+  // the frame, so it is drawn at the origin rather than positioned.
+  if (maskImg) {
+    const span = clothingSpans(maskImg, w, h);
+    if (span) {
+      const fitted = fitGarment(
+        img,
+        img.naturalWidth,
+        img.naturalHeight,
+        span,
+        photo ?? null,
+        w,
+        h,
+      );
+      if (fitted) {
+        ctx.drawImage(fitted, 0, 0);
+        return;
+      }
+    }
+  }
+
   const dw = overlay.w * w;
   const dh = (dw * img.naturalHeight) / img.naturalWidth;
   const x = overlay.x * w;
   const y = overlay.y * h;
-  const maskImg = overlay.mask ? decoded.get(overlay.mask) : null;
 
   const place = (c: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) => {
     if (!overlay.tilt) {
@@ -322,7 +350,7 @@ export async function exportImage(
   } else {
     ctx.drawImage(sharpenTo(subject, outW, outH, sharpen), 0, 0, outW, outH);
   }
-  if (overlay) paintOverlay(ctx, overlay, outW, outH);
+  if (overlay) paintOverlay(ctx, overlay, outW, outH, source?.img ?? subject);
 
   return new Promise((resolve, reject) => {
     canvas.toBlob(
