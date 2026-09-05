@@ -95,8 +95,28 @@ export function CompareSlider({
         // comparison, the backdrop and the jacket together, and keeps the
         // overlay's fractional coordinates exact. A tall photo used to run
         // past the bottom of the screen with no way to pull back.
-        className="block h-auto w-auto max-w-full"
-        style={{ maxHeight: `${maxVh}vh` }}
+        className="block"
+        style={{
+          // Fill the height that is available, rather than only refusing to
+          // exceed it.
+          //
+          // This used to be `w-auto` with a maximum height, which is correct
+          // for a large photograph and useless for a small one: a 204 by 247
+          // pixel file rendered at 204 by 247 in the middle of a column more
+          // than a thousand pixels wide. Somebody looked at that and said
+          // they could not see the picture at all, and they were right — it
+          // was the size of a stamp on an empty screen.
+          //
+          // Height drives the size now and the width follows the aspect
+          // ratio, so a small file grows to meet the same cap a large one is
+          // held to. `object-fit` only matters for a panorama wide enough
+          // that the width cap binds first; letterboxing it is better than
+          // stretching a face.
+          height: `${maxVh}vh`,
+          width: "auto",
+          maxWidth: "100%",
+          objectFit: "contain",
+        }}
         draggable={false}
       />
 
