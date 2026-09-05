@@ -230,6 +230,51 @@ export function clothingSpans(
   }
   rows.set(fixed);
 
+  // Straighten the centre line, and only the centre line.
+  //
+  // Each row is drawn from the body's left edge to its right edge, so the
+  // artwork's middle follows the middle of the row. A width may jump from
+  // row to row — that is a shoulder, an arm, a shape — but a person's
+  // centre line does not. Letting it follow every jump shears the vertical
+  // parts of the garment sideways: measured on a real portrait, the tie
+  // that sits at 0.499 of the artwork came out at 0.632 of the frame, a
+  // red streak dragged onto the lapel.
+  //
+  // So the centre is averaged over a long window while the half-width is
+  // left exactly as measured. The outline still follows the body; the tie
+  // stays where a tie goes.
+  const SPAN = Math.max(6, Math.round(mh / 8));
+  const centre = new Float64Array(mh);
+  const half = new Float64Array(mh);
+  for (let y = 0; y < mh; y++) {
+    const l = rows[y * 2];
+    const r = rows[y * 2 + 1];
+    if (l < 0 || r <= l) {
+      centre[y] = -1;
+      continue;
+    }
+    centre[y] = (l + r) / 2;
+    half[y] = (r - l) / 2;
+  }
+
+  const straight = Int32Array.from(rows);
+  for (let y = 0; y < mh; y++) {
+    if (centre[y] < 0) continue;
+    let sum = 0;
+    let n = 0;
+    for (let j = Math.max(0, y - SPAN); j <= Math.min(mh - 1, y + SPAN); j++) {
+      if (centre[j] >= 0) {
+        sum += centre[j];
+        n++;
+      }
+    }
+    if (n === 0) continue;
+    const c = sum / n;
+    straight[y * 2] = Math.round(c - half[y]);
+    straight[y * 2 + 1] = Math.round(c + half[y]);
+  }
+  rows.set(straight);
+
   // A span this short is noise, not a torso.
   if (first < 0 || last - first < 8) return null;
 
@@ -261,6 +306,17 @@ export function fitGarment(
   photo: CanvasImageSource | null,
   w: number,
   h: number,
+  /**
+   * Where the body's centre line actually is, as a fraction of the width.
+   *
+   * Measured from the shoulders by the pose network, because the clothing
+   * mask's own centre is not the body's: on a real portrait the mask ran
+   * wide to the right over a shoulder and a chair, putting the garment's
+   * centre at 0.63 while the subject's neck was at 0.48. Everything
+   * vertical in the artwork — the tie, the lapel edges — then sat fifteen
+   * percent of the frame off the man wearing it.
+   */
+  centreX: number | null = null,
 ): HTMLCanvasElement | null {
   const out = surface(w, h);
   const g = out.getContext("2d");
@@ -310,8 +366,19 @@ export function fitGarment(
 
     const y0 = Math.floor((i / rowCount) * h);
     const y1 = Math.max(y0 + 1, Math.floor(((i + 1) / rowCount) * h));
-    const x0 = (l / 1000) * w;
-    const x1 = (r / 1000) * w;
+
+    // The width comes from the mask, which is the body's real shape. The
+    // centre comes from the shoulders when they are known, because the
+    // mask's centre is only the middle of whatever the mask happened to
+    // include.
+    let x0 = (l / 1000) * w;
+    let x1 = (r / 1000) * w;
+    if (centreX !== null) {
+      const half = (x1 - x0) / 2;
+      const c = centreX * w;
+      x0 = c - half;
+      x1 = c + half;
+    }
 
     // The matching slice of artwork, stretched to this row's span. One
     // drawImage per row: the browser resamples, so the seams disappear.

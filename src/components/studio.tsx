@@ -243,6 +243,10 @@ export function Studio() {
           shot.bitmap,
           w,
           h,
+          // The shoulders, when the pose network found them. Their midpoint
+          // is the body's centre line; the clothing mask's own centre is
+          // only the middle of whatever the mask happened to include.
+          shoulders ? (shoulders.leftX + shoulders.rightX) / 2 : null,
         );
         if (!out || !alive) return;
         out.toBlob((blob) => {
@@ -263,7 +267,7 @@ export function Studio() {
       alive = false;
       if (made) URL.revokeObjectURL(made);
     };
-  }, [shot, art, clothes, clothesFor]);
+  }, [shot, art, clothes, clothesFor, shoulders]);
 
   // Sharpening the preview, at preview size. The same function runs at full
   // size on export, so one algorithm and one set of numbers decide both.
@@ -556,6 +560,7 @@ export function Studio() {
               w: cw,
               tilt: Math.atan2(dy, dx),
               mask: clothes ? clothes.mask : null,
+              centreX: (shoulders.leftX + shoulders.rightX) / 2,
             };
           }
 

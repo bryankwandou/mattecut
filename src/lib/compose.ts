@@ -48,6 +48,10 @@ export type Overlay = {
    *  poured into it row by row, so it follows the shoulders and the taper
    *  of the body instead of being a rectangle with its corners hidden. */
   mask?: Blob | null;
+  /** Midpoint between the shoulders, as a fraction of the width. Null when
+   *  the pose network did not find them, in which case the mask's own
+   *  centre is the only estimate available. */
+  centreX?: number | null;
 };
 
 /**
@@ -208,6 +212,7 @@ export function paintOverlay(
         photo ?? null,
         w,
         h,
+        overlay.centreX ?? null,
       );
       if (fitted) {
         ctx.drawImage(fitted, 0, 0);
