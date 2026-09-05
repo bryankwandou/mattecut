@@ -52,6 +52,10 @@ export type Overlay = {
    *  the pose network did not find them, in which case the mask's own
    *  centre is the only estimate available. */
   centreX?: number | null;
+  /** The shoulder line: how far down the frame, and how far apart the
+   *  joints are. Both fractions. Null when the pose network found nothing,
+   *  in which case the garment falls back to stretching. */
+  shoulder?: { y: number; span: number } | null;
 };
 
 /**
@@ -213,6 +217,8 @@ export function paintOverlay(
         w,
         h,
         overlay.centreX ?? null,
+        overlay.shoulder ?? null,
+        maskImg,
       );
       if (fitted) {
         ctx.drawImage(fitted, 0, 0);

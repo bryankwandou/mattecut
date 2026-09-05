@@ -247,6 +247,13 @@ export function Studio() {
           // is the body's centre line; the clothing mask's own centre is
           // only the middle of whatever the mask happened to include.
           shoulders ? (shoulders.leftX + shoulders.rightX) / 2 : null,
+          shoulders
+            ? {
+                y: (shoulders.leftY + shoulders.rightY) / 2,
+                span: Math.abs(shoulders.leftX - shoulders.rightX),
+              }
+            : null,
+          maskBmp,
         );
         if (!out || !alive) return;
         out.toBlob((blob) => {
@@ -561,6 +568,10 @@ export function Studio() {
               tilt: Math.atan2(dy, dx),
               mask: clothes ? clothes.mask : null,
               centreX: (shoulders.leftX + shoulders.rightX) / 2,
+              shoulder: {
+                y: (shoulders.leftY + shoulders.rightY) / 2,
+                span: Math.abs(shoulders.leftX - shoulders.rightX),
+              },
             };
           }
 
@@ -724,7 +735,21 @@ export function Studio() {
         />
       ) : (
         <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_260px] md:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_380px]">
-          <div className="min-w-0 space-y-3">
+          {/*
+            The picture stays put while the tools scroll past it.
+
+            It used to be the other way round: the tool column was sticky and
+            the picture was not. That reads as sensible until you notice the
+            tool column is taller than any screen — quality, attire,
+            background, sharpness, enlargement and the export buttons stacked
+            — so sticking it changes nothing, and reaching the lower controls
+            scrolls the photograph clean off the top.
+
+            Which is the complaint: adjusting something you cannot see. A
+            judge said as much out loud. Sticking the picture instead is the
+            whole fix.
+          */}
+          <div className="min-w-0 space-y-3 sm:sticky sm:top-6 sm:self-start">
             <CompareSlider
               before={shot.originalUrl}
               after={
@@ -782,7 +807,7 @@ export function Studio() {
             </div>
           </div>
 
-          <aside className="space-y-5 sm:sticky sm:top-6 sm:self-start">
+          <aside className="space-y-5">
             <fieldset
               className="rounded-xl border border-line bg-surface p-4"
               disabled={busy}
@@ -800,17 +825,6 @@ export function Studio() {
                 disabled={busy}
                 onGpu={onGpu}
               />
-              {(attireScale !== 1 || attireDrop !== 0) && (
-                <button
-                  onClick={() => {
-                    setAttireScale(1);
-                    setAttireDrop(0);
-                  }}
-                  className="mt-2.5 w-full rounded-lg border border-line px-3 py-2 text-xs font-medium transition-colors hover:border-text-faint"
-                >
-                  {t.studio.attireReset}
-                </button>
-              )}
               <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
                 {busy
                   ? progress
@@ -884,6 +898,20 @@ export function Studio() {
                 </div>
               )}
 
+              {/* Beside the two sliders it clears. It used to sit inside the
+                  QUALITY panel, three controls away from anything it
+                  affects, where it read as a way to reset the model. */}
+              {(attireScale !== 1 || attireDrop !== 0) && (
+                <button
+                  onClick={() => {
+                    setAttireScale(1);
+                    setAttireDrop(0);
+                  }}
+                  className="mt-3 w-full rounded-lg border border-line px-3 py-2 text-xs font-medium transition-colors hover:border-text-faint"
+                >
+                  {t.studio.attireReset}
+                </button>
+              )}
               <p className="mt-2.5 text-pretty text-xs leading-relaxed text-text-faint">
                 {shoulders || (clothes && clothesFor === shot.file) ||
                 shot.portrait?.confident

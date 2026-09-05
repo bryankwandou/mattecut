@@ -66,6 +66,20 @@ const DETAIL_RADIUS = 9;
  */
 const JACKET_DROP = 1.65;
 
+/**
+ * How wide the artwork is drawn, against the distance between the shoulder
+ * joints. The joints are inside the garment: a jacket clears them.
+ */
+const SPREAD = 1.34;
+
+
+/**
+ * Over what fraction of the garment the fixed collar gives way to the body
+ * outline. Above this the artwork keeps its own shape; below it, the width
+ * is the body's.
+ */
+const BLEND = 0.4;
+
 function surface(w: number, h: number): HTMLCanvasElement {
   const c = document.createElement("canvas");
   c.width = w;
@@ -317,6 +331,19 @@ export function fitGarment(
    * percent of the frame off the man wearing it.
    */
   centreX: number | null = null,
+  /**
+   * The shoulder line, when the pose network found it: how far down the
+   * frame it sits and how far apart the joints are, both as fractions.
+   *
+   * With it the garment is *placed* — its collar keeps the artwork's own
+   * proportions and its width comes from the body only lower down. Without
+   * it every row is stretched to the mask, which follows the outline but
+   * crushes whatever the artwork draws where the body is narrow.
+   */
+  shoulder: { y: number; span: number } | null = null,
+  /** The clothing mask, used to clip the placed garment so it can still
+   *  only appear on cloth. */
+  mask: CanvasImageSource | null = null,
 ): HTMLCanvasElement | null {
   const out = surface(w, h);
   const g = out.getContext("2d");
@@ -358,6 +385,87 @@ export function fitGarment(
   if (usedRows < 4) return null;
 
   g.imageSmoothingQuality = "high";
+
+  // The placed path. It needs a shoulder line and a centre; without either
+  // it cannot know the garment's true size, and the stretched path below
+  // is the honest fallback.
+  if (shoulder && centreX !== null && shoulder.span > 0.02) {
+    const naturalW = shoulder.span * w * SPREAD;
+    const naturalH = (naturalW * artH) / artW;
+
+    // The top of the cloth is the neckline, by definition — it is where the
+    // clothing model stopped finding shirt and started finding skin. Anchor
+    // there rather than at the shoulder line: measured on a real portrait,
+    // deriving the top from the shoulders put the collar 0.39 of the frame
+    // below the neck, floating on the chest.
+    const topY = (startRow / rowCount) * h;
+
+    // And the collar belongs under the head, not under the middle of the
+    // body. On a person turned even slightly the two are not the same
+    // place: here the neck sat at 0.499 of the width while the shoulder
+    // midpoint was 0.566. So the collar takes the centre of the first rows
+    // of cloth, and the garment eases across to the shoulder midpoint as it
+    // widens down the chest.
+    let neckSum = 0;
+    let neckN = 0;
+    const neckRows = Math.max(1, Math.round((lastRow - startRow) * 0.06));
+    for (let i = startRow; i < Math.min(rowCount, startRow + neckRows); i++) {
+      const l = span.rows[i * 2];
+      const r = span.rows[i * 2 + 1];
+      if (l >= 0 && r > l) {
+        neckSum += (l + r) / 2 / 1000;
+        neckN++;
+      }
+    }
+    const neckX = neckN > 0 ? (neckSum / neckN) * w : centreX * w;
+    const bodyX = centreX * w;
+    const blendPx = Math.max(1, naturalH * BLEND);
+
+    for (let y = Math.max(0, Math.floor(topY)); y < Math.min(h, topY + naturalH); y++) {
+      const srcY = ((y - topY) / naturalH) * artH;
+      if (srcY < 0 || srcY >= artH) continue;
+
+      // Which mask row this output row belongs to, for the body width.
+      const i = Math.min(rowCount - 1, Math.floor((y / h) * rowCount));
+      const l = span.rows[i * 2];
+      const r = span.rows[i * 2 + 1];
+      const bodyW = l >= 0 && r > l ? ((r - l) / 1000) * w : naturalW;
+
+      // Near the collar the artwork keeps its own width and hangs from the
+      // neck; lower down the body decides both. A jacket's collar is the
+      // drawing's, its waist is the wearer's.
+      const t = Math.min(1, Math.max(0, (y - topY) / blendPx));
+      const destW = naturalW + (bodyW - naturalW) * t;
+      const cx = neckX + (bodyX - neckX) * t;
+
+      g.drawImage(
+        art,
+        0,
+        srcY,
+        artW,
+        Math.max(1, artH / naturalH),
+        cx - destW / 2,
+        y,
+        destW,
+        1,
+      );
+    }
+
+    if (mask) {
+      // Placed rather than stretched means it can reach past the cloth, so
+      // the mask still has the final say on where it may show.
+      g.globalCompositeOperation = "destination-in";
+      g.drawImage(mask, 0, 0, w, h);
+      g.globalCompositeOperation = "source-over";
+    }
+
+    if (photo) {
+      const keep = surface(w, h);
+      keep.getContext("2d")?.drawImage(out, 0, 0);
+      shade(g, photo, keep, w, h);
+    }
+    return out;
+  }
 
   for (let i = startRow; i <= lastRow; i++) {
     const l = span.rows[i * 2];
